@@ -1,0 +1,91 @@
+import { EDITOR_UI_CONSTANTS } from "@/src/constants/editor.constant";
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#161618",
+    borderTopLeftRadius: EDITOR_UI_CONSTANTS.MODAL_BORDER_RADIUS,
+    borderTopRightRadius: EDITOR_UI_CONSTANTS.MODAL_BORDER_RADIUS,
+    paddingBottom: 40,
+    paddingHorizontal: 20,
+    minHeight: EDITOR_UI_CONSTANTS.MODAL_MIN_HEIGHT,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#fff",
+    marginBottom: 0,
+  },
+  closeBtn: {
+    backgroundColor: "#2c2c2e",
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    marginTop: 10,
+  },
+  item: {
+    width: "25%",
+    alignItems: "center",
+    marginBottom: 25,
+  },
+  iconContainer: {
+    width: EDITOR_UI_CONSTANTS.ITEM_ICON_SIZE,
+    height: EDITOR_UI_CONSTANTS.ITEM_ICON_SIZE,
+    borderRadius: EDITOR_UI_CONSTANTS.ITEM_ICON_SIZE / 2,
+    backgroundColor: "#242426",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+    position: "relative",
+  },
+  itemLabel: {
+    color: "#D1D1D6",
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  crown: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    backgroundColor: EDITOR_UI_CONSTANTS.ITEM_BADGE_COLOR,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#161618",
+  },
+  newBadge: {
+    position: "absolute",
+    top: -6,
+    left: 8,
+    backgroundColor: EDITOR_UI_CONSTANTS.ITEM_NEW_COLOR,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  newBadgeText: {
+    fontSize: 9,
+    fontWeight: "800",
+    color: "#fff",
+  },
+});

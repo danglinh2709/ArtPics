@@ -1,0 +1,17 @@
+﻿src/features/projects/Editor/sections/EditorPanels.tsx(1,10): error TS2724: '"@/src/types/editor.types"' has no exported member named 'ToolbarTab'. Did you mean 'TToolbarTab'?
+src/features/projects/toolbar/AdjustPanel.tsx(6,10): error TS2724: '"../../../types/editor.types"' has no exported member named 'LayerAdjustments'. Did you mean 'ILayerAdjustments'?
+src/features/projects/toolbar/AdjustPanel.tsx(43,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: ViewProps): View', gave the following error.
+    Type 'string | number | symbol' is not assignable to type 'Key | null | undefined'.
+      Type 'symbol' is not assignable to type 'Key | null | undefined'.
+  Overload 2 of 2, '(props: ViewProps, context: any): View', gave the following error.
+    Type 'string | number | symbol' is not assignable to type 'Key | null | undefined'.
+      Type 'symbol' is not assignable to type 'Key | null | undefined'.
+src/features/projects/toolbar/AdjustPanel.tsx(47,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string | number | symbol' can't be used to index type 'ILayerAdjustments'.
+  No index signature with a parameter of type 'string' was found on type 'ILayerAdjustments'.
+src/features/projects/toolbar/AdjustPanel.tsx(54,20): error TS7053: Element implicitly has an 'any' type because expression of type 'string | number | symbol' can't be used to index type 'ILayerAdjustments'.
+  No index signature with a parameter of type 'string' was found on type 'ILayerAdjustments'.
+src/services/project.service.ts(3,3): error TS2724: '"../types/project.type"' has no exported member named 'ProjectDetail'. Did you mean 'TProjectDetail'?
+src/services/project.service.ts(4,3): error TS2724: '"../types/project.type"' has no exported member named 'ProjectListItem'. Did you mean 'TProjectListItem'?
+src/services/project.service.ts(5,3): error TS2724: '"../types/project.type"' has no exported member named 'EditorState'. Did you mean 'TEditorState'?
+src/stores/project.store.ts(8,66): error TS2739: Type '{ fetchProjects: () => Promise<void>; saveCurrentProject: () => Promise<void>; loadProject: (id: string) => Promise<void>; createNewProject: (name: string, ratio: TAspectRatio) => Promise<...>; ... 41 more ...; currentProjectVersion: number; }' is missing the following properties from type 'ProjectState': addTextLayer, updateLayerText

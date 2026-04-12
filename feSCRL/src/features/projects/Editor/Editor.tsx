@@ -1,0 +1,201 @@
+import React, { useMemo } from "react";
+import { Dimensions, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import ViewShot from "react-native-view-shot";
+import { useNavigation, useRouter } from "expo-router";
+
+import { useProjectStore } from "@/src/stores/project.store";
+import { SelectionSyncProvider } from "@/src/context/SelectionSyncContext";
+import { EDITOR_UI_CONSTANTS } from "@/src/constants/editor.constant";
+import { useEditorViewport } from "@/src/hooks/useEditorViewport";
+import { TToolbarTab } from "@/src/types/editor.types";
+
+import { EditorTopBar } from "./sections/EditorTopBar";
+import { EditorCanvas } from "./sections/EditorCanvas";
+import { EditorPanels } from "./sections/EditorPanels";
+import { EditorBottomBar } from "./sections/EditorBottomBar";
+
+import { useEditorUiState } from "./hooks/useEditorUiState";
+import { useEditorLeaveGuard } from "./hooks/useEditorLeaveGuard";
+import { useEditorExport } from "./hooks/useEditorExport";
+import { useEditorLayerActions } from "./hooks/useEditorLayerActions";
+
+import { EditorModals } from "./components/EditorModals";
+import { EditorLoadingOverlay } from "./components/EditorLoadingOverlay";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
+export default function Editor() {
+  const router = useRouter();
+  const navigation = useNavigation();
+
+  const {
+    selectedRatio,
+    layers,
+    selectedLayerId,
+    selectLayer,
+    saveCurrentProject,
+    currentProjectId,
+    isUploadingAsset,
+    updateLayerText,
+  } = useProjectStore();
+
+  const {
+    activeTab,
+    setActiveTab,
+    isLayerModalVisible,
+    setIsLayerModalVisible,
+    isSavingBeforeLeave,
+    setIsSavingBeforeLeave,
+    isExportModalVisible,
+    setIsExportModalVisible,
+    isPreviewModalVisible,
+    setIsPreviewModalVisible,
+    isTextEditModalVisible,
+    setIsTextEditModalVisible,
+  } = useEditorUiState();
+
+  const viewShotRef = React.useRef<ViewShot>(null);
+
+  const activeLayer = useMemo(
+    () => layers.find((layer) => layer.id === selectedLayerId),
+    [layers, selectedLayerId],
+  );
+
+  const { composedGesture, animatedStyle } = useEditorViewport();
+
+  const ratio = selectedRatio?.ratio || 1;
+  const canvasWidth = SCREEN_WIDTH * EDITOR_UI_CONSTANTS.CANVAS_WIDTH_RATIO;
+  const canvasHeight = canvasWidth / ratio;
+
+  useEditorLeaveGuard({
+    navigation,
+    isSavingBeforeLeave,
+    setIsSavingBeforeLeave,
+    isUploadingAsset,
+    saveCurrentProject,
+  });
+
+  const { handleSaveImage } = useEditorExport({
+    viewShotRef,
+    selectLayer,
+    setIsExportModalVisible,
+  });
+
+  const {
+    handleSelectImage,
+    handleAddText,
+    handleSaveText,
+    handleCanvasPress,
+  } = useEditorLayerActions({
+    currentProjectId,
+    canvasWidth,
+    canvasHeight,
+    layers,
+    selectedLayerId,
+    selectLayer,
+    setActiveTab,
+    setIsLayerModalVisible,
+    updateLayerText,
+  });
+
+  const handleOpenPreview = () => {
+    setIsExportModalVisible(false);
+    setTimeout(() => {
+      setIsPreviewModalVisible(true);
+    }, 300);
+  };
+
+  const handleBack = () => {
+    router.back();
+  };
+
+  const handleToolbarClose = () => {
+    selectLayer(null);
+    setActiveTab(null);
+  };
+
+  const handleTabPress = (tab: TToolbarTab) => {
+    if (tab === "text" && activeLayer?.type === "text") {
+      setIsTextEditModalVisible(true);
+      return;
+    }
+
+    setActiveTab((prev) => (prev === tab ? null : tab));
+  };
+
+  return (
+    <GestureHandlerRootView style={styles.root}>
+      <SelectionSyncProvider>
+        <SafeAreaView style={styles.container}>
+          <EditorTopBar
+            onBack={handleBack}
+            onExport={() => setIsExportModalVisible(true)}
+          />
+
+          <EditorCanvas
+            ref={viewShotRef}
+            canvasWidth={canvasWidth}
+            canvasHeight={canvasHeight}
+            layers={layers}
+            selectedLayerId={selectedLayerId}
+            isCropping={activeTab === "crop"}
+            onCanvasPress={handleCanvasPress}
+            gesture={composedGesture}
+            animatedStyle={animatedStyle}
+          />
+
+          <EditorPanels
+            activeTab={activeTab}
+            onClose={() => setActiveTab(null)}
+          />
+
+          <EditorBottomBar
+            activeLayer={activeLayer}
+            activeTab={activeTab}
+            ratioLabel={selectedRatio?.id}
+            onOpenLayerModal={() => setIsLayerModalVisible(true)}
+            onTabPress={handleTabPress}
+            onCloseToolbar={handleToolbarClose}
+          />
+
+          <EditorModals
+            isLayerModalVisible={isLayerModalVisible}
+            isExportModalVisible={isExportModalVisible}
+            isPreviewModalVisible={isPreviewModalVisible}
+            isTextEditModalVisible={isTextEditModalVisible}
+            setIsLayerModalVisible={setIsLayerModalVisible}
+            setIsExportModalVisible={setIsExportModalVisible}
+            setIsPreviewModalVisible={setIsPreviewModalVisible}
+            setIsTextEditModalVisible={setIsTextEditModalVisible}
+            layers={layers}
+            canvasWidth={canvasWidth}
+            canvasHeight={canvasHeight}
+            activeLayer={activeLayer}
+            onSelectImage={handleSelectImage}
+            onAddText={handleAddText}
+            onSaveImage={handleSaveImage}
+            onSaveText={handleSaveText}
+            onOpenPreview={handleOpenPreview}
+          />
+
+          <EditorLoadingOverlay
+            isUploadingAsset={isUploadingAsset}
+            isSavingBeforeLeave={isSavingBeforeLeave}
+          />
+        </SafeAreaView>
+      </SelectionSyncProvider>
+    </GestureHandlerRootView>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
+});
