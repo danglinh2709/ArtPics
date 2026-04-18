@@ -7,10 +7,11 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  SafeAreaView,
   ActivityIndicator,
   RefreshControl,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useTemplateStore } from "@/src/stores/template.store";
 import { colors, styles } from "./styles/template.styles";
@@ -20,22 +21,13 @@ import { TemplateGrid } from "./components/TemplateGrid";
 import { CategoryScreen } from "./CategoryScreen";
 import { Searchs } from "@/src/components/Searchs";
 
-const DISCOVER_CATEGORIES = [
-  "Stories",
-  "10+ Photos",
-  "Collage",
-  "Scrapbook",
-  "Celebrations",
-  "Creator Templates",
-  "Vision Boards",
-  "Film",
-  "Recap2025",
-  "Tiles",
-];
+import { TemplateCategory } from "@/src/types/template.types";
 
 export const TemplateBrowseScreen = () => {
+  const router = useRouter();
   const {
     templates,
+    categories,
     searchQuery,
     isLoading,
     fetchTemplates,
@@ -52,10 +44,14 @@ export const TemplateBrowseScreen = () => {
 
   if (activeCategory !== null) {
     return (
-      <CategoryScreen
-        category={activeCategory}
-        onBack={() => setActiveCategory(null)}
-      />
+      <>
+        <CategoryScreen
+          category={activeCategory}
+          onBack={() => setActiveCategory(null)}
+        />
+        <TemplateActionMenu />
+        <TemplatePreviewModal />
+      </>
     );
   }
 
@@ -70,23 +66,30 @@ export const TemplateBrowseScreen = () => {
       })
     : templates;
 
-  const renderDiscoverTile = (cat: string) => {
-    const tempImage = `https://picsum.photos/seed/${cat.replace(/\s+/g, "")}/200/300`;
-
+  const renderDiscoverTile = (cat: TemplateCategory) => {
     return (
       <TouchableOpacity
-        key={cat}
+        key={cat.id}
         style={styles.discoverTile}
-        onPress={() => setActiveCategory(cat)}
+        onPress={() => {
+          router.push({
+            pathname: "/template-category/[code]",
+            params: { code: cat.code, name: cat.name },
+          });
+        }}
         activeOpacity={0.85}
       >
         <Image
-          source={{ uri: tempImage }}
+          source={{
+            uri:
+              cat.coverImageUrl ||
+              `https://picsum.photos/seed/${cat.code}/200/300`,
+          }}
           style={styles.discoverTileImage}
           resizeMode="cover"
         />
         <View style={styles.discoverTileOverlay} />
-        <Text style={styles.discoverTileText}>{cat}</Text>
+        <Text style={styles.discoverTileText}>{cat.name}</Text>
       </TouchableOpacity>
     );
   };
@@ -126,9 +129,9 @@ export const TemplateBrowseScreen = () => {
         ) : (
           <>
             <Text style={styles.sectionTitle}>For You</Text>
-            <View style={styles.categoryTilesRow}>
+            <View style={styles.discoverGrid}>
               <TouchableOpacity
-                style={styles.categoryTile}
+                style={styles.discoverTile}
                 onPress={() => setActiveCategory("Recently Used")}
                 activeOpacity={0.85}
               >
@@ -136,26 +139,33 @@ export const TemplateBrowseScreen = () => {
                   source={{
                     uri: "https://picsum.photos/seed/RecentlyUsed/200/300",
                   }}
-                  style={styles.categoryTileImage}
+                  style={styles.discoverTileImage}
                   resizeMode="cover"
                 />
-                <View style={styles.categoryTileOverlay} />
-                <Text style={styles.categoryTileText}>Recently{"\n"}Used</Text>
+                <View style={styles.discoverTileOverlay} />
+                <Text style={styles.discoverTileText}>{"Recently\nUsed"}</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.categoryTile}
+                style={styles.discoverTile}
                 onPress={() => setActiveCategory("Favorites")}
                 activeOpacity={0.85}
               >
-                <View style={styles.categoryTileOverlay} />
-                <Text style={styles.categoryTileText}>Favorites</Text>
+                <Image
+                  source={{
+                    uri: "https://picsum.photos/seed/Favorites/200/300",
+                  }}
+                  style={styles.discoverTileImage}
+                  resizeMode="cover"
+                />
+                <View style={styles.discoverTileOverlay} />
+                <Text style={styles.discoverTileText}>Favorites</Text>
               </TouchableOpacity>
             </View>
 
             <Text style={styles.sectionTitle}>Featured</Text>
-            <View style={[styles.categoryTilesRow, { marginBottom: 20 }]}>
+            <View style={[styles.discoverGrid, { marginBottom: 20 }]}>
               <TouchableOpacity
-                style={[styles.categoryTile, { height: 110 }]}
+                style={styles.discoverTile}
                 onPress={() => setActiveCategory("Top Templates")}
                 activeOpacity={0.85}
               >
@@ -163,17 +173,17 @@ export const TemplateBrowseScreen = () => {
                   source={{
                     uri: "https://picsum.photos/seed/TopTemplates/400/300",
                   }}
-                  style={styles.categoryTileImage}
+                  style={styles.discoverTileImage}
                   resizeMode="cover"
                 />
-                <View style={styles.categoryTileOverlay} />
-                <Text style={styles.categoryTileText}>Top{"\n"}Templates</Text>
+                <View style={styles.discoverTileOverlay} />
+                <Text style={styles.discoverTileText}>{"Top\nTemplates"}</Text>
               </TouchableOpacity>
             </View>
 
             <Text style={styles.sectionTitle}>Discover</Text>
             <View style={styles.discoverGrid}>
-              {DISCOVER_CATEGORIES.map((cat) => renderDiscoverTile(cat))}
+              {categories.map((cat) => renderDiscoverTile(cat))}
             </View>
           </>
         )}

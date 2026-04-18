@@ -1,10 +1,13 @@
 import { API_ENDPOINT } from "../configs/api-endpoint";
-import { TemplateDetail, TemplateListItem } from "../types/template.types";
+import { TemplateDetail, TemplateListItem, TemplateCategory } from "../types/template.types";
 import instances from "./api";
 
 export const templateService = {
-  async getAllTemplates(category?: string): Promise<TemplateListItem[]> {
-    const params = category ? { category } : {};
+  async getAllTemplates(categoryCode?: string, format?: string): Promise<TemplateListItem[]> {
+    const params: Record<string, string> = {};
+    if (categoryCode) params.categoryCode = categoryCode;
+    if (format) params.format = format;
+
     const res = await instances.get(API_ENDPOINT.TEMPLATE.BASE, { params });
     return res.data;
   },
@@ -14,8 +17,20 @@ export const templateService = {
     return res.data;
   },
 
-  async getTemplateCategories(): Promise<string[]> {
-    const res = await instances.get(API_ENDPOINT.TEMPLATE.CATEGORIES);
+  async getFormats(categoryCode: string): Promise<string[]> {
+    const res = await instances.get(API_ENDPOINT.TEMPLATE.FORMATS, { 
+      params: { categoryCode } 
+    });
+    return res.data;
+  },
+
+  async getCategoryGrid(): Promise<TemplateCategory[]> {
+    const res = await instances.get(API_ENDPOINT.TEMPLATE_CATEGORY.BASE);
+    return res.data;
+  },
+
+  async getTemplateCategories(): Promise<TemplateCategory[]> {
+    const res = await instances.get(API_ENDPOINT.TEMPLATE_CATEGORY.BASE);
     return res.data;
   },
 

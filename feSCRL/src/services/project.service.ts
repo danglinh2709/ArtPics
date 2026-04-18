@@ -66,7 +66,8 @@ export const projectService = {
     await instances.delete(API_ENDPOINT.PROJECT.DELETE(id));
   },
 
-  async updateMetadata(id: string, metadata: any): Promise<void> {
-    await instances.patch(API_ENDPOINT.PROJECT.METADATA(id), metadata);
+  async updateMetadata(id: string, metadata: any): Promise<any> {
+    const res = await instances.patch(API_ENDPOINT.PROJECT.METADATA(id), metadata);
+    return res.data;
   },
 };

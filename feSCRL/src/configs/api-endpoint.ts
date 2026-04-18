@@ -23,6 +23,9 @@ export const API_ENDPOINT = {
   TEMPLATE: {
     BASE: "/Template",
     BY_ID: (id: string) => `/Template/${id}`,
-    CATEGORIES: "/Template/categories",
+    FORMATS: "/Template/formats",
+  },
+  TEMPLATE_CATEGORY: {
+    BASE: "/TemplateCategory"
   }
 };

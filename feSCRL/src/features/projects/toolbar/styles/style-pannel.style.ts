@@ -70,24 +70,36 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.05)",
     marginVertical: 10,
   },
-  borderBtn: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 12,
+  borderControls: {
+    backgroundColor: "rgba(255,255,255,0.03)",
+    borderRadius: 12,
+    padding: 12,
+    marginTop: 4,
   },
-  borderTitle: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  borderRight: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  borderValue: {
+  subLabel: {
     color: "#8E8E93",
-    marginRight: 8,
-    fontSize: 14,
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  borderColorRow: {
+    marginTop: 12,
+  },
+  colorPredefined: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 8,
+  },
+  colorCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 12,
+    marginBottom: 8,
+    borderWidth: 2,
+    borderColor: "transparent",
+  },
+  activeColor: {
+    borderColor: "#fff",
   },
 });
+

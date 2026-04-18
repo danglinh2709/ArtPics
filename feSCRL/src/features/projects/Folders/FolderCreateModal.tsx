@@ -16,9 +16,9 @@ export function FolderCreateModal() {
   const { isCreateFolderModalOpen, closeCreateFolderModal, createFolder } =
     useFolderStore();
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (folderName.trim()) {
-      createFolder(folderName.trim());
+      await createFolder(folderName.trim());
       setFolderName("");
       closeCreateFolderModal();
     }

@@ -13,6 +13,7 @@ import { useTemplateStore } from "@/src/stores/template.store";
 import { TemplateGrid } from "../templates/components/TemplateGrid";
 import { colors, styles } from "../templates/styles/template.styles";
 import { TemplateActionMenu } from "../templates/components/TemplateActionMenu";
+import TemplatePreviewModal from "../templates/components/TemplatePreviewModal";
 
 export const Home = () => {
   const { templates, fetchTemplates, fetchCategories, isLoading } =
@@ -106,7 +107,7 @@ export const Home = () => {
         )}
       </ScrollView>
 
-      <TemplateActionMenu />
+      <TemplatePreviewModal />
     </SafeAreaView>
   );
 };

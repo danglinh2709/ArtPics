@@ -1,4 +1,4 @@
-import instances from "./api"; // Khớp với path file config Axios của bạn
+import instances from "./api";
 import { API_ENDPOINT } from "../configs/api-endpoint";
 import { ITemplateCategory } from "../types/template-category.types";
 

@@ -4,6 +4,8 @@ export const createTemplateUiSlice: TemplateSliceCreator<
   Pick<
     import("../../types/template.store.types").TemplateState,
     | "isLoading"
+    | "isDetailLoading"
+    | "isApplyingTemplate"
     | "error"
     | "searchQuery"
     | "selectedCategory"
@@ -24,6 +26,8 @@ export const createTemplateUiSlice: TemplateSliceCreator<
   >
 > = (set) => ({
   isLoading: false,
+  isDetailLoading: false,
+  isApplyingTemplate: false,
   error: null,
   searchQuery: "",
   selectedCategory: null,

@@ -8,11 +8,16 @@ export const createProjectDataSlice: ProjectSliceCreator<
     | "currentProjectName"
     | "currentProjectVersion"
     | "layers"
+    | "pageBackground"
+    | "updatePageBackground"
   >
-> = () => ({
+> = (set) => ({
   projects: [],
   currentProjectId: null,
   currentProjectName: "Untitled Project",
   currentProjectVersion: 1,
   layers: [],
+  pageBackground: { type: "color", color: "#ffffff" },
+
+  updatePageBackground: (bg) => set({ pageBackground: bg }),
 });

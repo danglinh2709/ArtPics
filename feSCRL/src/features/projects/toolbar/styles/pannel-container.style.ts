@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+
+const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   container: {
@@ -6,6 +8,7 @@ export const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    height: SCREEN_HEIGHT * 0.45,
     backgroundColor: "#1C1C1E",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,

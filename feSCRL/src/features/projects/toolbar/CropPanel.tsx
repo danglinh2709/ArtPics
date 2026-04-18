@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Typography } from "../../../components/Typography";
 import { useProjectStore } from "../../../stores/project.store";
 import { RATIOS } from "@/src/configs/cropPannel.config";
+import { Section } from "@/src/components/Section";
 
 function cropRatiosEqual(
   a: number | null | undefined,
@@ -30,70 +31,75 @@ export function CropPanel() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <Typography variant="caption" style={styles.sectionTitle}>
-        Tỷ lệ khung (Shape)
-      </Typography>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ratioList}>
-        {RATIOS.map((r) => (
-          <TouchableOpacity
-            key={r.id}
-            style={[
-              styles.ratioItem,
-              cropRatiosEqual(layer.crop.aspectRatio, r.ratio) && styles.activeRatio,
-            ]}
-            onPress={() => {
-              if (r.ratio && selectedLayerId) {
-                setLayerFrameRatio(selectedLayerId, r.ratio);
-              }
-            }}
-          >
-            <View style={[styles.ratioBox, { aspectRatio: r.ratio || 1 }]} />
-            <Typography
-              variant="caption"
+      <Section title="Tỷ lệ khung (Shape)">
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ratioList} contentContainerStyle={styles.ratioListContent}>
+          {RATIOS.map((r) => (
+            <TouchableOpacity
+              key={r.id}
               style={[
-                styles.ratioLabel,
-                cropRatiosEqual(layer.crop.aspectRatio, r.ratio) && styles.activeLabel,
+                styles.ratioItem,
+                cropRatiosEqual(layer.crop.aspectRatio, r.ratio) && styles.activeRatio,
               ]}
+              onPress={() => {
+                if (r.ratio && selectedLayerId) {
+                  setLayerFrameRatio(selectedLayerId, r.ratio);
+                } else if (!r.ratio && selectedLayerId) {
+                   // Handle "Tự do" or reset ratio
+                   updateLayerCrop(selectedLayerId, { aspectRatio: null });
+                }
+              }}
             >
-              {r.label}
-            </Typography>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+              <View style={[
+                  styles.ratioBox, 
+                  { aspectRatio: r.ratio || 1 },
+                  cropRatiosEqual(layer.crop.aspectRatio, r.ratio) && styles.activeRatioBox
+              ]} />
+              <Typography
+                variant="caption"
+                style={[
+                  styles.ratioLabel,
+                  cropRatiosEqual(layer.crop.aspectRatio, r.ratio) && styles.activeLabel,
+                ]}
+              >
+                {r.label}
+              </Typography>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </Section>
 
-      <View style={styles.controlRow}>
-        <View style={styles.controlSection}>
-          <Typography variant="caption" style={styles.sectionTitle}>Zoom nội dung</Typography>
-          <Slider
-            style={styles.slider}
-            minimumValue={1}
-            maximumValue={5}
-            value={layer.crop.scale}
-            onValueChange={(v: number) => updateLayerCrop(layer.id, { scale: v })}
-            minimumTrackTintColor="#EECB68"
-            maximumTrackTintColor="rgba(255,255,255,0.1)"
-            thumbTintColor="#fff"
-          />
-        </View>
-        <View style={styles.controlSection}>
-          <Typography variant="caption" style={styles.sectionTitle}>Xoay nội dung</Typography>
-          <Slider
-            style={styles.slider}
-            minimumValue={-180}
-            maximumValue={180}
-            value={layer.crop.rotation}
-            onValueChange={(v: number) => updateLayerCrop(layer.id, { rotation: v })}
-            minimumTrackTintColor="#EECB68"
-            maximumTrackTintColor="rgba(255,255,255,0.1)"
-            thumbTintColor="#fff"
-          />
-        </View>
-      </View>
+      <Section title="Zoom nội dung" value={`${layer.crop.scale.toFixed(1)}x`}>
+        <Slider
+          style={styles.slider}
+          minimumValue={1}
+          maximumValue={5}
+          step={0.1}
+          value={layer.crop.scale}
+          onValueChange={(v: number) => updateLayerCrop(layer.id, { scale: v })}
+          minimumTrackTintColor="#EECB68"
+          maximumTrackTintColor="rgba(255,255,255,0.1)"
+          thumbTintColor="#fff"
+        />
+      </Section>
+
+      <Section title="Xoay nội dung" value={`${Math.round(layer.crop.rotation)}°`}>
+        <Slider
+          style={styles.slider}
+          minimumValue={-180}
+          maximumValue={180}
+          value={layer.crop.rotation}
+          onValueChange={(v: number) => updateLayerCrop(layer.id, { rotation: v })}
+          minimumTrackTintColor="#EECB68"
+          maximumTrackTintColor="rgba(255,255,255,0.1)"
+          thumbTintColor="#fff"
+        />
+      </Section>
 
       <TouchableOpacity style={styles.resetBtn} onPress={() => resetLayerCrop(layer.id)}>
           <Ionicons name="refresh" size={18} color="#fff" />
-          <Typography style={styles.resetText}>Đặt lại</Typography>
+          <Typography style={styles.resetText}>Đặt lại khung hình</Typography>
       </TouchableOpacity>
+      <View style={{ height: 40 }} />
     </ScrollView>
   );
 }
@@ -102,29 +108,30 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: 20,
   },
-  sectionTitle: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "700",
-    marginBottom: 12,
-  },
   ratioList: {
-    flexDirection: "row",
-    marginBottom: 24,
+    paddingVertical: 10,
+  },
+  ratioListContent: {
+    paddingHorizontal: 15,
   },
   ratioItem: {
     alignItems: "center",
     marginRight: 24,
-    width: 60,
+    minWidth: 50,
   },
   activeRatio: {},
   ratioBox: {
     width: 28,
     borderWidth: 1.5,
-    borderColor: "#fff",
+    borderColor: "rgba(255,255,255,0.3)",
     borderRadius: 4,
     marginBottom: 8,
     backgroundColor: "rgba(255,255,255,0.05)",
+  },
+  activeRatioBox: {
+    borderColor: "#EECB68",
+    backgroundColor: "rgba(238, 203, 104, 0.1)",
+    borderWidth: 2,
   },
   ratioLabel: {
     fontSize: 10,
@@ -133,25 +140,20 @@ const styles = StyleSheet.create({
   },
   activeLabel: {
     color: "#EECB68",
-  },
-  controlRow: {
-    flexDirection: "column",
-    marginBottom: 20,
-  },
-  controlSection: {
-    marginBottom: 16,
+    fontWeight: "700",
   },
   slider: {
     width: "100%",
-    height: 40,
+    height: 44,
   },
   resetBtn: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(255,255,255,0.1)",
+    backgroundColor: "rgba(255,255,255,0.05)",
     paddingVertical: 14,
     borderRadius: 14,
+    marginTop: 10,
   },
   resetText: {
     color: "#fff",
@@ -160,3 +162,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+

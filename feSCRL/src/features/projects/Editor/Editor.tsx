@@ -35,10 +35,11 @@ export default function Editor() {
     layers,
     selectedLayerId,
     selectLayer,
-    saveCurrentProject,
     currentProjectId,
     isUploadingAsset,
     updateLayerText,
+    pageBackground,
+    saveCurrentProject,
   } = useProjectStore();
 
   const {
@@ -75,6 +76,7 @@ export default function Editor() {
     setIsSavingBeforeLeave,
     isUploadingAsset,
     saveCurrentProject,
+    viewShotRef,
   });
 
   const { handleSaveImage } = useEditorExport({
@@ -141,6 +143,7 @@ export default function Editor() {
             layers={layers}
             selectedLayerId={selectedLayerId}
             isCropping={activeTab === "crop"}
+            pageBackground={pageBackground}
             onCanvasPress={handleCanvasPress}
             gesture={composedGesture}
             animatedStyle={animatedStyle}
@@ -170,6 +173,7 @@ export default function Editor() {
             setIsPreviewModalVisible={setIsPreviewModalVisible}
             setIsTextEditModalVisible={setIsTextEditModalVisible}
             layers={layers}
+            pageBackground={pageBackground}
             canvasWidth={canvasWidth}
             canvasHeight={canvasHeight}
             activeLayer={activeLayer}
@@ -180,10 +184,10 @@ export default function Editor() {
             onOpenPreview={handleOpenPreview}
           />
 
-          <EditorLoadingOverlay
+          {/* <EditorLoadingOverlay
             isUploadingAsset={isUploadingAsset}
             isSavingBeforeLeave={isSavingBeforeLeave}
-          />
+          /> */}
         </SafeAreaView>
       </SelectionSyncProvider>
     </GestureHandlerRootView>

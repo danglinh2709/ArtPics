@@ -6,6 +6,7 @@ import {
   ILayerTransform,
   Project,
   TTextLayer,
+  TPageBackground,
 } from "../../types/editor.types";
 import { TAspectRatio } from "@/src/types/project.type";
 import { EAssetType } from "@/src/enums/layer.enum";
@@ -29,6 +30,7 @@ export interface ProjectState {
   currentProjectName: string;
   currentProjectVersion: number;
   layers: ILayer[];
+  pageBackground: TPageBackground;
 
   // Actions
   openCreateModal: () => void;
@@ -41,12 +43,13 @@ export interface ProjectState {
 
   // Project Management (API)
   fetchProjects: () => Promise<void>;
-  saveCurrentProject: () => Promise<void>;
+  saveCurrentProject: (thumbnailUri?: string) => Promise<void>;
   updateEditorState: (projectId: string, editorState: any, version: number) => Promise<any>;
   loadProject: (id: string) => Promise<void>;
   createNewProject: (name: string, ratio: TAspectRatio) => Promise<any>;
   deleteProject: (id: string) => Promise<void>;
   duplicateProject: (id: string) => Promise<void>;
+  toggleStarProject: (id: string) => Promise<void>;
   clearLayers: () => void;
 
   // Layer Actions
@@ -81,6 +84,8 @@ export interface ProjectState {
 
   addTextLayer: (textLayer: TTextLayer) => void;
   updateLayerText: (id: string, text: string) => void;
+
+  updatePageBackground: (bg: TPageBackground) => void;
 }
 
 // alias

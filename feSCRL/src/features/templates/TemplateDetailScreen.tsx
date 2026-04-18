@@ -22,17 +22,19 @@ export default function TemplateDetailScreen() {
     createProjectFromTemplate, 
     isApplyingTemplate,
     selectedTemplate: template,
-    isPreviewDetailLoading: loading,
+    isDetailLoading: loading,
     fetchTemplateDetail,
-    clearSelectedTemplate
+    clearSelectedTemplate,
+    touchRecentTemplate,
   } = useTemplateStore();
 
   useEffect(() => {
     if (id) {
       fetchTemplateDetail(id);
+      touchRecentTemplate(id);
     }
     return () => clearSelectedTemplate();
-  }, [id, fetchTemplateDetail, clearSelectedTemplate]);
+  }, [id, fetchTemplateDetail, clearSelectedTemplate, touchRecentTemplate]);
 
   const onBack = () => router.back();
 

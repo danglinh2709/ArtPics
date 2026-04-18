@@ -27,6 +27,8 @@ namespace Infrastructure.Persistence.Seeders
                 {
                     Name = "Modern Story Scrl",
                     Category = "Instagram Story",
+                    CategoryCode = "STORY",
+                    Format = "9:16",
                     Description = "A modern 3-page continuous scroll design for Instagram Stories.",
                     ThumbnailUrl = "https://res.cloudinary.com/demo/image/upload/v1631234567/sample_story_thumb.jpg",
                     PreviewImageUrl = "https://res.cloudinary.com/demo/image/upload/v1631234567/sample_story_preview.jpg",
@@ -90,6 +92,8 @@ namespace Infrastructure.Persistence.Seeders
                 {
                     Name = "Business Carousel",
                     Category = "Facebook Post",
+                    CategoryCode = "POST",
+                    Format = "1:1",
                     Description = "Professional carousel for business announcements.",
                     ThumbnailUrl = "https://res.cloudinary.com/demo/image/upload/v1631234567/sample_carousel_thumb.jpg",
                     PreviewImageUrl = "https://res.cloudinary.com/demo/image/upload/v1631234567/sample_carousel_preview.jpg",

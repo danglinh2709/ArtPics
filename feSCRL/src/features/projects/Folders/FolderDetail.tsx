@@ -21,7 +21,7 @@ export function FolderDetail() {
   if (!folder) return null;
 
   const folderProjects = projects.filter((p) =>
-    folder.projectIds.includes(p.id),
+    (folder.projectIds ?? []).includes(p.id),
   );
 
   const handleSelectProject = async (project: Project) => {

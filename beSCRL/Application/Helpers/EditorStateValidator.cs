@@ -1,8 +1,13 @@
-﻿using Application.Common;
+using Application.Common;
 using MongoDB.Bson;
 
 namespace Application.Helpers
 {
+    /// <summary>
+    /// Validates an editorState BsonDocument before persisting.
+    /// Designed to be permissive for template-sourced data while still
+    /// catching structural errors (wrong types, missing critical ids, etc.).
+    /// </summary>
     public static class EditorStateValidator
     {
         public static void Validate(BsonDocument editorState)
@@ -11,75 +16,77 @@ namespace Application.Helpers
                 throw new ArgumentException("EditorState is required.");
 
             ValidateRoot(editorState);
-            ValidateDocument(editorState["document"].AsBsonDocument);
-            ValidatePages(editorState["pages"].AsBsonArray, editorState["document"].AsBsonDocument);
-            ValidateOptionalSections(editorState);
+
+            var document = GetField(editorState, "document")!.AsBsonDocument;
+            var pages = GetField(editorState, "pages")!.AsBsonArray;
+
+            ValidateDocument(document);
+            ValidatePages(pages, document);
         }
 
+        // ──────────────────────────────────────────────────────────────
+        // Root
+        // ──────────────────────────────────────────────────────────────
         private static void ValidateRoot(BsonDocument root)
         {
-
             RequireField(root, "schemaVersion");
             RequireField(root, "document");
             RequireField(root, "pages");
 
-            if (!root["schemaVersion"].IsInt32 && !root["schemaVersion"].IsInt64)
-                throw new ArgumentException("schemaVersion must be a number.");
+            var schemaV = GetField(root, "schemaVersion")!;
+            // Accept int, long, double or numeric-string
+            double schemaNum;
+            if (schemaV.IsInt32) schemaNum = schemaV.AsInt32;
+            else if (schemaV.IsInt64) schemaNum = schemaV.AsInt64;
+            else if (schemaV.IsDouble) schemaNum = schemaV.AsDouble;
+            else if (schemaV.IsString && double.TryParse(schemaV.AsString, out var parsed)) schemaNum = parsed;
+            else throw new ArgumentException("schemaVersion must be a number.");
 
-            var schemaVersion = root["schemaVersion"].ToInt32();
-            if (schemaVersion <= 0)
+            if (schemaNum <= 0)
                 throw new ArgumentException("schemaVersion must be greater than 0.");
 
-            if (!root["document"].IsBsonDocument)
+            if (!GetField(root, "document")!.IsBsonDocument)
                 throw new ArgumentException("document must be an object.");
 
-            if (!root["pages"].IsBsonArray)
+            if (!GetField(root, "pages")!.IsBsonArray)
                 throw new ArgumentException("pages must be an array.");
         }
-        
 
+        // ──────────────────────────────────────────────────────────────
+        // Document
+        // ──────────────────────────────────────────────────────────────
         private static void ValidateDocument(BsonDocument document)
         {
             RequireField(document, "type");
-            RequireField(document, "title");
             RequireField(document, "width");
             RequireField(document, "height");
             RequireField(document, "pageCount");
 
-            var type = document["type"].AsString;
-            var allowedTypes = new[]
-            {
-                EditorConstants.TypePost,
-                EditorConstants.TypeStory,
-                EditorConstants.TypeCarousel
-            };
-
+            var type = GetField(document, "type")!.AsString;
+            var allowedTypes = new[] { EditorConstants.TypePost, EditorConstants.TypeStory, EditorConstants.TypeCarousel };
             if (!allowedTypes.Contains(type))
-                throw new ArgumentException("document.type is invalid.");
+                throw new ArgumentException($"document.type '{type}' is invalid.");
 
-            var width = document["width"].ToInt32();
-            var height = document["height"].ToInt32();
-            var pageCount = document["pageCount"].ToInt32();
+            var width = GetField(document, "width")!.ToDouble();
+            var height = GetField(document, "height")!.ToDouble();
+            var pageCount = GetField(document, "pageCount")!.ToInt32();
 
-            if (width <= 0)
-                throw new ArgumentException("document.width must be greater than 0.");
-
-            if (height <= 0)
-                throw new ArgumentException("document.height must be greater than 0.");
-
-            if (pageCount <= 0)
-                throw new ArgumentException("document.pageCount must be greater than 0.");
+            if (width <= 0) throw new ArgumentException("document.width must be > 0.");
+            if (height <= 0) throw new ArgumentException("document.height must be > 0.");
+            if (pageCount <= 0) throw new ArgumentException("document.pageCount must be > 0.");
         }
 
+        // ──────────────────────────────────────────────────────────────
+        // Pages
+        // ──────────────────────────────────────────────────────────────
         private static void ValidatePages(BsonArray pages, BsonDocument document)
         {
             if (pages.Count == 0)
                 throw new ArgumentException("pages must not be empty.");
 
-            var expectedPageCount = document["pageCount"].ToInt32();
-
+            var expectedPageCount = GetField(document, "pageCount")!.ToInt32();
             if (pages.Count != expectedPageCount)
-                throw new ArgumentException("document.pageCount does not match pages length.");
+                throw new ArgumentException($"document.pageCount ({expectedPageCount}) does not match pages array length ({pages.Count}).");
 
             var pageIds = new HashSet<string>();
 
@@ -91,145 +98,113 @@ namespace Application.Helpers
                 var page = pages[i].AsBsonDocument;
 
                 RequireField(page, "id");
-                RequireField(page, "name");
-                RequireField(page, "index");
-                RequireField(page, "background");
-                RequireField(page, "layout");
                 RequireField(page, "layers");
 
-                var pageId = page["id"].AsString;
+                var pageId = GetField(page, "id")!.AsString;
                 if (string.IsNullOrWhiteSpace(pageId))
                     throw new ArgumentException($"pages[{i}].id is required.");
-
                 if (!pageIds.Add(pageId))
                     throw new ArgumentException($"Duplicate page id: {pageId}");
 
-                if (page["index"].ToInt32() < 0)
-                    throw new ArgumentException($"pages[{i}].index must be >= 0.");
+                // background is optional for template pages
+                var bgField = GetField(page, "background");
+                if (bgField != null && bgField.IsBsonDocument)
+                    ValidateBackground(bgField.AsBsonDocument, i);
 
-                if (!page["background"].IsBsonDocument)
-                    throw new ArgumentException($"pages[{i}].background must be an object.");
+                // layout is optional
+                var layoutField = GetField(page, "layout");
+                if (layoutField != null && layoutField.IsBsonDocument)
+                    ValidateLayout(layoutField.AsBsonDocument, i);
 
-                if (!page["layout"].IsBsonDocument)
-                    throw new ArgumentException($"pages[{i}].layout must be an object.");
-
-                if (!page["layers"].IsBsonArray)
+                var layersField = GetField(page, "layers")!;
+                if (!layersField.IsBsonArray)
                     throw new ArgumentException($"pages[{i}].layers must be an array.");
 
-                ValidateBackground(page["background"].AsBsonDocument, i);
-                ValidateLayout(page["layout"].AsBsonDocument, i);
-                ValidateLayers(page["layers"].AsBsonArray, i);
+                ValidateLayers(layersField.AsBsonArray, i);
             }
         }
 
+        // ──────────────────────────────────────────────────────────────
+        // Background
+        // ──────────────────────────────────────────────────────────────
         private static void ValidateBackground(BsonDocument background, int pageIndex)
         {
-            RequireField(background, "type");
+            var typeField = GetField(background, "type");
+            if (typeField == null || !typeField.IsString) return; // permissive
 
-            var type = background["type"].AsString;
-            var allowed = new[] { "color", "image", "gradient", "video", "transparent" };
-
+            var type = typeField.AsString;
+            var allowed = new[] { "color", "image", "gradient", "video", "transparent", "texture" };
             if (!allowed.Contains(type))
-                throw new ArgumentException($"pages[{pageIndex}].background.type is invalid.");
+                throw new ArgumentException($"pages[{pageIndex}].background.type '{type}' is invalid.");
 
-            if (type == "color")
+            if (type == "texture")
             {
-                RequireField(background, "color");
-            }
-
-            if (type == "image" || type == "video")
-            {
-                RequireField(background, "assetId");
+                var uriField = GetField(background, "textureUri");
+                if (uriField == null || !uriField.IsString || string.IsNullOrWhiteSpace(uriField.AsString))
+                    throw new ArgumentException($"pages[{pageIndex}].background.textureUri is required for texture type.");
             }
         }
 
+        // ──────────────────────────────────────────────────────────────
+        // Layout (optional)
+        // ──────────────────────────────────────────────────────────────
         private static void ValidateLayout(BsonDocument layout, int pageIndex)
         {
-            RequireField(layout, "layoutType");
-            RequireField(layout, "frames");
+            var framesField = GetField(layout, "frames");
+            if (framesField == null || !framesField.IsBsonArray) return; // permissive
 
-            if (!layout["frames"].IsBsonArray)
-                throw new ArgumentException($"pages[{pageIndex}].layout.frames must be an array.");
-
-            var frames = layout["frames"].AsBsonArray;
+            var frames = framesField.AsBsonArray;
             var frameIds = new HashSet<string>();
 
             for (int i = 0; i < frames.Count; i++)
             {
-                if (!frames[i].IsBsonDocument)
-                    throw new ArgumentException($"pages[{pageIndex}].layout.frames[{i}] must be an object.");
-
+                if (!frames[i].IsBsonDocument) continue;
                 var frame = frames[i].AsBsonDocument;
 
-                RequireField(frame, "id");
-                RequireField(frame, "x");
-                RequireField(frame, "y");
-                RequireField(frame, "width");
-                RequireField(frame, "height");
+                var idField = GetField(frame, "id");
+                if (idField == null || !idField.IsString) continue;
 
-                var frameId = frame["id"].AsString;
-                if (!frameIds.Add(frameId))
-                    throw new ArgumentException($"Duplicate frame id: {frameId}");
-
-                if (frame["width"].ToDouble() < 0 || frame["height"].ToDouble() < 0)
-                    throw new ArgumentException($"pages[{pageIndex}].layout.frames[{i}] width/height must be >= 0.");
+                if (!frameIds.Add(idField.AsString))
+                    throw new ArgumentException($"Duplicate frame id: {idField.AsString}");
             }
         }
 
+        // ──────────────────────────────────────────────────────────────
+        // Layers
+        // ──────────────────────────────────────────────────────────────
         private static void ValidateLayers(BsonArray layers, int pageIndex)
         {
             var layerIds = new HashSet<string>();
 
             for (int i = 0; i < layers.Count; i++)
             {
-                if (!layers[i].IsBsonDocument)
-                    throw new ArgumentException($"pages[{pageIndex}].layers[{i}] must be an object.");
+                if (!layers[i].IsBsonDocument) continue;
 
                 var layer = layers[i].AsBsonDocument;
 
-                RequireField(layer, "id");
-                RequireField(layer, "type");
-                RequireField(layer, "transform");
-
-                var layerId = layer["id"].AsString;
-                if (string.IsNullOrWhiteSpace(layerId))
+                var idField = GetField(layer, "id");
+                if (idField == null || !idField.IsString || string.IsNullOrWhiteSpace(idField.AsString))
                     throw new ArgumentException($"pages[{pageIndex}].layers[{i}].id is required.");
 
+                var layerId = idField.AsString;
                 if (!layerIds.Add(layerId))
                     throw new ArgumentException($"Duplicate layer id: {layerId}");
 
-                if (!layer["transform"].IsBsonDocument)
-                    throw new ArgumentException($"pages[{pageIndex}].layers[{i}].transform must be an object.");
+                var typeField = GetField(layer, "type");
+                if (typeField == null || !typeField.IsString) continue;
 
-                ValidateTransform(layer["transform"].AsBsonDocument, pageIndex, i);
-                ValidateLayerByType(layer, pageIndex, i);
+                var type = typeField.AsString;
+                ValidateLayerByType(type, layer, pageIndex, i);
             }
         }
 
-        private static void ValidateTransform(BsonDocument transform, int pageIndex, int layerIndex)
+        // ──────────────────────────────────────────────────────────────
+        // Layer type dispatch
+        // ──────────────────────────────────────────────────────────────
+        private static void ValidateLayerByType(string type, BsonDocument layer, int pageIndex, int layerIndex)
         {
-            RequireField(transform, "x");
-            RequireField(transform, "y");
-            RequireField(transform, "width");
-            RequireField(transform, "height");
-
-            if (transform["width"].ToDouble() < 0)
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].transform.width must be >= 0.");
-
-            if (transform["height"].ToDouble() < 0)
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].transform.height must be >= 0.");
-        }
-
-        private static void ValidateLayerByType(BsonDocument layer, int pageIndex, int layerIndex)
-        {
-            var type = layer["type"].AsString;
-
             switch (type)
             {
-                case "text":
-                    ValidateTextLayer(layer, pageIndex, layerIndex);
-                    break;
-
                 case "image":
                 case "video":
                 case "sticker":
@@ -237,97 +212,98 @@ namespace Application.Helpers
                     ValidateAssetLayer(layer, pageIndex, layerIndex);
                     break;
 
+                case "text":
+                    // text layers: just need to exist — content validation is permissive
+                    break;
+
                 case "shape":
-                    ValidateShapeLayer(layer, pageIndex, layerIndex);
-                    break;
-
                 case "group":
-                    ValidateGroupLayer(layer, pageIndex, layerIndex);
+                case "image-text":
+                    // permissive — no strict content requirements
                     break;
 
+                // unknown types are allowed — don't throw, just skip
                 default:
-                    throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].type is invalid.");
+                    break;
             }
         }
 
-        private static void ValidateTextLayer(BsonDocument layer, int pageIndex, int layerIndex)
-        {
-            RequireField(layer, "content");
-
-            if (!layer["content"].IsBsonDocument)
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].content must be an object.");
-
-            var content = layer["content"].AsBsonDocument;
-            RequireField(content, "text");
-
-            if (string.IsNullOrWhiteSpace(content["text"].AsString))
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].content.text is required.");
-        }
-
+        // ──────────────────────────────────────────────────────────────
+        // Asset layer — permissive: any one of url / uri / assetId / content.assetId
+        // ──────────────────────────────────────────────────────────────
         private static void ValidateAssetLayer(BsonDocument layer, int pageIndex, int layerIndex)
         {
-            RequireField(layer, "content");
+            // 1. Has flat 'url' field
+            var urlField = GetField(layer, "url");
+            if (urlField != null && urlField.IsString) return;
 
-            if (!layer["content"].IsBsonDocument)
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].content must be an object.");
+            // 2. Has flat 'uri' field
+            var uriField = GetField(layer, "uri");
+            if (uriField != null && uriField.IsString && !string.IsNullOrWhiteSpace(uriField.AsString)) return;
 
-            var content = layer["content"].AsBsonDocument;
-            RequireField(content, "assetId");
+            // 3. Has flat 'assetId' field
+            var flatAssetId = GetField(layer, "assetId");
+            if (flatAssetId != null && flatAssetId.IsString && !string.IsNullOrWhiteSpace(flatAssetId.AsString)) return;
 
-            if (string.IsNullOrWhiteSpace(content["assetId"].AsString))
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].content.assetId is required.");
+            // 4. Has content.assetId
+            var contentField = GetField(layer, "content");
+            if (contentField != null && contentField.IsBsonDocument)
+            {
+                var assetIdInContent = GetField(contentField.AsBsonDocument, "assetId");
+                if (assetIdInContent != null && assetIdInContent.IsString && !string.IsNullOrWhiteSpace(assetIdInContent.AsString)) return;
+            }
+
+            // 5. Everything missing — permissive: just skip without throwing
+            // This handles edge cases like newly-created template frames with no image yet
         }
 
-        private static void ValidateShapeLayer(BsonDocument layer, int pageIndex, int layerIndex)
-        {
-            RequireField(layer, "content");
+        // ──────────────────────────────────────────────────────────────
+        // Helpers
+        // ──────────────────────────────────────────────────────────────
 
-            if (!layer["content"].IsBsonDocument)
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].content must be an object.");
-
-            var content = layer["content"].AsBsonDocument;
-            RequireField(content, "shapeType");
-        }
-
-        private static void ValidateGroupLayer(BsonDocument layer, int pageIndex, int layerIndex)
-        {
-            RequireField(layer, "content");
-
-            if (!layer["content"].IsBsonDocument)
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].content must be an object.");
-
-            var content = layer["content"].AsBsonDocument;
-            RequireField(content, "children");
-
-            if (!content["children"].IsBsonArray)
-                throw new ArgumentException($"pages[{pageIndex}].layers[{layerIndex}].content.children must be an array.");
-        }
-
-        private static void ValidateOptionalSections(BsonDocument root)
-        {
-            if (root.Contains("assets") && !root["assets"].IsBsonArray)
-                throw new ArgumentException("assets must be an array.");
-
-            if (root.Contains("selection") && !root["selection"].IsBsonDocument)
-                throw new ArgumentException("selection must be an object.");
-
-            if (root.Contains("viewport") && !root["viewport"].IsBsonDocument)
-                throw new ArgumentException("viewport must be an object.");
-
-            if (root.Contains("preferences") && !root["preferences"].IsBsonDocument)
-                throw new ArgumentException("preferences must be an object.");
-
-            if (root.Contains("timeline") && !root["timeline"].IsBsonDocument)
-                throw new ArgumentException("timeline must be an object.");
-
-            if (root.Contains("meta") && !root["meta"].IsBsonDocument)
-                throw new ArgumentException("meta must be an object.");
-        }
-
+        /// <summary>
+        /// Require a field to exist in the document (case-insensitive across camelCase / PascalCase / lowercase).
+        /// </summary>
         private static void RequireField(BsonDocument document, string fieldName)
         {
-            if (!document.Contains(fieldName))
+            if (FindKey(document, fieldName) == null)
                 throw new ArgumentException($"Missing required field: {fieldName}");
+        }
+
+        /// <summary>
+        /// Get a field value using case-insensitive lookup. Returns null if not found.
+        /// </summary>
+        private static BsonValue? GetField(BsonDocument document, string fieldName)
+        {
+            var key = FindKey(document, fieldName);
+            return key != null ? document[key] : null;
+        }
+
+        /// <summary>
+        /// Find the actual key name in the document that matches fieldName (case-insensitive).
+        /// Returns null if not found.
+        /// </summary>
+        private static string? FindKey(BsonDocument document, string fieldName)
+        {
+            // Exact match first (most common)
+            if (document.Contains(fieldName)) return fieldName;
+
+            // PascalCase
+            var pascal = char.ToUpperInvariant(fieldName[0]) + fieldName[1..];
+            if (document.Contains(pascal)) return pascal;
+
+            // lowercase
+            var lower = fieldName.ToLowerInvariant();
+            if (document.Contains(lower)) return lower;
+
+            // Full scan (handles any other casing)
+            foreach (var element in document.Elements)
+            {
+                if (string.Equals(element.Name, fieldName, StringComparison.OrdinalIgnoreCase))
+                    return element.Name;
+            }
+
+            return null;
         }
     }
 }

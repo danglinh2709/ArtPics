@@ -41,16 +41,6 @@ export function TemplateCard({ template }: ITemplateCardProps) {
           </Text>
         </View>
       </View>
-
-      <TouchableOpacity
-        style={styles.templateMenuBtn}
-        onPress={(e) => {
-          e.stopPropagation();
-          openTemplateMenu(template.id);
-        }}
-      >
-        <Ionicons name="ellipsis-vertical" size={14} color="#fff" />
-      </TouchableOpacity>
     </TouchableOpacity>
   );
 }

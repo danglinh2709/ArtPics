@@ -6,11 +6,13 @@ import { styles } from "../../styles/project-form.styles";
 
 interface ProjectHeaderProps {
   title?: string;
+  onPressAdd?: () => void;
   onPressMenu?: () => void;
 }
 
 export function ProjectHeader({
   title = "Dự án",
+  onPressAdd,
   onPressMenu,
 }: ProjectHeaderProps) {
   return (
@@ -21,13 +23,13 @@ export function ProjectHeader({
         {title}
       </Typography>
 
-      <TouchableOpacity
-        style={styles.menuButton}
-        activeOpacity={0.8}
-        onPress={onPressMenu}
-      >
-        <Ionicons name="ellipsis-horizontal-circle" size={28} color="#fff" />
-      </TouchableOpacity>
+      <View style={styles.headerSide}>
+        {onPressAdd ? (
+          <TouchableOpacity onPress={onPressAdd} style={{ alignItems: "flex-end", padding: 8 }}>
+            <Ionicons name="add" size={28} color="#FFF" />
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </View>
   );
 }

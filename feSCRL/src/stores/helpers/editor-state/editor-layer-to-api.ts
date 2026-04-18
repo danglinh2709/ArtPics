@@ -10,17 +10,31 @@ export function mapEditorLayerToApi(
 
   const assetId = layer.assetId || extractAssetIdFromUri(layer.uri);
 
-  if (!assetId) {
-    return null;
+  // If we have an assetId, wrap in content object for backend
+  if (assetId) {
+    return {
+      ...(layer as unknown as Record<string, unknown>),
+      content: {
+        assetId,
+        fit: "cover",
+      },
+    };
   }
 
-  return {
-    ...(layer as unknown as Record<string, unknown>),
-    content: {
-      assetId,
-      fit: "cover",
-    },
-  };
+  // Support legacy 'url' field from templates
+  const anyLayer = layer as any;
+  const legacyUrl = anyLayer.url || anyLayer.Url;
+
+  // Preserve external URLs (templates)
+  if (layer.uri || legacyUrl) {
+    return {
+      ...(layer as unknown as Record<string, unknown>),
+      url: layer.uri || legacyUrl,
+    };
+  }
+
+  // Default to spread for other types
+  return { ...(layer as object) } as Record<string, unknown>;
 }
 
 export function mapLayersToApi(layers: ILayer[]): Record<string, unknown>[] {

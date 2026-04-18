@@ -51,5 +51,10 @@ export function extractAssetIdFromUri(
 }
 
 export function isMediaLayerType(type: ILayer["type"]): boolean {
-  return type === "image" || type === "video";
+  return (
+    type === "image" || type === "video"
+    //  ||
+    // type === "sticker" ||
+    // type === "frameFill"
+  );
 }

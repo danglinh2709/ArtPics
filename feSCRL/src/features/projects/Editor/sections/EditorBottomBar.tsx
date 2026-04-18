@@ -34,12 +34,15 @@ export function EditorBottomBar({
         />
       ) : (
         <View style={styles.defaultBottomBar}>
-          <View style={styles.bottomBarItem}>
+          <TouchableOpacity
+            style={styles.bottomBarItem}
+            onPress={() => onTabPress("background")}
+          >
             <Ionicons name="radio-button-off" size={24} color="#fff" />
             <Typography variant="caption" style={styles.bottomLabel}>
               Nền
             </Typography>
-          </View>
+          </TouchableOpacity>
 
           <View style={styles.bottomBarItem}>
             <Ionicons name="layers-outline" size={24} color="#fff" />

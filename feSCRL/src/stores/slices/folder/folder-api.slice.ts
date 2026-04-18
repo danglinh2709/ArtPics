@@ -6,6 +6,7 @@ export const createFolderApiSlice: FolderSliceCreator<
     import("../../types/folder.store.types").FolderState,
     | "fetchFolders"
     | "createFolder"
+    | "updateFolder"
     | "deleteFolder"
     | "addProjectToFolder"
     | "removeProjectFromFolder"
@@ -29,6 +30,19 @@ export const createFolderApiSlice: FolderSliceCreator<
       set((state) => ({ folders: [newFolder, ...state.folders] }));
     } catch (e: any) {
       console.error("Failed to create folder", e);
+    }
+  },
+
+  updateFolder: async (id, name) => {
+    try {
+      const updatedFolder = await folderService.updateFolder(id, name);
+      set((state) => ({
+        folders: state.folders.map((f) =>
+          f.id === id ? updatedFolder : f
+        ),
+      }));
+    } catch (e: any) {
+      console.error("Failed to update folder", e);
     }
   },
 

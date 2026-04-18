@@ -32,9 +32,14 @@ export const mapApiProjectToProject = (
 
   // lấy layers từ project hiện tại hoặc từ api
   let layers = (existing?.layers || []) as ILayer[];
+  let pageBackground = existing?.pageBackground || null;
 
   // nếu có editorState thì map layers từ editorState
   if (editorState) {
+    const firstPage = editorState.pages?.[0];
+    if (firstPage?.background) {
+      pageBackground = firstPage.background;
+    }
     const rawLayers = pickBestPageRawLayers(editorState);
     if (rawLayers && rawLayers.length > 0) {
       layers = mapLayersFromApi(rawLayers);
@@ -44,9 +49,13 @@ export const mapApiProjectToProject = (
   return {
     id: p.id,
     name: p.name,
+    templateId: p.templateId ?? null,
+    status: p.status ?? "Draft",
     thumbnailAssetId: p.thumbnailAssetId,
     updatedAt: new Date(p.updatedAt).getTime(),
     ratio: ratio ?? null,
+    isStarred: p.isStarred ?? false,
+    pageBackground,
     layers,
   };
 };

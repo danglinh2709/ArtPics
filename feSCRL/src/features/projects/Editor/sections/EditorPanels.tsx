@@ -4,6 +4,7 @@ import { ReplacePanel } from "../../toolbar/ReplacePanel";
 import { StylePanel } from "../../toolbar/StylePanel";
 import { CropPanel } from "../../toolbar/CropPanel";
 import { AdjustPanel } from "../../toolbar/AdjustPanel";
+import { BackgroundPanel } from "../../toolbar/BackgroundPanel";
 import { PanelContainer } from "../../toolbar/PanelContainer";
 
 interface IEditorPanelsProps {
@@ -22,6 +23,8 @@ export function EditorPanels({ activeTab, onClose }: IEditorPanelsProps) {
         return <CropPanel />;
       case "adjust":
         return <AdjustPanel />;
+      case "background":
+        return <BackgroundPanel />;
       default:
         return null;
     }

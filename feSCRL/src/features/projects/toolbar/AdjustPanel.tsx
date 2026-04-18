@@ -1,9 +1,11 @@
 import Slider from "@react-native-community/slider";
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Typography } from "../../../components/Typography";
 import { useProjectStore } from "../../../stores/project.store";
 import { ILayerAdjustments } from "../../../types/editor.types";
+import { Section } from "@/src/components/Section";
+import { Ionicons } from "@expo/vector-icons";
 
 const ADJUSTMENTS: {
   id: keyof ILayerAdjustments;
@@ -27,7 +29,7 @@ const ADJUSTMENTS: {
     max: 100,
     defaultValue: 0,
   },
-  { id: "blur", label: "Làm mờ", min: 0, max: 50, defaultValue: 0 },
+  { id: "blur", label: "Làm mờ", min: 0, max: 20, defaultValue: 0 },
   { id: "sharpen", label: "Độ sắc nét", min: 0, max: 100, defaultValue: 0 },
 ];
 
@@ -37,21 +39,27 @@ export function AdjustPanel() {
 
   if (!layer) return null;
 
+  const handleReset = () => {
+    const defaults = ADJUSTMENTS.reduce((acc, curr) => {
+      acc[curr.id] = curr.defaultValue;
+      return acc;
+    }, {} as any);
+    updateLayerAdjustments(layer.id, defaults);
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {ADJUSTMENTS.map((adj) => (
-        <View key={adj.id} style={styles.section}>
-          <View style={styles.header}>
-            <Typography style={styles.label}>{adj.label}</Typography>
-            <Typography variant="caption" style={styles.value}>
-              {(layer.adjustments[adj.id] || 0).toFixed(0)}
-            </Typography>
-          </View>
+        <Section 
+            key={adj.id} 
+            title={adj.label} 
+            value={(layer.adjustments?.[adj.id] ?? adj.defaultValue).toFixed(0)}
+        >
           <Slider
             style={styles.slider}
             minimumValue={adj.min}
             maximumValue={adj.max}
-            value={layer.adjustments[adj.id] || adj.defaultValue}
+            value={layer.adjustments?.[adj.id] ?? adj.defaultValue}
             onValueChange={(v: number) =>
               updateLayerAdjustments(layer.id, { [adj.id]: v })
             }
@@ -59,8 +67,14 @@ export function AdjustPanel() {
             maximumTrackTintColor="rgba(255,255,255,0.1)"
             thumbTintColor="#fff"
           />
-        </View>
+        </Section>
       ))}
+
+      <TouchableOpacity style={styles.resetBtn} onPress={handleReset}>
+          <Ionicons name="refresh" size={18} color="#fff" />
+          <Typography style={styles.resetText}>Đặt lại tất cả</Typography>
+      </TouchableOpacity>
+      <View style={{ height: 40 }} />
     </ScrollView>
   );
 }
@@ -69,31 +83,24 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: 20,
   },
-  section: {
-    marginBottom: 24,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  label: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  value: {
-    color: "#EECB68",
-    fontSize: 12,
-    fontWeight: "800",
-    backgroundColor: "rgba(238, 203, 104, 0.1)",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 6,
-  },
   slider: {
     width: "100%",
-    height: 40,
+    height: 44,
+  },
+  resetBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.05)",
+    paddingVertical: 14,
+    borderRadius: 14,
+    marginTop: 10,
+  },
+  resetText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+    marginLeft: 8,
   },
 });
+

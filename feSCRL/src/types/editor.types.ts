@@ -49,6 +49,10 @@ export interface ILayerStyle {
     color: string;
     opacity: number;
   } | null;
+  background?: TPageBackground | null;
+  textColor?: string;
+  fontFamily?: string;
+  textAlign?: "left" | "center" | "right" | "justify";
 }
 
 export interface ILayerAdjustments {
@@ -59,12 +63,22 @@ export interface ILayerAdjustments {
   sharpen: number; // Độ sắc nét
 }
 
+export type TPageBackground =
+  | { type: "color"; color: string }
+  | { type: "gradient"; gradient: { colors: string[]; angle: number } }
+  | { type: "texture"; textureUri: string }
+  | null;
+
 export interface Project {
   id: string;
   name: string;
+  templateId?: string | null;
+  status?: string;
   thumbnailAssetId?: string | null;
   ratio?: TAspectRatio | null;
+  pageBackground?: TPageBackground | null;
   layers: ILayer[];
+  isStarred?: boolean;
   updatedAt: number;
 }
 
@@ -77,7 +91,8 @@ export type TToolbarTab =
   | "format"
   | "align"
   | "position"
-  | "opacity";
+  | "opacity"
+  | "background";
 
 export type TLayerAlignment =
   | "left"

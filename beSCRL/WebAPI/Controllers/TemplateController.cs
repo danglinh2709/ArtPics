@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("api/[controller]")]
     public class TemplateController : ControllerBase
     {
         private readonly ITemplateService _templateService;
@@ -16,9 +16,19 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? category = null)
+        public async Task<IActionResult> GetAll([FromQuery] string? categoryCode = null, [FromQuery] string? format = null)
         {
-            var result = await _templateService.GetAllActiveAsync(category);
+            var result = await _templateService.GetAllActiveAsync(categoryCode, format);
+            return Ok(result);
+        }
+
+        [HttpGet("formats")]
+        public async Task<IActionResult> GetFormats([FromQuery] string categoryCode)
+        {
+            if (string.IsNullOrWhiteSpace(categoryCode))
+                return BadRequest("CategoryCode is required to get formats.");
+
+            var result = await _templateService.GetFormatsAsync(categoryCode);
             return Ok(result);
         }
 

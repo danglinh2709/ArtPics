@@ -17,7 +17,11 @@ namespace WebAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+                });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -109,8 +113,8 @@ namespace WebAPI
             // Seed templates
             using (var scope = app.Services.CreateScope())
             {
-                var seeder = scope.ServiceProvider.GetRequiredService<Infrastructure.Persistence.Seeders.TemplateSeeder>();
-                await seeder.SeedAsync();
+                var seeder = scope.ServiceProvider.GetRequiredService<Infrastructure.Persistence.Seeders.DatabaseSeeder>();
+                await seeder.SeedAllAsync();
             }
 
             app.MapControllers();

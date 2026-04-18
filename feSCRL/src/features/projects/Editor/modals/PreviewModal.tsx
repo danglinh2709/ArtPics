@@ -18,6 +18,7 @@ interface IPreviewModalProps {
   visible: boolean;
   onClose: () => void;
   layers: ILayer[];
+  pageBackground?: any;
   canvasWidth: number;
   canvasHeight: number;
 }
@@ -26,10 +27,11 @@ export function PreviewModal({
   visible,
   onClose,
   layers,
+  pageBackground,
   canvasWidth,
   canvasHeight,
 }: IPreviewModalProps) {
-  const previewScale = (SCREEN_WIDTH - 100) / canvasWidth;
+  const previewScale = (SCREEN_WIDTH - 60) / canvasWidth;
   const previewWidth = canvasWidth * previewScale;
   const previewHeight = canvasHeight * previewScale;
 
@@ -43,17 +45,20 @@ export function PreviewModal({
       <SafeAreaView style={styles.overlay}>
         <View style={styles.header}>
           <View style={{ width: 44 }} />
-          <Typography style={styles.headerTitle}>Xem trước</Typography>
+          <Typography style={styles.headerTitle}>Preview</Typography>
           <TouchableOpacity
             onPress={onClose}
+            style={styles.closeBtn}
             hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
           >
-            <Ionicons name="close-circle" size={28} color="#444" />
+            <Ionicons name="close" size={24} color="#ccc" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.mockupContainer}>
-          <View style={styles.instagramPost}>
+          <View style={styles.whiteCard}>
+            <View style={styles.dragHandle} />
+
             <View style={styles.postHeader}>
               <View style={styles.profileCircle} />
               <View style={styles.userInfo}>
@@ -62,8 +67,8 @@ export function PreviewModal({
               </View>
               <Ionicons
                 name="ellipsis-horizontal"
-                size={18}
-                color="#8E8E93"
+                size={20}
+                color="#A0A0A0"
                 style={{ marginLeft: "auto" }}
               />
             </View>
@@ -76,6 +81,7 @@ export function PreviewModal({
             >
               <ProjectMiniCanvas
                 layers={layers}
+                pageBackground={pageBackground}
                 canvasWidth={canvasWidth}
                 canvasHeight={canvasHeight}
                 thumbnailWidth={previewWidth}
@@ -85,17 +91,17 @@ export function PreviewModal({
 
             <View style={styles.postFooter}>
               <View style={styles.footerActions}>
-                <Ionicons name="heart-outline" size={24} color="#fff" />
+                <Ionicons name="heart-outline" size={26} color="#222" />
                 <Ionicons
                   name="chatbubble-outline"
-                  size={22}
-                  color="#fff"
+                  size={24}
+                  color="#222"
                   style={styles.actionIcon}
                 />
                 <Ionicons
                   name="paper-plane-outline"
-                  size={22}
-                  color="#fff"
+                  size={24}
+                  color="#222"
                   style={styles.actionIcon}
                 />
               </View>
@@ -103,13 +109,12 @@ export function PreviewModal({
               <View style={styles.dotsContainer}>
                 <View style={[styles.dot, styles.dotActive]} />
                 <View style={[styles.dot, styles.dotInactive]} />
-                <View style={[styles.dot, styles.dotInactive]} />
               </View>
 
               <Ionicons
                 name="bookmark-outline"
-                size={22}
-                color="#fff"
+                size={24}
+                color="#222"
                 style={{ marginLeft: "auto" }}
               />
             </View>

@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
 import Animated from "react-native-reanimated";
 import { GestureDetector } from "react-native-gesture-handler";
+import { LinearGradient } from "expo-linear-gradient";
 import { LayerItem } from "../../Layers/LayerItem";
-import { ILayer } from "@/src/types/editor.types";
+import { ILayer, TPageBackground } from "@/src/types/editor.types";
 import ViewShot from "react-native-view-shot";
 
 interface IEditorCanvasProps {
@@ -12,6 +13,7 @@ interface IEditorCanvasProps {
   layers: ILayer[];
   selectedLayerId: string | null;
   isCropping: boolean;
+  pageBackground: TPageBackground;
   onCanvasPress: () => void;
   gesture: ReturnType<
     typeof import("react-native-gesture-handler").Gesture.Simultaneous
@@ -27,6 +29,7 @@ export const EditorCanvas = React.forwardRef<ViewShot, IEditorCanvasProps>(
       layers,
       selectedLayerId,
       isCropping,
+      pageBackground,
       onCanvasPress,
       gesture,
       animatedStyle,
@@ -50,9 +53,29 @@ export const EditorCanvas = React.forwardRef<ViewShot, IEditorCanvasProps>(
             >
               <TouchableOpacity
                 activeOpacity={1}
-                style={styles.canvas}
+                style={[
+                  styles.canvas,
+                  pageBackground?.type === "color" && {
+                    backgroundColor: pageBackground.color,
+                  },
+                ]}
                 onPress={onCanvasPress}
               >
+                {pageBackground?.type === "gradient" && (
+                  <LinearGradient
+                    colors={pageBackground.gradient.colors as any}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={StyleSheet.absoluteFillObject}
+                  />
+                )}
+                {pageBackground?.type === "texture" && (
+                  <Image
+                    source={{ uri: pageBackground.textureUri }}
+                    style={StyleSheet.absoluteFillObject}
+                    resizeMode="cover"
+                  />
+                )}
                 {layers.map((layer) => (
                   <LayerItem
                     key={`content-${layer.id}`}

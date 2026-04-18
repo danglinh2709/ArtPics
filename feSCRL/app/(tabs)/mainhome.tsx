@@ -1,9 +1,5 @@
-import { View, Text } from "react-native";
+import { Home } from "@/src/features/home/Home";
 
 export default function MainHomeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Trang chủ</Text>
-    </View>
-  );
+  return <Home />;
 }

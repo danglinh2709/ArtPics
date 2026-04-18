@@ -20,6 +20,7 @@ interface IExportModalProps {
   visible: boolean;
   onClose: () => void;
   layers: ILayer[];
+  pageBackground?: any;
   canvasWidth: number;
   canvasHeight: number;
   onExpand: () => void;
@@ -30,12 +31,13 @@ export function ExportModal({
   visible,
   onClose,
   layers,
+  pageBackground,
   canvasWidth,
   canvasHeight,
   onExpand,
   onSaveImage,
 }: IExportModalProps) {
-  const previewScale = (SCREEN_WIDTH - 80) / canvasWidth;
+  const previewScale = (SCREEN_WIDTH - 120) / canvasWidth;
   const previewWidth = canvasWidth * previewScale;
   const previewHeight = canvasHeight * previewScale;
 
@@ -43,32 +45,32 @@ export function ExportModal({
     <Modal
       visible={visible}
       transparent={true}
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <View style={{ width: 40 }} />
-            <Typography style={styles.headerTitle}>Xuất</Typography>
-            <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close-circle" size={28} color="#444" />
-            </TouchableOpacity>
-          </View>
+        <View style={styles.header}>
+          <View style={{ width: 44 }} />
+          <Typography style={styles.headerTitle}>Export</Typography>
+          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+            <Ionicons name="close" size={24} color="#ccc" />
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.tabSwitcher}>
-            <View style={styles.tabActive}>
-              <Typography style={styles.tabTextActive}>Carousel</Typography>
-            </View>
-            <View style={styles.tabInactive}>
-              <Typography style={styles.tabTextInactive}>Video</Typography>
-              <View style={styles.crownContainer}>
-                <Ionicons name="ribbon" size={12} color="#000" />
-              </View>
+        <View style={styles.tabSwitcher}>
+          <View style={styles.tabActive}>
+            <Typography style={styles.tabTextActive}>Carousel</Typography>
+          </View>
+          <View style={styles.tabInactive}>
+            <Typography style={styles.tabTextInactive}>Video</Typography>
+            <View style={styles.crownContainer}>
+              <Ionicons name="ribbon" size={14} color="#000" />
             </View>
           </View>
+        </View>
 
-          <View style={styles.previewContainer}>
+        <View style={styles.previewContainer}>
+          <View style={styles.previewCard}>
             <View
               style={[
                 styles.previewFrame,
@@ -77,6 +79,7 @@ export function ExportModal({
             >
               <ProjectMiniCanvas
                 layers={layers}
+                pageBackground={pageBackground}
                 canvasWidth={canvasWidth}
                 canvasHeight={canvasHeight}
                 thumbnailWidth={previewWidth}
@@ -85,31 +88,37 @@ export function ExportModal({
               <TouchableOpacity
                 style={styles.expandBtn}
                 onPress={onExpand}
-                activeOpacity={0.7}
+                activeOpacity={0.8}
               >
-                <Ionicons name="expand" size={24} color="#fff" />
+                <Ionicons name="expand" size={18} color="#fff" />
               </TouchableOpacity>
             </View>
           </View>
-
-          <View style={styles.footer}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.optionsScroll}
-              decelerationRate="fast"
-            >
-              <ExportOption
-                icon="download-outline"
-                label="Ảnh"
-                onPress={onSaveImage}
-              />
-              <ExportOption icon="logo-instagram" label="Instagram" />
-              <ExportOption icon="logo-tiktok" label="TikTok" />
-              <ExportOption icon="link-outline" label="Liên kết mẫu" isNew />
-              <ExportOption icon="ellipsis-horizontal" label="Thêm" />
-            </ScrollView>
+          
+          <View style={styles.dotsContainer}>
+            <View style={[styles.dot, styles.dotActive]} />
+            <View style={[styles.dot, styles.dotInactive]} />
           </View>
+        </View>
+
+        <View style={styles.footer}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.optionsScroll}
+            decelerationRate="fast"
+          >
+            <ExportOption
+              icon="download-outline"
+              label="Camera Roll"
+              onPress={onSaveImage}
+            />
+            <ExportOption icon="logo-instagram" label="Instagram" isNew />
+            <ExportOption icon="calendar-outline" label="Schedule" isNew />
+            <ExportOption icon="link-outline" label="Template Link" />
+            <ExportOption icon="logo-tiktok" label="TikTok" />
+            <ExportOption icon="ellipsis-horizontal" label="More" />
+          </ScrollView>
         </View>
       </View>
     </Modal>

@@ -27,6 +27,7 @@ export const createProjectApiSlice: ProjectSliceCreator<
     | "createNewProject"
     | "deleteProject"
     | "duplicateProject"
+    | "toggleStarProject"
     | "uploadAsset"
   >
 > = (set, get) => ({
@@ -49,15 +50,24 @@ export const createProjectApiSlice: ProjectSliceCreator<
   },
 
   // update editor state directly
-  updateEditorState: async (projectId: string, editorState: any, version: number) => {
+  updateEditorState: async (
+    projectId: string,
+    editorState: any,
+    version: number,
+  ) => {
     set({ isLoading: true, error: null });
     try {
-      const saved = await projectService.updateEditorState(projectId, editorState, version);
+      const saved = await projectService.updateEditorState(
+        projectId,
+        editorState,
+        version,
+      );
       if (saved?.currentVersion != null) {
         set({ currentProjectVersion: saved.currentVersion });
       }
       return saved;
     } catch (e: any) {
+      console.error("[updateEditorState] ERROR: ", e.message, e.response?.data);
       set({ error: e.message || "Failed to update project data" });
       return null;
     } finally {
@@ -75,14 +85,18 @@ export const createProjectApiSlice: ProjectSliceCreator<
         documentHeight: ratio.height,
       });
 
-      set({
+      set((state) => ({
         currentProjectId: newProject.id,
         currentProjectName: name,
         currentProjectVersion: newProject.currentVersion,
         selectedRatio: ratio,
         layers: [],
         selectedLayerId: null,
-      });
+        projects: [
+          mapApiProjectToProject(newProject as any, []),
+          ...state.projects,
+        ],
+      }));
 
       return newProject;
     } catch (e: any) {
@@ -94,7 +108,7 @@ export const createProjectApiSlice: ProjectSliceCreator<
   },
 
   // save current project
-  saveCurrentProject: async () => {
+  saveCurrentProject: async (thumbnailUri?: string) => {
     const {
       currentProjectId,
       currentProjectName,
@@ -102,9 +116,13 @@ export const createProjectApiSlice: ProjectSliceCreator<
       layers,
       selectedRatio,
       isUploadingAsset,
+      pageBackground,
     } = get();
 
-    if (!currentProjectId || !selectedRatio) return;
+    if (!currentProjectId || !selectedRatio) {
+      console.warn("[saveCurrentProject] ABORT: missing projectId or ratio");
+      return;
+    }
 
     if (isUploadingAsset) {
       console.log("[saveCurrentProject] Waiting for asset upload to finish...");
@@ -128,34 +146,77 @@ export const createProjectApiSlice: ProjectSliceCreator<
             id: "page-1",
             name: "Page 1",
             index: 0,
-            background: { type: "color", color: "#ffffff" },
+            background: pageBackground as any,
             layout: { layoutType: "free", frames: [] },
             layers: mapLayersToApi(layers) as any,
           } as TPage,
         ],
       };
 
+      // Double check schemaVersion is present
+      if (!editorState.schemaVersion) {
+        editorState.schemaVersion = 1;
+      }
+
+      const versionToSend = get().currentProjectVersion;
+      // console.log(
+      //   "[saveCurrentProject] Sending version:",
+      //   versionToSend,
+      //   "layers mapped:",
+      //   editorState.pages[0].layers?.length,
+      // );
+
       const saved = await projectService.updateEditorState(
         currentProjectId,
         editorState,
-        currentProjectVersion,
+        versionToSend,
       );
+
+      // console.log(
+      //   "[saveCurrentProject] Save SUCCESS, new version:",
+      //   saved?.currentVersion,
+      // );
 
       if (saved?.currentVersion != null) {
         set({ currentProjectVersion: saved.currentVersion });
       }
 
       try {
-        const assets = await assetService.getAssetsByProject(currentProjectId);
-        const latestImageAsset = [...assets]
-          .reverse()
-          .find((a) => a.type === 1);
+        let finalThumbnailAssetId: string | null = null;
 
-        if (latestImageAsset) {
-          await projectService.updateMetadata(currentProjectId, {
-            name: currentProjectName || "Untitled",
-            thumbnailAssetId: latestImageAsset.id,
-          });
+        // If a viewshot URI is provided, upload it as an image asset
+        if (thumbnailUri) {
+          const uploadedAsset = await assetService.uploadAsset(
+            currentProjectId,
+            EAssetType.Image,
+            thumbnailUri,
+            "project_thumbnail.png",
+            "image/png",
+          );
+          if (uploadedAsset && uploadedAsset.id) {
+            finalThumbnailAssetId = uploadedAsset.id;
+          }
+        }
+
+        if (finalThumbnailAssetId) {
+          const projectToUpdate = get().projects.find(
+            (p) => p.id === currentProjectId,
+          );
+          const metaResult = await projectService.updateMetadata(
+            currentProjectId,
+            {
+              name: currentProjectName || projectToUpdate?.name || "Untitled",
+              thumbnailAssetId: finalThumbnailAssetId,
+              templateId: projectToUpdate?.templateId || null,
+              status: projectToUpdate?.status || "Draft",
+              isStarred: projectToUpdate?.isStarred || false,
+            },
+          );
+
+          // Sync version from metadata update
+          if (metaResult?.currentVersion != null) {
+            set({ currentProjectVersion: metaResult.currentVersion });
+          }
 
           set((state) => {
             const newProjects = [...state.projects];
@@ -163,7 +224,7 @@ export const createProjectApiSlice: ProjectSliceCreator<
             if (idx > -1) {
               newProjects[idx] = {
                 ...newProjects[idx],
-                thumbnailAssetId: latestImageAsset.id,
+                thumbnailAssetId: finalThumbnailAssetId,
                 updatedAt: Date.now(),
               };
             }
@@ -172,11 +233,16 @@ export const createProjectApiSlice: ProjectSliceCreator<
         }
       } catch (err) {
         console.warn(
-          "[saveCurrentProject] Thumbnail metadata update skipped:",
+          "[saveCurrentProject] Thumbnail metadata update failed:",
           err,
         );
       }
     } catch (e: any) {
+      console.error(
+        "[saveCurrentProject] ERROR: ",
+        e.message,
+        e.response?.data,
+      );
       set({ error: e.message || "Failed to save project" });
     } finally {
       set({ isLoading: false });
@@ -199,6 +265,12 @@ export const createProjectApiSlice: ProjectSliceCreator<
 
       const layers = mapLayersFromApi(rawLayerList);
 
+      const firstPage = editorState?.pages?.[0];
+      const loadedBackground = firstPage?.background || {
+        type: "color",
+        color: "#ffffff",
+      };
+
       set({
         currentProjectId: detail.id,
         currentProjectName: detail.name,
@@ -206,6 +278,7 @@ export const createProjectApiSlice: ProjectSliceCreator<
         layers,
         selectedRatio: resolvedRatio,
         selectedLayerId: null,
+        pageBackground: loadedBackground as any,
       });
     } catch (e: any) {
       set({ error: e.message || "Failed to load project" });
@@ -297,6 +370,35 @@ export const createProjectApiSlice: ProjectSliceCreator<
       set({ error: e.message || "Failed to duplicate project" });
     } finally {
       set({ isLoading: false });
+    }
+  },
+
+  // toggle project star status
+  toggleStarProject: async (id: string) => {
+    try {
+      const { projects } = get();
+      const project = projects.find((p) => p.id === id);
+      if (!project) return;
+
+      const newStarredStatus = !project.isStarred;
+
+      // Optimistic update
+      set((state) => ({
+        projects: state.projects.map((p) =>
+          p.id === id ? { ...p, isStarred: newStarredStatus } : p,
+        ),
+      }));
+
+      await projectService.updateMetadata(id, {
+        name: project.name,
+        isStarred: newStarredStatus,
+        thumbnailAssetId: project.thumbnailAssetId,
+      });
+    } catch (e) {
+      console.warn("Failed to toggle star", e);
+      // Revert optimistic update
+      const { fetchProjects } = get();
+      await fetchProjects();
     }
   },
 

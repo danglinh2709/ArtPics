@@ -16,11 +16,10 @@ export function EditorLoadingOverlay({
       {isUploadingAsset && (
         <View style={styles.uploadOverlay}>
           <ActivityIndicator size="large" color="#EECB68" />
-          <Loading />
         </View>
       )}
 
-      {isSavingBeforeLeave && <Loading />}
+      {isSavingBeforeLeave}
     </>
   );
 }

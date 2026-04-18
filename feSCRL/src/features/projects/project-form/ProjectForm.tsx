@@ -18,20 +18,31 @@ import { styles } from "../styles/project-form.styles";
 import { ProjectCreateModal } from "../ProjectCreateModal";
 import { ProjectActionMenu } from "../ProjectActionMenu";
 
-import { FolderList } from "./components/FolderList";
-import { FolderDetail } from "./components/FolderDetail";
-import { FolderCreateModal } from "./components/FolderCreateModal";
-import { FolderAddProjectModal } from "./components/FolderAddProjectModal";
+import { FolderList } from "../Folders/FolderList";
+import { FolderDetail } from "../Folders/FolderDetail";
+import { FolderCreateModal } from "../Folders/FolderCreateModal";
+import { FolderAddProjectModal } from "../Folders/FolderAddProjectModal";
 
 export function ProjectForm() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TProjectTabKey>("projects");
 
-  const { openCreateModal, projects, fetchProjects, loadProject, isLoading: isProjectLoading } =
-    useProjectStore();
+  const {
+    openCreateModal,
+    projects,
+    fetchProjects,
+    loadProject,
+    isLoading: isProjectLoading,
+  } = useProjectStore();
 
-  const { folders, activeFolderId, setActiveFolderId, openCreateFolderModal, fetchFolders, isLoading: isFolderLoading } =
-    useFolderStore();
+  const {
+    folders,
+    activeFolderId,
+    setActiveFolderId,
+    openCreateFolderModal,
+    fetchFolders,
+    isLoading: isFolderLoading,
+  } = useFolderStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -99,7 +110,7 @@ export function ProjectForm() {
         <FolderDetail />
       ) : (
         <>
-          <ProjectHeader />
+          <ProjectHeader onPressAdd={activeTab === "projects" ? openCreateModal : openCreateFolderModal} />
           <ProjectTabs activeTab={activeTab} onChangeTab={setActiveTab} />
           <View style={styles.content}>{renderContent()}</View>
         </>

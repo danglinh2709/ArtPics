@@ -7,11 +7,17 @@ import {
   getEditorDocument,
   mapLayersFromApi,
 } from "../../helpers/editor-state";
+import {
+  getRecentTemplateIds,
+  touchRecentTemplateId,
+} from "../../../services/template-preferences.storage";
 
 export const createTemplateApiSlice: TemplateSliceCreator<
   Pick<
     import("../../types/template.store.types").TemplateState,
     | "fetchTemplates"
+    | "fetchRecentTemplates"
+    | "touchRecentTemplate"
     | "fetchTemplateDetail"
     | "fetchCategories"
     | "createProjectFromTemplate"
@@ -33,8 +39,37 @@ export const createTemplateApiSlice: TemplateSliceCreator<
     }
   },
 
-  fetchTemplateDetail: async (id: string) => {
+  fetchRecentTemplates: async () => {
     set({ isLoading: true, error: null });
+    try {
+      const recentIds = await getRecentTemplateIds();
+      if (recentIds.length === 0) {
+        set({ recentTemplates: [] });
+        return;
+      }
+      // Fetch all templates then filter by recent IDs, preserving order
+      const allTemplates = await templateService.getAllTemplates();
+      const recentTemplates = recentIds
+        .map((id) => allTemplates.find((t) => t.id === id))
+        .filter(Boolean) as any[];
+      set({ recentTemplates });
+    } catch (e: any) {
+      set({ error: e.message || "Failed to fetch recent templates" });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  touchRecentTemplate: async (id: string) => {
+    try {
+      await touchRecentTemplateId(id);
+    } catch (e) {
+      console.warn("[touchRecentTemplate] failed:", e);
+    }
+  },
+
+  fetchTemplateDetail: async (id: string) => {
+    set({ isDetailLoading: true, error: null });
 
     try {
       const detail = await templateService.getTemplateById(id);
@@ -56,7 +91,7 @@ export const createTemplateApiSlice: TemplateSliceCreator<
     } catch (e: any) {
       set({ error: e.message || "Failed to fetch template detail" });
     } finally {
-      set({ isLoading: false });
+      set({ isDetailLoading: false });
     }
   },
 
@@ -77,10 +112,14 @@ export const createTemplateApiSlice: TemplateSliceCreator<
     templateId: string,
     projectName?: string,
   ) => {
-    set({ isLoading: true, error: null });
+    set({ isApplyingTemplate: true, error: null });
 
     try {
-      const template = await templateService.getTemplateById(templateId);
+      const { selectedTemplate } = get();
+      const template = selectedTemplate?.id === templateId 
+        ? selectedTemplate 
+        : await templateService.getTemplateById(templateId);
+
       if (
         !template ||
         !template.templateData ||
@@ -93,7 +132,7 @@ export const createTemplateApiSlice: TemplateSliceCreator<
       const width = template.templateData.document.width || 1080;
       const height = template.templateData.document.height || 1080;
 
-      const { createNewProject, updateEditorState, loadProject } =
+      const { createNewProject, updateEditorState } =
         await import("../project/project-api.slice").then((m) =>
           m.createProjectApiSlice(
             (useProjectStore as any).setState,
@@ -115,6 +154,7 @@ export const createTemplateApiSlice: TemplateSliceCreator<
 
       // 2. Clone template data into project
       const editorState = {
+        schemaVersion: 1, // Ensure version is present
         ...template.templateData,
         document: {
           ...template.templateData.document,
@@ -122,21 +162,38 @@ export const createTemplateApiSlice: TemplateSliceCreator<
         },
       };
 
-      await updateEditorState(
+      // Ensure schemaVersion is truly at the root even if spread overrode it
+      if (!(editorState as any).schemaVersion) {
+        (editorState as any).schemaVersion = 1;
+      }
+
+      const updatedProject = await updateEditorState(
         newProject.id,
         editorState,
         newProject.currentVersion,
       );
 
-      // 3. Load the filled project
-      await loadProject(newProject.id);
+      // 3. Hydrate state locally instead of causing an additional loadProject API call
+      const resolvedRatio = resolveAspectRatioFromDocument(width, height);
+      const firstPage = editorState.pages?.[0];
+      const pageBg = firstPage?.background || { type: "color", color: "#ffffff" };
+
+      useProjectStore.setState({
+        currentProjectId: newProject.id,
+        currentProjectName: newProject.name,
+        currentProjectVersion: updatedProject?.currentVersion ?? newProject.currentVersion,
+        layers: mapLayersFromApi(pickBestPageRawLayers(editorState)),
+        pageBackground: pageBg,
+        selectedRatio: resolvedRatio,
+        selectedLayerId: null,
+      });
 
       return newProject;
     } catch (e: any) {
       set({ error: e.message || "Lỗi khi tạo dự án từ mẫu" });
       return null;
     } finally {
-      set({ isLoading: false });
+      set({ isApplyingTemplate: false });
     }
   },
 

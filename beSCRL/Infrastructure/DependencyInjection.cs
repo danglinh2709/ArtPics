@@ -40,8 +40,11 @@ namespace Infrastructure
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IFolderService, FolderService>();
             services.AddScoped<ITemplateService, TemplateService>();
+            services.AddScoped<ITemplateCategoryService, TemplateCategoryService>();
 
             services.AddScoped<Infrastructure.Persistence.Seeders.TemplateSeeder>();
+            services.AddScoped<Infrastructure.Persistence.Seeders.TemplateCategorySeeder>();
+            services.AddScoped<Infrastructure.Persistence.Seeders.DatabaseSeeder>();
 
             // Cloudinary
             services.Configure<CloudinarySettings>(configuration.GetSection(CloudinarySettings.SectionName));
@@ -56,6 +59,7 @@ namespace Infrastructure
             services.AddScoped<IAssetRepository, AssetRepository>();
             services.AddScoped<IFolderRepository, FolderRepository>();
             services.AddScoped<ITemplateRepository, TemplateRepository>();
+            services.AddScoped<ITemplateCategoryRepository, TemplateCategoryRepository>();
 
             return services;
         }

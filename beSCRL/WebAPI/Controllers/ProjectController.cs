@@ -1,4 +1,4 @@
-﻿using Application.DTOs.ProjectDto;
+using Application.DTOs.ProjectDto;
 using Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;

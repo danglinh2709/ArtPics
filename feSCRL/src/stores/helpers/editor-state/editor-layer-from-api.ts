@@ -33,15 +33,16 @@ function num(value: unknown, fallback: number): number {
 export function mapEditorLayerFromApi(raw: any): ILayer {
   const transform = raw?.transform ?? raw?.Transform ?? {};
 
+  // Support both nested transform AND flat x/y/width/height (template seeder format)
   const mappedTransform = {
-    x: num(transform.x, 0),
-    y: num(transform.y, 0),
-    width: num(transform.width, 100),
-    height: num(transform.height, 100),
-    rotation: num(transform.rotation, 0),
-    flipX: Boolean(transform.flipX),
-    flipY: Boolean(transform.flipY),
-    zIndex: num(transform.zIndex, 0),
+    x: num(transform.x ?? raw?.x, 0),
+    y: num(transform.y ?? raw?.y, 0),
+    width: num(transform.width ?? raw?.width, 100),
+    height: num(transform.height ?? raw?.height, 100),
+    rotation: num(transform.rotation ?? raw?.rotation, 0),
+    flipX: Boolean(transform.flipX ?? raw?.flipX),
+    flipY: Boolean(transform.flipY ?? raw?.flipY),
+    zIndex: num(transform.zIndex ?? raw?.zIndex, 0),
   };
 
   const type = ((raw?.type ?? raw?.Type) as ILayer["type"]) || "image";
@@ -52,17 +53,29 @@ export function mapEditorLayerFromApi(raw: any): ILayer {
     typeof content === "object" &&
     (content.assetId ?? content.AssetId);
 
+  // Also check flat assetId field (template seeder format)
+  const rawAssetId = raw?.assetId ?? raw?.AssetId;
+
   const apiBaseUrl = getApiBaseUrl();
 
+  // Priority: raw.uri > raw.url > content.assetId > flat assetId > ""
   const uriRaw =
-    typeof raw?.uri === "string"
+    typeof raw?.uri === "string" && raw.uri
       ? raw.uri
-      : assetIdFromContent != null
-        ? String(assetIdFromContent)
-        : "";
+      : typeof raw?.url === "string" && raw.url
+        ? raw.url
+        : assetIdFromContent != null
+          ? String(assetIdFromContent)
+          : rawAssetId != null
+            ? String(rawAssetId)
+            : "";
 
   let finalUri = uriRaw;
-  const finalAssetId = assetIdFromContent ? String(assetIdFromContent) : null;
+  const finalAssetId = assetIdFromContent
+    ? String(assetIdFromContent)
+    : rawAssetId
+      ? String(rawAssetId)
+      : null;
 
   const isTextLayer = type === "text";
   const isAbsoluteUri =
@@ -77,9 +90,11 @@ export function mapEditorLayerFromApi(raw: any): ILayer {
 
   const crop = raw?.crop ? { ...defaultCrop, ...raw.crop } : { ...defaultCrop };
 
+  // Support flat opacity field from template seeder
+  const rawOpacity = raw?.style?.opacity ?? raw?.opacity ?? 1;
   const style = raw?.style
-    ? { ...defaultStyle, ...raw.style }
-    : { ...defaultStyle };
+    ? { ...defaultStyle, ...raw.style, opacity: num(rawOpacity, 1) }
+    : { ...defaultStyle, opacity: num(rawOpacity, 1) };
 
   const adjustments = raw?.adjustments
     ? { ...defaultAdjustments, ...raw.adjustments }
@@ -94,8 +109,8 @@ export function mapEditorLayerFromApi(raw: any): ILayer {
     crop,
     style,
     adjustments,
-    isLocked: Boolean(raw?.isLocked),
-    isVisible: raw?.isVisible !== false,
+    isLocked: Boolean(raw?.isLocked ?? raw?.locked),
+    isVisible: (raw?.isVisible ?? raw?.visible) !== false,
   };
 }
 

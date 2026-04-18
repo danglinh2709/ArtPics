@@ -12,6 +12,7 @@ export interface FolderState {
   // Folder UI
   isCreateFolderModalOpen: boolean;
   isAddProjectModalOpen: boolean;
+  renamingFolderId: string | null;
   isLoading: boolean;
   error: string | null;
 
@@ -20,12 +21,15 @@ export interface FolderState {
   closeCreateFolderModal: () => void;
   openAddProjectModal: () => void;
   closeAddProjectModal: () => void;
+  openRenameFolder: (id: string) => void;
+  closeRenameFolder: () => void;
   setFolderLoading: (isLoading: boolean) => void;
   setFolderError: (error: string | null) => void;
 
   // Folder API Actions
   fetchFolders: () => Promise<void>;
   createFolder: (name: string) => Promise<void>;
+  updateFolder: (id: string, name: string) => Promise<void>;
   deleteFolder: (id: string) => Promise<void>;
   addProjectToFolder: (folderId: string, projectId: string) => Promise<void>;
   removeProjectFromFolder: (

@@ -29,7 +29,7 @@ export function FolderAddProjectModal() {
 
   // Projects not in the folder
   const availableProjects = projects.filter(
-    (p) => !activeFolder?.projectIds.includes(p.id),
+    (p) => !(activeFolder?.projectIds ?? []).includes(p.id),
   );
 
   const toggleSelect = (id: string) => {
@@ -42,11 +42,11 @@ export function FolderAddProjectModal() {
     setSelectedIds(newSelected);
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (activeFolderId) {
-      selectedIds.forEach((id) => {
-        addProjectToFolder(activeFolderId, id);
-      });
+      for (const id of Array.from(selectedIds)) {
+        await addProjectToFolder(activeFolderId, id);
+      }
     }
     handleClose();
   };

@@ -4,7 +4,7 @@ import { ExportModal } from "../modals/ExportModal";
 import { PreviewModal } from "../modals/PreviewModal";
 import { TextEditModal } from "../modals/TextEditModal";
 
-import { ILayer, TTextLayer } from "@/src/types/editor.types";
+import { ILayer, TPageBackground, TTextLayer } from "@/src/types/editor.types";
 import { AddLayerModal } from "../../AddLayerModal";
 
 interface EditorModalsProps {
@@ -19,6 +19,7 @@ interface EditorModalsProps {
   setIsTextEditModalVisible: (value: boolean) => void;
 
   layers: ILayer[];
+  pageBackground?: TPageBackground | null;
   canvasWidth: number;
   canvasHeight: number;
   activeLayer?: ILayer;
@@ -40,6 +41,7 @@ export function EditorModals({
   setIsPreviewModalVisible,
   setIsTextEditModalVisible,
   layers,
+  pageBackground,
   canvasWidth,
   canvasHeight,
   activeLayer,
@@ -62,6 +64,7 @@ export function EditorModals({
         visible={isExportModalVisible}
         onClose={() => setIsExportModalVisible(false)}
         layers={layers}
+        pageBackground={pageBackground}
         canvasWidth={canvasWidth}
         canvasHeight={canvasHeight}
         onExpand={onOpenPreview}
@@ -77,6 +80,7 @@ export function EditorModals({
           }, 150);
         }}
         layers={layers}
+        pageBackground={pageBackground}
         canvasWidth={canvasWidth}
         canvasHeight={canvasHeight}
       />

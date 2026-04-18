@@ -13,7 +13,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { templateService } from "@/src/services/template.service";
-import { ITemplateListItem } from "@/src/types/template.types";
+import { TemplateListItem } from "@/src/types/template.types";
 import { colors, styles as commonStyles } from "./styles/template.styles";
 import { FilterChip } from "./components/FilterChip";
 import { TemplateListItemCard } from "./components/TemplateListItemCard";
@@ -27,7 +27,7 @@ export default function TemplateCategoryScreen() {
 
   const [formats, setFormats] = useState<string[]>([]);
   const [selectedFormat, setSelectedFormat] = useState<string | null>(null);
-  const [templates, setTemplates] = useState<ITemplateListItem[]>([]);
+  const [templates, setTemplates] = useState<TemplateListItem[]>([]);
 
   const [loadingFormats, setLoadingFormats] = useState(true);
   const [loadingTemplates, setLoadingTemplates] = useState(true);
@@ -37,7 +37,7 @@ export default function TemplateCategoryScreen() {
     const fetchFormats = async () => {
       try {
         setLoadingFormats(true);
-        const data = await templateService.getFormatsByCategory(code);
+        const data = await templateService.getFormats(code);
         setFormats(data);
       } catch (error) {
         console.error("Failed to load formats", error);

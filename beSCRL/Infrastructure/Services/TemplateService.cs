@@ -36,15 +36,17 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<List<TemplateListItemDto>> GetAllActiveAsync(string? category = null)
+        public async Task<List<TemplateListItemDto>> GetAllActiveAsync(string? categoryCode = null, string? format = null)
         {
-            var templates = await _templateRepository.GetAllActiveAsync(category);
+            var templates = await _templateRepository.GetAllActiveAsync(categoryCode, format);
             
             return templates.Select(t => new TemplateListItemDto
             {
                 Id = t.Id!,
                 Name = t.Name,
                 Category = t.Category,
+                CategoryCode = t.CategoryCode,
+                Format = t.Format,
                 Description = t.Description,
                 ThumbnailUrl = t.ThumbnailUrl,
                 Tags = t.Tags,
@@ -64,6 +66,8 @@ namespace Infrastructure.Services
                 Id = template.Id!,
                 Name = template.Name,
                 Category = template.Category,
+                CategoryCode = template.CategoryCode,
+                Format = template.Format,
                 Description = template.Description,
                 PreviewImageUrl = template.PreviewImageUrl,
                 ThumbnailUrl = template.ThumbnailUrl,
@@ -75,6 +79,11 @@ namespace Infrastructure.Services
         public async Task<List<string>> GetCategoriesAsync()
         {
             return await _templateRepository.GetAllCategoriesAsync();
+        }
+
+        public async Task<List<string>> GetFormatsAsync(string categoryCode)
+        {
+            return await _templateRepository.GetFormatsAsync(categoryCode);
         }
 
         public async Task<TemplateDetailDto> CreateAsync(CreateTemplateRequestDto request)
@@ -106,6 +115,8 @@ namespace Infrastructure.Services
                 Id = template.Id!,
                 Name = template.Name,
                 Category = template.Category,
+                CategoryCode = template.CategoryCode,
+                Format = template.Format,
                 Description = template.Description,
                 PreviewImageUrl = template.PreviewImageUrl,
                 ThumbnailUrl = template.ThumbnailUrl,
@@ -142,6 +153,8 @@ namespace Infrastructure.Services
                 Id = template.Id!,
                 Name = template.Name,
                 Category = template.Category,
+                CategoryCode = template.CategoryCode,
+                Format = template.Format,
                 Description = template.Description,
                 PreviewImageUrl = template.PreviewImageUrl,
                 ThumbnailUrl = template.ThumbnailUrl,

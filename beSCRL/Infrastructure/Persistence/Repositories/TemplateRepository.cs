@@ -12,13 +12,18 @@ namespace Infrastructure.Persistence.Repositories
 
       
 
-        public async Task<IEnumerable<Template>> GetAllActiveAsync(string? category = null)
+        public async Task<IEnumerable<Template>> GetAllActiveAsync(string? categoryCode = null, string? format = null)
         {
             var filter = Builders<Template>.Filter.Eq(t => t.IsActive, true);
             
-            if (!string.IsNullOrEmpty(category))
+            if (!string.IsNullOrEmpty(categoryCode))
             {
-                filter &= Builders<Template>.Filter.Eq(t => t.Category, category);
+                filter &= Builders<Template>.Filter.Eq(t => t.CategoryCode, categoryCode);
+            }
+
+            if (!string.IsNullOrEmpty(format))
+            {
+                filter &= Builders<Template>.Filter.Eq(t => t.Format, format);
             }
 
             return await _collection
@@ -30,11 +35,21 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<string>> GetAllCategoriesAsync()
         {
-#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+#pragma warning disable CS8619 
             return await _collection
-                .Distinct(t => t.Category, Builders<Template>.Filter.Eq(t => t.IsActive, true))
+                .Distinct(t => t.CategoryCode, Builders<Template>.Filter.Eq(t => t.IsActive, true))
                 .ToListAsync();
-#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+#pragma warning restore CS8619
+        }
+
+        public async Task<List<string>> GetFormatsAsync(string categoryCode)
+        {
+            var filter = Builders<Template>.Filter.Eq(t => t.IsActive, true) & 
+                         Builders<Template>.Filter.Eq(t => t.CategoryCode, categoryCode);
+
+            return await _collection
+                .Distinct(t => t.Format, filter)
+                .ToListAsync();
         }
     }
 }

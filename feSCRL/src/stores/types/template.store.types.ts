@@ -1,9 +1,11 @@
 import { StateCreator } from "zustand";
-import { TemplateDetail, TemplateListItem } from "@/src/types/template.types";
+import { TemplateDetail, TemplateListItem, TemplateCategory } from "@/src/types/template.types";
 
 export interface TemplateState {
   // UI State
   isLoading: boolean;
+  isDetailLoading: boolean;
+  isApplyingTemplate: boolean;
   error: string | null;
   searchQuery: string;
   selectedCategory: string | null;
@@ -14,7 +16,8 @@ export interface TemplateState {
 
   // Data State
   templates: TemplateListItem[];
-  categories: string[];
+  recentTemplates: TemplateListItem[];
+  categories: TemplateCategory[];
   selectedTemplateId: string | null;
   selectedTemplate: TemplateDetail | null;
   layers: any[]; // Specific layer type from project if needed
@@ -35,6 +38,8 @@ export interface TemplateState {
 
   // API Actions
   fetchTemplates: (category?: string) => Promise<void>;
+  fetchRecentTemplates: () => Promise<void>;
+  touchRecentTemplate: (id: string) => Promise<void>;
   fetchTemplateDetail: (id: string) => Promise<void>;
   fetchCategories: () => Promise<void>;
   createProjectFromTemplate: (templateId: string, projectName?: string) => Promise<any>;

@@ -20,7 +20,7 @@ interface IProjectCardProps {
 }
 
 export function ProjectCard({ project, onPress }: IProjectCardProps) {
-  const { openProjectMenu } = useProjectStore();
+  const { openProjectMenu, toggleStarProject } = useProjectStore();
   const [containerWidth, setContainerWidth] = useState<number>(0);
 
   const previewRatio = project.ratio?.ratio ?? 1;
@@ -48,6 +48,7 @@ export function ProjectCard({ project, onPress }: IProjectCardProps) {
         {hasLayers && containerWidth > 0 ? (
           <ProjectMiniCanvas
             layers={project.layers}
+            pageBackground={project.pageBackground}
             canvasWidth={editorReferenceWidth}
             canvasHeight={editorReferenceHeight}
             thumbnailWidth={containerWidth}
@@ -65,6 +66,14 @@ export function ProjectCard({ project, onPress }: IProjectCardProps) {
           onPress={() => openProjectMenu(project.id)}
         >
           <Ionicons name="ellipsis-horizontal" size={18} color="#fff" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ position: 'absolute', top: 8, right: 44, width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.45)' }}
+          activeOpacity={0.8}
+          onPress={() => toggleStarProject(project.id)}
+        >
+          <Ionicons name={project.isStarred ? "heart" : "heart-outline"} size={16} color={project.isStarred ? "#FF3B30" : "#fff"} />
         </TouchableOpacity>
       </View>
 

@@ -18,6 +18,12 @@ namespace Domain.Entities
         [BsonElement("category")]
         public string? Category { get; set; }
 
+        [BsonElement("categoryCode")]
+        public string? CategoryCode { get; set; }
+
+        [BsonElement("format")]
+        public string? Format { get; set; }
+
         [BsonElement("description")]
         public string? Description { get; set; }
 

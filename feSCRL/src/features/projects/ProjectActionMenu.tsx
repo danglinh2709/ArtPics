@@ -12,9 +12,12 @@ import { Typography } from "../../components/Typography";
 import { useProjectStore } from "../../stores/project.store";
 import { ROUTES } from "@/src/enums/route.enum";
 import { styles } from "./styles/project-action-menu.style";
+import { ProjectSelectFolderModal } from "./ProjectSelectFolderModal";
+import { useFolderStore } from "../../stores/folder.store";
 
 export function ProjectActionMenu() {
   const router = useRouter();
+  const [isSelectFolderModalOpen, setIsSelectFolderModalOpen] = React.useState(false);
   const {
     isProjectMenuVisible,
     closeProjectMenu,
@@ -23,6 +26,8 @@ export function ProjectActionMenu() {
     duplicateProject,
     deleteProject,
   } = useProjectStore();
+
+  const { activeFolderId, removeProjectFromFolder } = useFolderStore();
 
   if (!isProjectMenuVisible) return null;
 
@@ -43,7 +48,11 @@ export function ProjectActionMenu() {
 
   const handleDelete = async () => {
     if (activeProjectMenuId) {
-      await deleteProject(activeProjectMenuId);
+      if (activeFolderId) {
+        await removeProjectFromFolder(activeFolderId, activeProjectMenuId);
+      } else {
+        await deleteProject(activeProjectMenuId);
+      }
       closeProjectMenu();
     }
   };
@@ -70,7 +79,7 @@ export function ProjectActionMenu() {
 
             <View style={styles.separator} />
 
-            <TouchableOpacity style={styles.option}>
+            <TouchableOpacity style={styles.option} onPress={() => setIsSelectFolderModalOpen(true)}>
               <Typography style={styles.optionText}>
                 Thêm vào Thư mục
               </Typography>
@@ -80,7 +89,7 @@ export function ProjectActionMenu() {
 
             <TouchableOpacity style={styles.option} onPress={handleDelete}>
               <Typography style={[styles.optionText, styles.deleteText]}>
-                Xóa
+                {activeFolderId ? "Loại bỏ khỏi Tệp tin" : "Xóa"}
               </Typography>
             </TouchableOpacity>
           </View>
@@ -93,6 +102,16 @@ export function ProjectActionMenu() {
           </TouchableOpacity>
         </View>
       </Pressable>
+      {isSelectFolderModalOpen && (
+         <ProjectSelectFolderModal
+           isVisible={isSelectFolderModalOpen}
+           onClose={() => {
+             setIsSelectFolderModalOpen(false);
+             closeProjectMenu();
+           }}
+           projectId={activeProjectMenuId}
+         />
+      )}
     </Modal>
   );
 }

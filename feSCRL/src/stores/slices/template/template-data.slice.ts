@@ -4,6 +4,7 @@ export const createTemplateDataSlice: TemplateSliceCreator<
   Pick<
     import("../../types/template.store.types").TemplateState,
     | "templates"
+    | "recentTemplates"
     | "categories"
     | "selectedTemplateId"
     | "selectedTemplate"
@@ -13,6 +14,7 @@ export const createTemplateDataSlice: TemplateSliceCreator<
   >
 > = (set) => ({
   templates: [],
+  recentTemplates: [],
   categories: [],
   selectedTemplateId: null,
   selectedTemplate: null,
