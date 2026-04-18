@@ -7,7 +7,7 @@ export const ROUTES = {
 
   INFORUSER: "/inforUser",
 
-  MAINHOME: "/mainhome",
+  MAINHOME: "/home",
   SETTING: "/(tabs)/more",
   PROJECT: "/(tabs)/project",
   EDITOR: "/editor",

@@ -6,7 +6,7 @@ import { useProjectStore } from "@/src/stores/project.store";
 
 function CenterTabButton({ children }: any) {
   const { openCreateModal } = useProjectStore();
-  
+
   return (
     <Pressable onPress={openCreateModal} style={styles.centerButtonWrapper}>
       <View style={styles.centerButton}>{children}</View>
@@ -28,7 +28,8 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="mainhome"
+        name="home"
+
         options={{
           title: "Trang chủ",
           tabBarIcon: ({ color, focused }) => (
@@ -52,20 +53,6 @@ export default function TabLayout() {
               color={color}
             />
           ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="create"
-        options={{
-          title: "",
-          tabBarIcon: () => (
-            <View style={styles.plusCustom}>
-              <View style={styles.plusHorizontal} />
-              <View style={styles.plusVertical} />
-            </View>
-          ),
-          tabBarButton: (props) => <CenterTabButton {...props} />,
         }}
       />
 

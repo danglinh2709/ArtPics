@@ -52,7 +52,7 @@ export default function OtpForm() {
 
       await loginWithOtp(payload);
 
-      router.push(ROUTES.SETTING);
+      router.push(ROUTES.MAINHOME);
     } catch (err: any) {
       console.log("LOGIN OTP ERROR:", err?.response?.data || err?.message);
 
