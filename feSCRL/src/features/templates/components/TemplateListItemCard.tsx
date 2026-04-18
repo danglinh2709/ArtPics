@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { ITemplateListItem } from "../../../types/template.types";
+import { TemplateListItem } from "../../../types/template.types";
 import { colors } from "../styles/template.styles";
 
 const { width } = Dimensions.get("window");
@@ -17,7 +17,7 @@ const GAP = 16;
 const CARD_WIDTH = (width - GAP * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
 
 interface TemplateListItemCardProps {
-  template: ITemplateListItem;
+  template: TemplateListItem;
 }
 
 export const TemplateListItemCard = ({

@@ -8,6 +8,7 @@ export interface TemplateCategory {
 
 export interface TemplateListItem {
   id: string;
+  code: string;
   name: string;
   category?: string;
   categoryCode?: string;
@@ -16,21 +17,22 @@ export interface TemplateListItem {
   thumbnailUrl?: string;
   tags: string[];
   sortOrder: number;
+  width: number;
+  height: number;
+  pageCount: number;
+  imageLayerCount: number;
+  aspectKey: TemplateAspectKey;
+  format?: string;
   isProject?: boolean;
   projectData?: any;
 }
 
-export interface TemplateDetail {
-  id: string;
-  name: string;
-  category?: string;
-  description?: string;
-  previewImageUrl?: string;
-  thumbnailUrl?: string;
+export interface TemplateDetail extends TemplateListItem {
+  isDefault: boolean;
+  isActive: boolean;
   templateData: any;
-  tags: string[];
-  categoryCode?: string;
   format?: string;
-  pageCount?: number;
-  aspectKey?: string;
 }
+
+export type TemplateAspectKey = "square" | "portrait" | "landscape" | "story";
+

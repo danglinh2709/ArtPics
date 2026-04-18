@@ -1,8 +1,8 @@
-import { ITemplateListItem } from "@/src/types/template.types";
+import { TemplateListItem } from "@/src/types/template.types";
 
 /** Ảnh đại diện cho mỗi category (ưu tiên sortOrder nhỏ). */
 export function buildCategoryCoverMap(
-  templates: ITemplateListItem[],
+  templates: TemplateListItem[],
 ): Record<string, string | undefined> {
   const sorted = [...templates].sort(
     (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0),
@@ -18,16 +18,16 @@ export function buildCategoryCoverMap(
 }
 
 export function sortTemplatesByOrder(
-  templates: ITemplateListItem[],
-): ITemplateListItem[] {
+  templates: TemplateListItem[],
+): TemplateListItem[] {
   return [...templates].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 
 /** Giữ thứ tự theo danh sách id (dùng cho “đã dùng gần đây”). */
 export function orderTemplatesByIds(
-  templates: ITemplateListItem[],
+  templates: TemplateListItem[],
   ids: string[],
-): ITemplateListItem[] {
+): TemplateListItem[] {
   const map = new Map(templates.map((t) => [t.id, t]));
-  return ids.map((id) => map.get(id)).filter(Boolean) as ITemplateListItem[];
+  return ids.map((id) => map.get(id)).filter(Boolean) as TemplateListItem[];
 }

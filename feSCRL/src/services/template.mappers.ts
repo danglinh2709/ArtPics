@@ -1,7 +1,7 @@
 import {
   TemplateAspectKey,
-  ITemplateDetail,
-  ITemplateListItem,
+  TemplateDetail,
+  TemplateListItem,
 } from "../types/template.types";
 
 function trimUrl(u?: string | null): string | undefined {
@@ -39,7 +39,7 @@ function normalizeAspectKey(
 }
 
 /** Chuẩn hoá phản hồi API (camelCase / PascalCase, URL bị whitespace). */
-export function normalizeTemplateListItem(raw: Record<string, unknown>): ITemplateListItem {
+export function normalizeTemplateListItem(raw: Record<string, unknown>): TemplateListItem {
   const id = raw.id ?? raw.Id;
   const tagsRaw = raw.tags ?? raw.Tags;
   const tags = Array.isArray(tagsRaw)
@@ -78,12 +78,12 @@ export function normalizeTemplateListItem(raw: Record<string, unknown>): ITempla
   };
 }
 
-export function normalizeTemplateDetail(raw: Record<string, unknown>): ITemplateDetail {
+export function normalizeTemplateDetail(raw: Record<string, unknown>): TemplateDetail {
   const base = normalizeTemplateListItem(raw);
   return {
     ...base,
     isDefault: Boolean(raw.isDefault ?? raw.IsDefault ?? false),
     isActive: Boolean(raw.isActive ?? raw.IsActive ?? true),
-    templateData: (raw.templateData ?? raw.TemplateData) as ITemplateDetail["templateData"],
+    templateData: (raw.templateData ?? raw.TemplateData) as TemplateDetail["templateData"],
   };
 }

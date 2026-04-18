@@ -26,17 +26,23 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={DarkTheme}>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={!isAuthenticated}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="usage-intent" />
-          <Stack.Screen name="login" />
-          <Stack.Screen name="otp" />
-        </Stack.Protected>
+        {!isAuthenticated ? (
+          <>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="usage-intent" />
+            <Stack.Screen name="login" />
+            <Stack.Screen name="otp" />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="template-detail/[id]" options={{ presentation: "modal" }} />
+          </>
+        )}
 
-        <Stack.Protected guard={isAuthenticated}>
-          <Stack.Screen name="(tabs)" />
-        </Stack.Protected>
+
       </Stack>
+
 
       <ProjectCreateModal />
       <StatusBar style="light" />

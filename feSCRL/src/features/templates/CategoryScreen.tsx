@@ -52,13 +52,20 @@ export const CategoryScreen = ({ category, onBack }: CategoryScreenProps) => {
   const starredProjects = isFavorites ? projects.filter(p => p.isStarred) : [];
   const mappedProjects = starredProjects.map(p => ({
     id: `project-${p.id}`,
+    code: `project-${p.id}`,
     name: p.name || p.ratio?.label || "Untitled",
     category: "Favorites",
     tags: ["Project"],
     sortOrder: 0,
+    width: 0,
+    height: 0,
+    pageCount: 1,
+    imageLayerCount: 0,
+    aspectKey: "square" as const,
     isProject: true,
     projectData: p,
   }));
+
 
   const combinedData = isFavorites ? [...mappedProjects, ...sourceData] : sourceData;
 

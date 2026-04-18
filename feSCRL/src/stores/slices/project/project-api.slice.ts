@@ -67,7 +67,7 @@ export const createProjectApiSlice: ProjectSliceCreator<
       }
       return saved;
     } catch (e: any) {
-      console.error("[updateEditorState] ERROR: ", e.message, e.response?.data);
+      // console.error("[updateEditorState] ERROR: ", e.message, e.response?.data);
       set({ error: e.message || "Failed to update project data" });
       return null;
     } finally {
