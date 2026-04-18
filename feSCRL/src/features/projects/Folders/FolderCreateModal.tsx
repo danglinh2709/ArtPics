@@ -12,7 +12,7 @@ import { useFolderStore } from "@/src/stores/folder.store";
 import { Typography } from "@/src/components/Typography";
 
 export function FolderCreateModal() {
-  const [folderName, setFolderName] = useState("");
+  const [folderName, setFolderName] = useState<string>("");
   const { isCreateFolderModalOpen, closeCreateFolderModal, createFolder } =
     useFolderStore();
 

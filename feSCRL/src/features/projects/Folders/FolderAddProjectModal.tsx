@@ -11,7 +11,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Typography } from "@/src/components/Typography";
 import { useFolderStore } from "@/src/stores/folder.store";
 import { useProjectStore, resolveAssetUri } from "@/src/stores/project.store";
-import { Project } from "@/src/types/editor.types";
 
 export function FolderAddProjectModal() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());

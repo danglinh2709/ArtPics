@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
+    [BsonIgnoreExtraElements]
     public sealed class Template : AuditableEntity
     {
         [BsonElement("name")]

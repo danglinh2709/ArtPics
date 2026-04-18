@@ -1,8 +1,8 @@
 import React from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import { IProjectFolder } from "@/src/types/folder.types";
+import { Loading } from "../../../components/Loading";
 import { FolderCard } from "./FolderCard";
-import { Loading } from "../../../../components/Loading";
 
 interface IFolderListProps {
   data: IProjectFolder[];
@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   itemContainer: {
-    width: "48%", // Allow 2 columns of folders
+    width: "48%",
   },
 });

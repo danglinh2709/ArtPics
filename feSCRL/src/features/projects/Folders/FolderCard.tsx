@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Typography } from "@/src/components/Typography";
 
-// Use dynamic typing from types
 import { IProjectFolder } from "@/src/types/folder.types";
+import { useFolderStore } from "@/src/stores/folder.store";
 
 interface IFolderCardProps {
   folder: IProjectFolder;
@@ -12,6 +12,23 @@ interface IFolderCardProps {
 }
 
 export function FolderCard({ folder, onPress }: IFolderCardProps) {
+  const { deleteFolder } = useFolderStore();
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Xác nhận xóa",
+      "Bạn có chắc chắn muốn xóa thư mục này không?",
+      [
+        { text: "Hủy", style: "cancel" },
+        {
+          text: "Xóa",
+          style: "destructive",
+          onPress: () => deleteFolder(folder.id),
+        },
+      ]
+    );
+  };
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -20,6 +37,13 @@ export function FolderCard({ folder, onPress }: IFolderCardProps) {
     >
       <View style={styles.iconContainer}>
         <Ionicons name="folder" size={48} color="#FFD700" />
+        <TouchableOpacity
+          style={styles.folderMenuBtn}
+          activeOpacity={0.8}
+          onPress={handleDelete}
+        >
+          <Ionicons name="ellipsis-horizontal" size={18} color="#fff" />
+        </TouchableOpacity>
       </View>
       <View style={styles.infoContainer}>
         <Typography variant="title" style={styles.name} numberOfLines={1}>
@@ -49,6 +73,18 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 215, 0, 0.1)",
     borderRadius: 12,
     marginBottom: 12,
+    position: "relative",
+  },
+  folderMenuBtn: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.45)",
   },
   infoContainer: {
     gap: 4,
