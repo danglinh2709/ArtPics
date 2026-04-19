@@ -75,17 +75,17 @@ export function AddLayerModal({
                     return;
                   }
 
-                  if (item.actionType === LAYER_MENU_ITEMS_ACTION_TYPE.TEXT) {
-                    onAddText({
-                      text: "Văn bản mới",
-                      x: 100,
-                      y: 100,
-                      width: 200,
-                      height: 50,
-                    });
-                    onClose();
-                    return;
-                  }
+                  // if (item.actionType === LAYER_MENU_ITEMS_ACTION_TYPE.TEXT) {
+                  //   onAddText({
+                  //     text: "Văn bản mới",
+                  //     x: 100,
+                  //     y: 100,
+                  //     width: 200,
+                  //     height: 50,
+                  //   });
+                  //   onClose();
+                  //   return;
+                  // }
                 }}
               >
                 <View style={styles.iconContainer}>

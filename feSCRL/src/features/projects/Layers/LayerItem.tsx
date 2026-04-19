@@ -142,7 +142,7 @@ export function LayerItem({
   return (
     <GestureDetector gesture={panGesture}>
       <Animated.View style={wrapperStyle}>
-        <EditableLayerContent layer={layer} />
+        <EditableLayerContent layer={layer} width={width} height={height} />
 
         {isSelected && renderMode === "full" && (
           <SelectionOverlayUI
