@@ -93,9 +93,7 @@ const styles = StyleSheet.create({
     width: 60,
     paddingVertical: 8,
   },
-  activeTab: {
-    // Optional: add a small indicator or background
-  },
+  activeTab: {},
   tabLabel: {
     fontSize: 10,
     color: "#fff",

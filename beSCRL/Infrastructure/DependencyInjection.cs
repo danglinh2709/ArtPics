@@ -6,6 +6,7 @@ using Infrastructure.Configuration;
 using Infrastructure.Configuration.Infrastructure.Configuration;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories;
+using Infrastructure.Persistence.Seeders;
 using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,9 +43,9 @@ namespace Infrastructure
             services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<ITemplateCategoryService, TemplateCategoryService>();
 
-            services.AddScoped<Infrastructure.Persistence.Seeders.TemplateSeeder>();
-            services.AddScoped<Infrastructure.Persistence.Seeders.TemplateCategorySeeder>();
-            services.AddScoped<Infrastructure.Persistence.Seeders.DatabaseSeeder>();
+            services.AddScoped<TemplateSeeder>();
+            services.AddScoped<TemplateCategorySeeder>();
+            services.AddScoped<DatabaseSeeder>();
 
             // Cloudinary
             services.Configure<CloudinarySettings>(configuration.GetSection(CloudinarySettings.SectionName));

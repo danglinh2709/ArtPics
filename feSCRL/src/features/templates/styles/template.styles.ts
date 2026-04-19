@@ -5,7 +5,7 @@ const { width } = Dimensions.get("window");
 const CARD_GAP = 10;
 const CARD_WIDTH = (width - 32 - CARD_GAP) / 2;
 
-// ─── Design Tokens ────────────────────────────────────────────────────────────
+//  Design Tokens
 export const colors = {
   bg: "#0a0a0a",
   surface: "#1a1a1a",
@@ -23,7 +23,7 @@ export const colors = {
 };
 
 export const styles = StyleSheet.create({
-  // ── Screen layout ──────────────────────────────────────────────────────────
+  //  Screen layout
   safeArea: {
     flex: 1,
     backgroundColor: colors.bg,
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.bg,
   },
 
-  // ── Header ─────────────────────────────────────────────────────────────────
+  //  Header
   screenTitle: {
     fontSize: 24,
     fontWeight: "800",
@@ -61,7 +61,7 @@ export const styles = StyleSheet.create({
     width: 40,
   },
 
-  // ── Search ─────────────────────────────────────────────────────────────────
+  //  Search
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 0,
   },
 
-  // ── Section ────────────────────────────────────────────────────────────────
+  //  Section
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
@@ -104,7 +104,7 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  // ── Category tiles (For You, Featured) ────────────────────────────────────
+  //  Category tiles (For You, Featured)
   categoryTilesRow: {
     flexDirection: "row",
     paddingHorizontal: 16,
@@ -142,7 +142,7 @@ export const styles = StyleSheet.create({
     width: "70%",
   },
 
-  // ── Discover grid ──────────────────────────────────────────────────────────
+  //  Discover grid
   discoverGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -181,7 +181,7 @@ export const styles = StyleSheet.create({
     width: "60%",
   },
 
-  // ── Category Filter pills (inside a category screen) ───────────────────────
+  //  Category Filter pills (inside a category screen)
   filterRow: {
     paddingHorizontal: 16,
     paddingBottom: 12,
@@ -208,7 +208,7 @@ export const styles = StyleSheet.create({
     color: colors.bg,
   },
 
-  // ── Template Masonry card ──────────────────────────────────────────────────
+  //  Template Masonry card
   masonryContainer: {
     flexDirection: "row",
     paddingHorizontal: 16,
@@ -265,7 +265,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  // ── Preview Modal ──────────────────────────────────────────────────────────
+  //  Preview Modal
   previewOverlay: {
     flex: 1,
     backgroundColor: colors.bg,
@@ -338,7 +338,7 @@ export const styles = StyleSheet.create({
     opacity: 0.5,
   },
 
-  // ── Action Menu ────────────────────────────────────────────────────────────
+  //  Action Menu
   actionMenuOverlay: {
     flex: 1,
     backgroundColor: colors.overlay,
@@ -392,7 +392,7 @@ export const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
 
-  // ── Misc ───────────────────────────────────────────────────────────────────
+  //  Misc
   loaderContainer: {
     flex: 1,
     justifyContent: "center",
@@ -421,7 +421,7 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
 
-  // ── Error & Loading ────────────────────────────────────────────────────────
+  //  Error & Loading
   errorContainer: {
     margin: 16,
     padding: 16,
@@ -441,7 +441,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 12,
   },
 
-  // ── Browse & Discover ──────────────────────────────────────────────────────
+  //  Browse & Discover
   browsePromoTileHalf: {
     flex: 1,
     height: 120,
@@ -526,4 +526,3 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-

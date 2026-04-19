@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View, Image } from "react-native";
+import { ScrollView, TouchableOpacity, View, Image } from "react-native";
 import { Typography } from "../../../components/Typography";
 import { useProjectStore } from "../../../stores/project.store";
 import { styles } from "./styles/background-panel.style";
@@ -12,6 +12,7 @@ import {
 } from "@/src/configs/background-panel.config";
 import {
   PAGE_BACKGROUND_OPTIONS,
+  PAGE_BACKGROUND_TYPES,
   TPageBackgroundType,
 } from "@/src/constants/editor-tabs.constants";
 
@@ -35,10 +36,13 @@ export function BackgroundPanel() {
       if (layer) {
         updateLayerStyle(layer.id, { background: null });
       } else {
-        updatePageBackground({ type: "color", color: "transparent" });
+        updatePageBackground({
+          type: PAGE_BACKGROUND_TYPES.COLOR,
+          color: "transparent",
+        });
       }
     } else {
-      const bg = { type: "color" as const, color };
+      const bg = { type: PAGE_BACKGROUND_TYPES.COLOR, color };
       if (layer) {
         updateLayerStyle(layer.id, { background: bg });
       } else {
@@ -48,7 +52,7 @@ export function BackgroundPanel() {
   };
 
   const handleSelectGradient = (grad: { colors: string[]; angle: number }) => {
-    const bg = { type: "gradient" as const, gradient: grad };
+    const bg = { type: PAGE_BACKGROUND_TYPES.GRADIENT, gradient: grad };
     if (layer) {
       updateLayerStyle(layer.id, { background: bg });
     } else {
@@ -57,7 +61,7 @@ export function BackgroundPanel() {
   };
 
   const handleSelectTexture = (uri: string) => {
-    const bg = { type: "texture" as const, textureUri: uri };
+    const bg = { type: PAGE_BACKGROUND_TYPES.TEXTURE, textureUri: uri };
     if (layer) {
       updateLayerStyle(layer.id, { background: bg });
     } else {
@@ -67,7 +71,6 @@ export function BackgroundPanel() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Segmented Tabs */}
       <View style={styles.tabContainer}>
         {PAGE_BACKGROUND_OPTIONS.map((tab) => (
           <TouchableOpacity
@@ -87,17 +90,10 @@ export function BackgroundPanel() {
         ))}
       </View>
 
-      {/* Content Grids */}
       <View style={styles.grid}>
-        {/* COLOR TAB: Circular Swatches + Color Wheel */}
         {activeTab === "color" && (
           <>
-            {/* Custom Color Wheel Button */}
-            <TouchableOpacity
-              style={styles.colorContainer}
-              // In the future, this would open a specific Color Picker Modal
-              onPress={() => {}}
-            >
+            <TouchableOpacity style={styles.colorContainer} onPress={() => {}}>
               <LinearGradient
                 colors={[
                   "#FF0000",
@@ -112,22 +108,29 @@ export function BackgroundPanel() {
                 end={{ x: 1, y: 1 }}
                 style={styles.colorWheelIcon}
               >
-                <View style={{ backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: 999, padding: 2 }}>
+                <View
+                  style={{
+                    backgroundColor: "rgba(0,0,0,0.3)",
+                    borderRadius: 999,
+                    padding: 2,
+                  }}
+                >
                   <Ionicons name="color-palette" size={16} color="#fff" />
                 </View>
               </LinearGradient>
             </TouchableOpacity>
 
-            {/* Default Presets */}
             {PRESET_COLORS.map((color) => (
               <TouchableOpacity
                 key={color}
                 style={[
                   styles.colorContainer,
-                  currentBg?.type === "color" &&
+                  currentBg?.type === PAGE_BACKGROUND_TYPES.COLOR &&
                     currentBg.color === color &&
                     styles.selectedColorContainer,
-                  color === "transparent" && !currentBg && styles.selectedColorContainer,
+                  color === "transparent" &&
+                    !currentBg &&
+                    styles.selectedColorContainer,
                 ]}
                 onPress={() => handleSelectColor(color)}
               >
@@ -145,14 +148,13 @@ export function BackgroundPanel() {
           </>
         )}
 
-        {/* GRADIENT TAB: 4-Column Rounded Squares */}
-        {activeTab === "gradient" &&
+        {activeTab === PAGE_BACKGROUND_TYPES.GRADIENT &&
           PRESET_GRADIENTS.map((grad, index) => (
             <TouchableOpacity
               key={index}
               style={[
                 styles.squareContainer,
-                currentBg?.type === "gradient" &&
+                currentBg?.type === PAGE_BACKGROUND_TYPES.GRADIENT &&
                   JSON.stringify(currentBg.gradient) === JSON.stringify(grad) &&
                   styles.selectedSquareContainer,
               ]}
@@ -167,32 +169,30 @@ export function BackgroundPanel() {
             </TouchableOpacity>
           ))}
 
-        {/* TEXTURE TAB: 4-Column Textures */}
-        {activeTab === "texture" &&
+        {activeTab === PAGE_BACKGROUND_TYPES.TEXTURE &&
           PRESET_TEXTURES.map((tex, index) => (
             <TouchableOpacity
               key={index}
               style={[
                 styles.squareContainer,
-                currentBg?.type === "texture" &&
+                currentBg?.type === PAGE_BACKGROUND_TYPES.TEXTURE &&
                   currentBg.textureUri === tex.uri &&
                   styles.selectedSquareContainer,
               ]}
               onPress={() => handleSelectTexture(tex.uri)}
             >
               <View
-                style={[styles.squarePreview, { backgroundColor: "#2C2C2E" }]} // fallback dark background
+                style={[styles.squarePreview, { backgroundColor: "#2C2C2E" }]}
               >
-                 <Image
-                    source={{ uri: tex.uri }}
-                    style={styles.textureImage}
-                    resizeMode="cover"
-                 />
+                <Image
+                  source={{ uri: tex.uri }}
+                  style={styles.textureImage}
+                  resizeMode="cover"
+                />
               </View>
             </TouchableOpacity>
           ))}
       </View>
-      {/* Provide padding bottom for scrollable content */}
       <View style={{ height: 40 }} />
     </ScrollView>
   );

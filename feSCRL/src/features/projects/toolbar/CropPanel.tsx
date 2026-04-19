@@ -32,33 +32,42 @@ export function CropPanel() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Section title="Tỷ lệ khung (Shape)">
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ratioList} contentContainerStyle={styles.ratioListContent}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.ratioList}
+          contentContainerStyle={styles.ratioListContent}
+        >
           {RATIOS.map((r) => (
             <TouchableOpacity
               key={r.id}
               style={[
                 styles.ratioItem,
-                cropRatiosEqual(layer.crop.aspectRatio, r.ratio) && styles.activeRatio,
+                cropRatiosEqual(layer.crop.aspectRatio, r.ratio) &&
+                  styles.activeRatio,
               ]}
               onPress={() => {
                 if (r.ratio && selectedLayerId) {
                   setLayerFrameRatio(selectedLayerId, r.ratio);
                 } else if (!r.ratio && selectedLayerId) {
-                   // Handle "Tự do" or reset ratio
-                   updateLayerCrop(selectedLayerId, { aspectRatio: null });
+                  updateLayerCrop(selectedLayerId, { aspectRatio: null });
                 }
               }}
             >
-              <View style={[
-                  styles.ratioBox, 
+              <View
+                style={[
+                  styles.ratioBox,
                   { aspectRatio: r.ratio || 1 },
-                  cropRatiosEqual(layer.crop.aspectRatio, r.ratio) && styles.activeRatioBox
-              ]} />
+                  cropRatiosEqual(layer.crop.aspectRatio, r.ratio) &&
+                    styles.activeRatioBox,
+                ]}
+              />
               <Typography
                 variant="caption"
                 style={[
                   styles.ratioLabel,
-                  cropRatiosEqual(layer.crop.aspectRatio, r.ratio) && styles.activeLabel,
+                  cropRatiosEqual(layer.crop.aspectRatio, r.ratio) &&
+                    styles.activeLabel,
                 ]}
               >
                 {r.label}
@@ -82,22 +91,30 @@ export function CropPanel() {
         />
       </Section>
 
-      <Section title="Xoay nội dung" value={`${Math.round(layer.crop.rotation)}°`}>
+      <Section
+        title="Xoay nội dung"
+        value={`${Math.round(layer.crop.rotation)}°`}
+      >
         <Slider
           style={styles.slider}
           minimumValue={-180}
           maximumValue={180}
           value={layer.crop.rotation}
-          onValueChange={(v: number) => updateLayerCrop(layer.id, { rotation: v })}
+          onValueChange={(v: number) =>
+            updateLayerCrop(layer.id, { rotation: v })
+          }
           minimumTrackTintColor="#EECB68"
           maximumTrackTintColor="rgba(255,255,255,0.1)"
           thumbTintColor="#fff"
         />
       </Section>
 
-      <TouchableOpacity style={styles.resetBtn} onPress={() => resetLayerCrop(layer.id)}>
-          <Ionicons name="refresh" size={18} color="#fff" />
-          <Typography style={styles.resetText}>Đặt lại khung hình</Typography>
+      <TouchableOpacity
+        style={styles.resetBtn}
+        onPress={() => resetLayerCrop(layer.id)}
+      >
+        <Ionicons name="refresh" size={18} color="#fff" />
+        <Typography style={styles.resetText}>Đặt lại khung hình</Typography>
       </TouchableOpacity>
       <View style={{ height: 40 }} />
     </ScrollView>
@@ -162,4 +179,3 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
-

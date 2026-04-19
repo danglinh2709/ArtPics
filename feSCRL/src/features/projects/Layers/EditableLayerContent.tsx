@@ -25,7 +25,7 @@ export function EditableLayerContent({ layer }: EditableLayerContentProps) {
   const image = useImage(resolvedUri);
 
   // 1. Calculate Adjustments Matrix
-  const colorMatrix = useMemo(() => {
+  /*const colorMatrix = useMemo(() => {
     const {
       brightness = 0,
       contrast = 0,
@@ -130,6 +130,7 @@ export function EditableLayerContent({ layer }: EditableLayerContentProps) {
     // Note: Simplify for performance or use individual filters
     return [...brightnessMatrix]; // Simplified example, real implementation uses concat
   }, [layer.adjustments]);
+  */
 
   // Higher level simplified matrix for Brightness/Contrast/Saturation
   const matrix = useMemo(() => {
@@ -204,7 +205,7 @@ export function EditableLayerContent({ layer }: EditableLayerContentProps) {
               color: layer.style?.textColor || "#000",
               textAlign: layer.style?.textAlign || "center",
               fontFamily: layer.style?.fontFamily,
-              fontSize: 24, // Fallback if not specified
+              fontSize: 24,
             },
           ]}
         >

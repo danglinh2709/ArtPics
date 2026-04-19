@@ -1,9 +1,9 @@
-import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { ILayer, TPageBackground } from "@/src/types/editor.types";
 import { resolveAssetUri } from "@/src/stores/helpers/api.utils";
+import { PAGE_BACKGROUND_TYPES } from "@/src/constants/editor-tabs.constants";
 
 interface IProjectMiniCanvasProps {
   layers: ILayer[];
@@ -35,13 +35,16 @@ export function ProjectMiniCanvas({
         {
           width: thumbnailWidth,
           height: thumbnailHeight,
-          backgroundColor: pageBackground?.type === "color" ? pageBackground.color : "#fff",
+          backgroundColor:
+            pageBackground?.type === PAGE_BACKGROUND_TYPES.COLOR
+              ? pageBackground.color
+              : "#fff",
           borderWidth: 0.5,
           borderColor: "rgba(255,255,255,0.1)",
         },
       ]}
     >
-      {pageBackground?.type === "gradient" && (
+      {pageBackground?.type === PAGE_BACKGROUND_TYPES.GRADIENT && (
         <LinearGradient
           colors={pageBackground.gradient.colors as any}
           start={{ x: 0, y: 0 }}
@@ -49,7 +52,7 @@ export function ProjectMiniCanvas({
           style={StyleSheet.absoluteFillObject}
         />
       )}
-      {pageBackground?.type === "texture" && (
+      {pageBackground?.type === PAGE_BACKGROUND_TYPES.TEXTURE && (
         <Image
           source={{ uri: pageBackground.textureUri }}
           style={StyleSheet.absoluteFillObject}
@@ -69,17 +72,22 @@ export function ProjectMiniCanvas({
         const flipY = transform?.flipY ? -1 : 1;
 
         const style = layer.style || {};
-        
+
         let borderRadiusProp = {};
         if (style.individualCorners) {
-           borderRadiusProp = {
-             borderTopLeftRadius: (style.individualCorners.topLeft || 0) * scale,
-             borderTopRightRadius: (style.individualCorners.topRight || 0) * scale,
-             borderBottomLeftRadius: (style.individualCorners.bottomLeft || 0) * scale,
-             borderBottomRightRadius: (style.individualCorners.bottomRight || 0) * scale,
-           };
+          borderRadiusProp = {
+            borderTopLeftRadius: (style.individualCorners.topLeft || 0) * scale,
+            borderTopRightRadius:
+              (style.individualCorners.topRight || 0) * scale,
+            borderBottomLeftRadius:
+              (style.individualCorners.bottomLeft || 0) * scale,
+            borderBottomRightRadius:
+              (style.individualCorners.bottomRight || 0) * scale,
+          };
         } else {
-           borderRadiusProp = { borderRadius: (style.borderRadius || 0) * scale };
+          borderRadiusProp = {
+            borderRadius: (style.borderRadius || 0) * scale,
+          };
         }
 
         const borderProp = style.border
@@ -102,7 +110,7 @@ export function ProjectMiniCanvas({
                 transform: [
                   { rotate: `${rotation}deg` },
                   { scaleX: flipX },
-                  { scaleY: flipY }
+                  { scaleY: flipY },
                 ],
                 opacity: style.opacity ?? 1,
                 overflow: "hidden",
@@ -119,7 +127,9 @@ export function ProjectMiniCanvas({
               />
             )}
             {layer.type === "text" && (
-              <View style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}>
+              <View
+                style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}
+              >
                 <Text
                   style={{
                     fontSize: 24 * scale,

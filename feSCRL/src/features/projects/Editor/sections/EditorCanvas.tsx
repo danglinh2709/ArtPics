@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
 import Animated from "react-native-reanimated";
 import { GestureDetector } from "react-native-gesture-handler";
@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { LayerItem } from "../../Layers/LayerItem";
 import { ILayer, TPageBackground } from "@/src/types/editor.types";
 import ViewShot from "react-native-view-shot";
+import { PAGE_BACKGROUND_TYPES } from "@/src/constants/editor-tabs.constants";
 
 interface IEditorCanvasProps {
   canvasWidth: number;
@@ -21,7 +22,7 @@ interface IEditorCanvasProps {
   animatedStyle: any;
 }
 
-export const EditorCanvas = React.forwardRef<ViewShot, IEditorCanvasProps>(
+export const EditorCanvas = forwardRef<ViewShot, IEditorCanvasProps>(
   (
     {
       canvasWidth,
@@ -55,13 +56,13 @@ export const EditorCanvas = React.forwardRef<ViewShot, IEditorCanvasProps>(
                 activeOpacity={1}
                 style={[
                   styles.canvas,
-                  pageBackground?.type === "color" && {
+                  pageBackground?.type === PAGE_BACKGROUND_TYPES.COLOR && {
                     backgroundColor: pageBackground.color,
                   },
                 ]}
                 onPress={onCanvasPress}
               >
-                {pageBackground?.type === "gradient" && (
+                {pageBackground?.type === PAGE_BACKGROUND_TYPES.GRADIENT && (
                   <LinearGradient
                     colors={pageBackground.gradient.colors as any}
                     start={{ x: 0, y: 0 }}
@@ -69,7 +70,7 @@ export const EditorCanvas = React.forwardRef<ViewShot, IEditorCanvasProps>(
                     style={StyleSheet.absoluteFillObject}
                   />
                 )}
-                {pageBackground?.type === "texture" && (
+                {pageBackground?.type === PAGE_BACKGROUND_TYPES.TEXTURE && (
                   <Image
                     source={{ uri: pageBackground.textureUri }}
                     style={StyleSheet.absoluteFillObject}
@@ -127,14 +128,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 15,
     elevation: 20,
-    overflow: "hidden", // <-- Clip image contents
+    overflow: "hidden",
   },
   canvas: {
     flex: 1,
   },
   overlayLayer: {
     ...StyleSheet.absoluteFillObject,
-    overflow: "visible", // <-- Allow icons to spill out
+    overflow: "visible",
     zIndex: 99,
   },
 });

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "#111", // nearly black background
+    backgroundColor: "#111",
     justifyContent: "space-between",
     paddingTop: 50,
     paddingBottom: 40,
@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
   },
   previewCard: {
     backgroundColor: "#fff",
-    padding: 40, // whitespace around the image
+    padding: 40,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
   },
   expandBtn: {
     position: "absolute",
-    bottom: -25, // stick out from bottom wrap
+    bottom: -25,
     left: -25,
     backgroundColor: "#333",
     width: 36,

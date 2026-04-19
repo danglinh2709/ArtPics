@@ -53,7 +53,7 @@ export function mapEditorLayerFromApi(raw: any): ILayer {
     typeof content === "object" &&
     (content.assetId ?? content.AssetId);
 
-  // Also check flat assetId field (template seeder format)
+  //  check flat assetId field (template seeder format)
   const rawAssetId = raw?.assetId ?? raw?.AssetId;
 
   const apiBaseUrl = getApiBaseUrl();

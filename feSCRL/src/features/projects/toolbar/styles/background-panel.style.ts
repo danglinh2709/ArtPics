@@ -34,9 +34,9 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 12,
   },
-  // --- COLOR SWATCHES (Circular) ---
+  //  COLOR SWATCHES (Circular)
   colorContainer: {
-    width: "15%", // Approx 6 items per row with gap
+    width: "15%",
     aspectRatio: 1,
     borderRadius: 999,
     borderWidth: 2,
@@ -67,9 +67,9 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  // --- GRADIENTS / TEXTURES (4-Column Rounded Squares) ---
+  //  GRADIENTS / TEXTURES
   squareContainer: {
-    width: "22%", // 4 items per row (4 * ~22% + 3 gaps = ~100%)
+    width: "22%",
     aspectRatio: 1,
     borderRadius: 12,
     borderWidth: 2,

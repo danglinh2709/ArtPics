@@ -17,7 +17,6 @@ namespace WebAPI.Extensions
                     var path = context.HttpContext.Request.Path.Value?.ToLower() ?? "";
                     string message = "Too many requests. Please try again later.";
 
-                    Console.WriteLine($"RATE LIMITED: {path}");
 
                     if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
                     {

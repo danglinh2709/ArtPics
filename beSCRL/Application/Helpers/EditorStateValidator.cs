@@ -3,11 +3,9 @@ using MongoDB.Bson;
 
 namespace Application.Helpers
 {
-    /// <summary>
-    /// Validates an editorState BsonDocument before persisting.
-    /// Designed to be permissive for template-sourced data while still
-    /// catching structural errors (wrong types, missing critical ids, etc.).
-    /// </summary>
+    // Validates an editorState BsonDocument before persisting.
+    // Designed to be permissive for template-sourced data while still
+    // catching structural errors (wrong types, missing critical ids,...).
     public static class EditorStateValidator
     {
         public static void Validate(BsonDocument editorState)
@@ -24,9 +22,7 @@ namespace Application.Helpers
             ValidatePages(pages, document);
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Root
-        // ──────────────────────────────────────────────────────────────
         private static void ValidateRoot(BsonDocument root)
         {
             RequireField(root, "schemaVersion");
@@ -52,9 +48,7 @@ namespace Application.Helpers
                 throw new ArgumentException("pages must be an array.");
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Document
-        // ──────────────────────────────────────────────────────────────
         private static void ValidateDocument(BsonDocument document)
         {
             RequireField(document, "type");
@@ -76,9 +70,7 @@ namespace Application.Helpers
             if (pageCount <= 0) throw new ArgumentException("document.pageCount must be > 0.");
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Pages
-        // ──────────────────────────────────────────────────────────────
         private static void ValidatePages(BsonArray pages, BsonDocument document)
         {
             if (pages.Count == 0)
@@ -124,9 +116,7 @@ namespace Application.Helpers
             }
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Background
-        // ──────────────────────────────────────────────────────────────
         private static void ValidateBackground(BsonDocument background, int pageIndex)
         {
             var typeField = GetField(background, "type");
@@ -145,9 +135,7 @@ namespace Application.Helpers
             }
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Layout (optional)
-        // ──────────────────────────────────────────────────────────────
         private static void ValidateLayout(BsonDocument layout, int pageIndex)
         {
             var framesField = GetField(layout, "frames");
@@ -169,9 +157,7 @@ namespace Application.Helpers
             }
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Layers
-        // ──────────────────────────────────────────────────────────────
         private static void ValidateLayers(BsonArray layers, int pageIndex)
         {
             var layerIds = new HashSet<string>();
@@ -198,9 +184,7 @@ namespace Application.Helpers
             }
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Layer type dispatch
-        // ──────────────────────────────────────────────────────────────
         private static void ValidateLayerByType(string type, BsonDocument layer, int pageIndex, int layerIndex)
         {
             switch (type)
@@ -228,9 +212,7 @@ namespace Application.Helpers
             }
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Asset layer — permissive: any one of url / uri / assetId / content.assetId
-        // ──────────────────────────────────────────────────────────────
         private static void ValidateAssetLayer(BsonDocument layer, int pageIndex, int layerIndex)
         {
             // 1. Has flat 'url' field
@@ -257,32 +239,24 @@ namespace Application.Helpers
             // This handles edge cases like newly-created template frames with no image yet
         }
 
-        // ──────────────────────────────────────────────────────────────
         // Helpers
-        // ──────────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// Require a field to exist in the document (case-insensitive across camelCase / PascalCase / lowercase).
-        /// </summary>
+        // Require a field to exist in the document (case-insensitive across camelCase / PascalCase / lowercase).
         private static void RequireField(BsonDocument document, string fieldName)
         {
             if (FindKey(document, fieldName) == null)
                 throw new ArgumentException($"Missing required field: {fieldName}");
         }
 
-        /// <summary>
-        /// Get a field value using case-insensitive lookup. Returns null if not found.
-        /// </summary>
+        // Get a field value using case-insensitive lookup. Returns null if not found.
         private static BsonValue? GetField(BsonDocument document, string fieldName)
         {
             var key = FindKey(document, fieldName);
             return key != null ? document[key] : null;
         }
 
-        /// <summary>
-        /// Find the actual key name in the document that matches fieldName (case-insensitive).
-        /// Returns null if not found.
-        /// </summary>
+        // Find the actual key name in the document that matches fieldName (case-insensitive).
+        // Returns null if not found.
         private static string? FindKey(BsonDocument document, string fieldName)
         {
             // Exact match first (most common)

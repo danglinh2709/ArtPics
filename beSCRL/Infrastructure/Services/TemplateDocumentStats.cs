@@ -3,9 +3,7 @@ using MongoDB.Bson;
 
 namespace Infrastructure.Services;
 
-/// <summary>
-/// Đọc kích thước / số trang / số layer ảnh từ TemplateData BSON (và bổ sung từ entity khi có).
-/// </summary>
+// Đọc kích thước / số trang / số layer ảnh từ TemplateData BSON 
 internal static class TemplateDocumentStats
 {
     public sealed record Stats(
