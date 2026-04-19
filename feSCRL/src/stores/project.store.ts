@@ -12,5 +12,5 @@ export const useProjectStore = create<ProjectState>((...args) => ({
   ...createProjectApiSlice(...args),
 }));
 
-export { resolveAssetUri } from "./project.store.helpers";
+export { resolveAssetUri } from "./helpers/project.store.helpers";
 export type { ProjectState } from "./types/project.store.types";

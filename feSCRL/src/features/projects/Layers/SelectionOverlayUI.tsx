@@ -1,10 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
 import { useProjectStore } from "@/src/stores/project.store";
 import {
-  HANDLE_SIZE,
   PILL_LENGTH,
   PILL_THICKNESS,
 } from "@/src/constants/selectionOverlay.constants";

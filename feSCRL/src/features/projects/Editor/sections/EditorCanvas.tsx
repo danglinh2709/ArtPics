@@ -37,6 +37,12 @@ export const EditorCanvas = forwardRef<ViewShot, IEditorCanvasProps>(
     },
     ref,
   ) => {
+    const sortedLayers = React.useMemo(() => {
+      return [...layers].sort(
+        (a, b) => (a.transform.zIndex || 0) - (b.transform.zIndex || 0),
+      );
+    }, [layers]);
+
     return (
       <View style={styles.editorArea}>
         <GestureDetector gesture={gesture}>
@@ -77,7 +83,7 @@ export const EditorCanvas = forwardRef<ViewShot, IEditorCanvasProps>(
                     resizeMode="cover"
                   />
                 )}
-                {layers.map((layer) => (
+                {sortedLayers.map((layer) => (
                   <LayerItem
                     key={`content-${layer.id}`}
                     layer={layer}
@@ -90,7 +96,7 @@ export const EditorCanvas = forwardRef<ViewShot, IEditorCanvasProps>(
             </ViewShot>
 
             <View style={styles.overlayLayer} pointerEvents="box-none">
-              {layers.map((layer) => {
+              {sortedLayers.map((layer) => {
                 if (layer.id !== selectedLayerId) return null;
                 return (
                   <LayerItem

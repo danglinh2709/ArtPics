@@ -22,7 +22,7 @@ import { useEditorExport } from "./hooks/useEditorExport";
 import { useEditorLayerActions } from "./hooks/useEditorLayerActions";
 
 import { EditorModals } from "./components/EditorModals";
-import { EditorLoadingOverlay } from "./components/EditorLoadingOverlay";
+// import { EditorLoadingOverlay } from "./components/EditorLoadingOverlay";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 

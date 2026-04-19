@@ -9,7 +9,6 @@ import { createLayerTransformActions } from "../project-layer/transform.actions"
 export const createProjectLayerSlice: ProjectSliceCreator<
   Pick<
     import("../../types/project.store.types").ProjectState,
-    | "clearLayers"
     | "addLayer"
     | "updateLayer"
     | "deleteLayer"

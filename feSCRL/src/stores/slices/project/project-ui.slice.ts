@@ -11,13 +11,10 @@ export const createProjectUiSlice: ProjectSliceCreator<
     | "error"
     | "isProjectMenuVisible"
     | "activeProjectMenuId"
-    | "setLoading"
-    | "setError"
     | "openCreateModal"
     | "closeCreateModal"
     | "openProjectMenu"
     | "closeProjectMenu"
-    | "setSelectedRatio"
   >
 > = (set) => ({
   isCreateModalVisible: false,
@@ -29,10 +26,6 @@ export const createProjectUiSlice: ProjectSliceCreator<
   isProjectMenuVisible: false,
   activeProjectMenuId: null,
 
-  setLoading: (isLoading) => set({ isLoading }),
-
-  setError: (error) => set({ error }),
-
   openCreateModal: () => set({ isCreateModalVisible: true }),
 
   closeCreateModal: () => set({ isCreateModalVisible: false }),
@@ -42,6 +35,4 @@ export const createProjectUiSlice: ProjectSliceCreator<
 
   closeProjectMenu: () =>
     set({ isProjectMenuVisible: false, activeProjectMenuId: null }),
-
-  setSelectedRatio: (ratio) => set({ selectedRatio: ratio }),
 });

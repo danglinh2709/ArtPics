@@ -29,8 +29,8 @@ export default function TemplateCategoryScreen() {
   const [selectedFormat, setSelectedFormat] = useState<string | null>(null);
   const [templates, setTemplates] = useState<TemplateListItem[]>([]);
 
-  const [loadingFormats, setLoadingFormats] = useState(true);
-  const [loadingTemplates, setLoadingTemplates] = useState(true);
+  const [loadingFormats, setLoadingFormats] = useState<boolean>(true);
+  const [loadingTemplates, setLoadingTemplates] = useState<boolean>(true);
 
   useEffect(() => {
     if (!code) return;

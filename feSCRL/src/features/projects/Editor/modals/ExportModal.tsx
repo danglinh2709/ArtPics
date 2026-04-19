@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Modal,
-  StyleSheet,
   TouchableOpacity,
   View,
   ScrollView,
@@ -12,7 +11,7 @@ import { Typography } from "../../../../components/Typography";
 import { ProjectMiniCanvas } from "../../project-form/components/ProjectMiniCanvas";
 import { ILayer } from "@/src/types/editor.types";
 import { ExportOption } from "./ExportOption";
-import { styles } from "./export-modal.style";
+import { styles } from "./styles/export-modal.style";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -94,7 +93,7 @@ export function ExportModal({
               </TouchableOpacity>
             </View>
           </View>
-          
+
           <View style={styles.dotsContainer}>
             <View style={[styles.dot, styles.dotActive]} />
             <View style={[styles.dot, styles.dotInactive]} />

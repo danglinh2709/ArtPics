@@ -37,20 +37,20 @@ export interface ProjectState {
   closeCreateModal: () => void;
   openProjectMenu: (id: string) => void;
   closeProjectMenu: () => void;
-  setSelectedRatio: (ratio: TAspectRatio) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
 
   // Project Management (API)
   fetchProjects: () => Promise<void>;
   saveCurrentProject: (thumbnailUri?: string) => Promise<void>;
-  updateEditorState: (projectId: string, editorState: any, version: number) => Promise<any>;
+  updateEditorState: (
+    projectId: string,
+    editorState: any,
+    version: number,
+  ) => Promise<any>;
   loadProject: (id: string) => Promise<void>;
   createNewProject: (name: string, ratio: TAspectRatio) => Promise<any>;
   deleteProject: (id: string) => Promise<void>;
   duplicateProject: (id: string) => Promise<void>;
   toggleStarProject: (id: string) => Promise<void>;
-  clearLayers: () => void;
 
   // Layer Actions
   addLayer: (layer: ILayer) => void;

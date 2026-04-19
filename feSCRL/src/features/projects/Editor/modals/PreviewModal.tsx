@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Typography } from "../../../../components/Typography";
 import { ProjectMiniCanvas } from "../../project-form/components/ProjectMiniCanvas";
 import { ILayer } from "@/src/types/editor.types";
-import { styles } from "./preview-modal.style";
+import { styles } from "./styles/preview-modal.style";
 import { SCREEN_WIDTH } from "@/src/constants/device.constants";
 
 interface IPreviewModalProps {

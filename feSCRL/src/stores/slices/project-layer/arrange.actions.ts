@@ -12,8 +12,21 @@ export const createLayerArrangeActions: ProjectSliceCreator<
       const i = layers.findIndex((l) => l.id === id);
       if (i === -1) return state;
 
-      const [ly] = layers.splice(i, 1);
-      layers.push(ly);
+      const maxZIndex = layers.reduce(
+        (max, l) => Math.max(max, l.transform.zIndex || 0),
+        0,
+      );
+
+      layers[i] = {
+        ...layers[i],
+        transform: {
+          ...layers[i].transform,
+          zIndex: maxZIndex + 1,
+        },
+      };
+
+      // Sort layers by zIndex to maintain array order consistency
+      layers.sort((a, b) => (a.transform.zIndex || 0) - (b.transform.zIndex || 0));
 
       return { layers };
     }),
@@ -24,8 +37,21 @@ export const createLayerArrangeActions: ProjectSliceCreator<
       const i = layers.findIndex((l) => l.id === id);
       if (i === -1) return state;
 
-      const [ly] = layers.splice(i, 1);
-      layers.unshift(ly);
+      const minZIndex = layers.reduce(
+        (min, l) => Math.min(min, l.transform.zIndex || 0),
+        0,
+      );
+
+      layers[i] = {
+        ...layers[i],
+        transform: {
+          ...layers[i].transform,
+          zIndex: minZIndex - 1,
+        },
+      };
+
+      // Sort layers by zIndex to maintain array order consistency
+      layers.sort((a, b) => (a.transform.zIndex || 0) - (b.transform.zIndex || 0));
 
       return { layers };
     }),

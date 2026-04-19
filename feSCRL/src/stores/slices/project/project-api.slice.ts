@@ -6,7 +6,7 @@ import { TAspectRatio, TEditorState, TPage } from "../../../types/project.type";
 import {
   getApiBaseUrl,
   mapApiProjectToProject,
-} from "../../project.store.helpers";
+} from "../../helpers/project.store.helpers";
 import { ProjectSliceCreator } from "../../types/project.store.types";
 import { EAssetType } from "@/src/enums/layer.enum";
 import {
@@ -112,7 +112,6 @@ export const createProjectApiSlice: ProjectSliceCreator<
     const {
       currentProjectId,
       currentProjectName,
-      currentProjectVersion,
       layers,
       selectedRatio,
       isUploadingAsset,

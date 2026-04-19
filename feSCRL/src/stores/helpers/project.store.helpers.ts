@@ -1,10 +1,7 @@
-import { ILayer, Project } from "../types/editor.types";
-import { resolveAspectRatioFromDocument } from "./helpers/aspect-ratio.utils";
-import {
-  mapLayersFromApi,
-  pickBestPageRawLayers,
-} from "./helpers/editor-state";
-import { getApiBaseUrl, resolveAssetUri } from "./helpers/api.utils";
+import { ILayer, Project } from "../../types/editor.types";
+import { resolveAspectRatioFromDocument } from "./aspect-ratio.utils";
+import { mapLayersFromApi, pickBestPageRawLayers } from "./editor-state";
+import { getApiBaseUrl, resolveAssetUri } from "./api.utils";
 
 export { getApiBaseUrl, resolveAssetUri };
 
@@ -59,5 +56,3 @@ export const mapApiProjectToProject = (
     layers,
   };
 };
-
-

@@ -1,44 +1,58 @@
 import { StyleSheet } from "react-native";
-import { SCREEN_WIDTH } from "@/src/constants/device.constants";
 
 export const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.85)",
-    justifyContent: "flex-end",
-    marginTop: 150,
-  },
-  container: {
-    backgroundColor: "#121212",
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    height: "88%",
-    paddingBottom: 30,
-    borderWidth: 1,
-    borderColor: "#222",
+    backgroundColor: "#111", // Dark background like Export modal
+    justifyContent: "space-between",
+    paddingTop: 10,
+    paddingBottom: 40,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 20,
     paddingHorizontal: 20,
+    marginBottom: 20,
   },
   headerTitle: {
-    color: "#fff",
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: "700",
+    color: "#fff",
+    letterSpacing: 0.5,
   },
-
-  mockupContainer: {
-    flex: 1,
+  closeBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "rgba(255,255,255,0.15)",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#000",
   },
-  instagramPost: {
-    width: SCREEN_WIDTH,
-    backgroundColor: "#000",
+  mockupContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
+    justifyContent: "center",
+  },
+  whiteCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    overflow: "hidden",
+    paddingBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 10,
+  },
+  dragHandle: {
+    width: 60,
+    height: 4,
+    backgroundColor: "#E0E0E0",
+    borderRadius: 2,
+    alignSelf: "center",
+    marginTop: 12,
+    marginBottom: 4,
   },
   postHeader: {
     flexDirection: "row",
@@ -50,41 +64,34 @@ export const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#262626",
+    backgroundColor: "#777",
     marginRight: 10,
   },
   userInfo: {
-    gap: 4,
+    gap: 6,
   },
   userNameLine: {
     width: 70,
-    height: 10,
-    backgroundColor: "#262626",
-    borderRadius: 2,
+    height: 8,
+    backgroundColor: "#A0A0A0",
+    borderRadius: 4,
   },
   userSubLine: {
-    width: 100,
+    width: 40,
     height: 8,
-    backgroundColor: "#1C1C1C",
-    borderRadius: 2,
+    backgroundColor: "#D0D0D0",
+    borderRadius: 4,
   },
   previewFrame: {
     alignSelf: "center",
     backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 20 },
-    shadowOpacity: 0.6,
-    shadowRadius: 30,
-    elevation: 25,
-    borderRadius: 1,
-    overflow: "hidden",
     position: "relative",
   },
   postFooter: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
-    paddingVertical: 14,
+    paddingTop: 16,
     position: "relative",
   },
   footerActions: {
@@ -92,7 +99,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   actionIcon: {
-    marginLeft: 14,
+    marginLeft: 16,
   },
   dotsContainer: {
     flexDirection: "row",
@@ -101,17 +108,18 @@ export const styles = StyleSheet.create({
     right: 0,
     justifyContent: "center",
     alignItems: "center",
-    gap: 5,
+    gap: 6,
+    top: 22,
   },
   dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
   },
   dotActive: {
-    backgroundColor: "#0095f6",
+    backgroundColor: "#FF2D55", // TikTok pinkish-red
   },
   dotInactive: {
-    backgroundColor: "#262626",
+    backgroundColor: "#E0E0E0",
   },
 });

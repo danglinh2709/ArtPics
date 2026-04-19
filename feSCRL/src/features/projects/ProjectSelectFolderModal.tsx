@@ -9,7 +9,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Typography } from "@/src/components/Typography";
 import { useFolderStore } from "@/src/stores/folder.store";
-import { useProjectStore } from "@/src/stores/project.store";
 
 interface ProjectSelectFolderModalProps {
   isVisible: boolean;
@@ -17,7 +16,11 @@ interface ProjectSelectFolderModalProps {
   projectId: string | null;
 }
 
-export function ProjectSelectFolderModal({ isVisible, onClose, projectId }: ProjectSelectFolderModalProps) {
+export function ProjectSelectFolderModal({
+  isVisible,
+  onClose,
+  projectId,
+}: ProjectSelectFolderModalProps) {
   const { folders, addProjectToFolder } = useFolderStore();
 
   const handleSelectFolder = async (folderId: string) => {
@@ -64,8 +67,17 @@ export function ProjectSelectFolderModal({ isVisible, onClose, projectId }: Proj
                     disabled={isAdded}
                   >
                     <View style={styles.folderInfo}>
-                      <Ionicons name="folder-outline" size={24} color="#8E8E93" />
-                      <Typography style={[styles.folderName, isAdded && styles.disabledText]}>
+                      <Ionicons
+                        name="folder-outline"
+                        size={24}
+                        color="#8E8E93"
+                      />
+                      <Typography
+                        style={[
+                          styles.folderName,
+                          isAdded && styles.disabledText,
+                        ]}
+                      >
                         {folder.name}
                       </Typography>
                     </View>
