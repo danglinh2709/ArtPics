@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "D:\\Class\\scrl_app\\beSCRL\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{732953EC-12AC-4B3B-829B-984DBF9E0C0B}|Infrastructure\\Infrastructure.csproj|d:\\class\\scrl_app\\bescrl\\infrastructure\\persistence\\seeders\\templatecategoryseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{732953EC-12AC-4B3B-829B-984DBF9E0C0B}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\persistence\\seeders\\templatecategoryseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{732953EC-12AC-4B3B-829B-984DBF9E0C0B}|Infrastructure\\Infrastructure.csproj|d:\\class\\scrl_app\\bescrl\\infrastructure\\services\\templateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{732953EC-12AC-4B3B-829B-984DBF9E0C0B}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\services\\templateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|d:\\class\\scrl_app\\bescrl\\webapi\\ratelimiting\\authratelimitpolicies.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\ratelimiting\\authratelimitpolicies.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|d:\\class\\scrl_app\\bescrl\\webapi\\ratelimiting\\ratelimitpartitionkeyhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\ratelimiting\\ratelimitpartitionkeyhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|d:\\class\\scrl_app\\bescrl\\webapi\\controllers\\templatecategorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,14 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|d:\\class\\scrl_app\\bescrl\\webapi\\extensions\\ratelimitingextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\extensions\\ratelimitingextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|d:\\class\\scrl_app\\bescrl\\webapi\\ratelimiting\\ratelimitpartitionkeyhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\ratelimiting\\ratelimitpartitionkeyhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|d:\\class\\scrl_app\\bescrl\\webapi\\ratelimiting\\authratelimitpolicies.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{203D74BF-A0D9-4820-97C8-6D35DC4E7D33}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\ratelimiting\\authratelimitpolicies.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -55,43 +59,58 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "TemplateCategorySeeder.cs",
+              "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\Infrastructure\\Persistence\\Seeders\\TemplateCategorySeeder.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Persistence\\Seeders\\TemplateCategorySeeder.cs",
+              "ToolTip": "D:\\Class\\scrl_app\\beSCRL\\Infrastructure\\Persistence\\Seeders\\TemplateCategorySeeder.cs",
+              "RelativeToolTip": "Infrastructure\\Persistence\\Seeders\\TemplateCategorySeeder.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAQwA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-20T15:04:45.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "TemplateService.cs",
               "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\Infrastructure\\Services\\TemplateService.cs",
               "RelativeDocumentMoniker": "Infrastructure\\Services\\TemplateService.cs",
               "ToolTip": "D:\\Class\\scrl_app\\beSCRL\\Infrastructure\\Services\\TemplateService.cs",
               "RelativeToolTip": "Infrastructure\\Services\\TemplateService.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAgwDUAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-19T03:38:15.322Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "TemplateCategoryController.cs",
               "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\WebAPI\\Controllers\\TemplateCategoryController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\TemplateCategoryController.cs",
               "ToolTip": "D:\\Class\\scrl_app\\beSCRL\\WebAPI\\Controllers\\TemplateCategoryController.cs",
               "RelativeToolTip": "WebAPI\\Controllers\\TemplateCategoryController.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:38:10.908Z"
+              "WhenOpened": "2026-04-19T03:38:10.908Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "EditorStateValidator.cs",
               "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\Application\\Helpers\\EditorStateValidator.cs",
               "RelativeDocumentMoniker": "Application\\Helpers\\EditorStateValidator.cs",
               "ToolTip": "D:\\Class\\scrl_app\\beSCRL\\Application\\Helpers\\EditorStateValidator.cs",
               "RelativeToolTip": "Application\\Helpers\\EditorStateValidator.cs",
-              "ViewState": "AgIAAJYAAAAAAAAAAAAkwAEBAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAEBAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:36:09.014Z"
+              "WhenOpened": "2026-04-19T03:36:09.014Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "TemplateController.cs",
               "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\WebAPI\\Controllers\\TemplateController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\TemplateController.cs",
@@ -103,7 +122,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\WebAPI\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\UserController.cs",
@@ -115,7 +134,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "RateLimitingExtensions.cs",
               "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\WebAPI\\Extensions\\RateLimitingExtensions.cs",
               "RelativeDocumentMoniker": "WebAPI\\Extensions\\RateLimitingExtensions.cs",
@@ -127,7 +146,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "AuthRateLimitPolicies.cs",
               "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\WebAPI\\RateLimiting\\AuthRateLimitPolicies.cs",
               "RelativeDocumentMoniker": "WebAPI\\RateLimiting\\AuthRateLimitPolicies.cs",
@@ -135,11 +154,12 @@
               "RelativeToolTip": "WebAPI\\RateLimiting\\AuthRateLimitPolicies.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:35:10.216Z"
+              "WhenOpened": "2026-04-19T03:35:10.216Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "RateLimitPartitionKeyHelper.cs",
               "DocumentMoniker": "D:\\Class\\scrl_app\\beSCRL\\WebAPI\\RateLimiting\\RateLimitPartitionKeyHelper.cs",
               "RelativeDocumentMoniker": "WebAPI\\RateLimiting\\RateLimitPartitionKeyHelper.cs",
@@ -147,7 +167,8 @@
               "RelativeToolTip": "WebAPI\\RateLimiting\\RateLimitPartitionKeyHelper.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAQwBAAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:35:04.573Z"
+              "WhenOpened": "2026-04-19T03:35:04.573Z",
+              "EditorCaption": ""
             }
           ]
         },

@@ -1,27 +1,4 @@
-using Application.Abstractions.Persistence;
-using Domain.Entities;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Infrastructure.Persistence.Seeders
-{
-    public class TemplateSeeder
-    {
-        private readonly ITemplateRepository _templateRepository;
-
-        public TemplateSeeder(ITemplateRepository templateRepository)
-        {
-            _templateRepository = templateRepository;
-        }
-
-        public async Task SeedAsync()
-        {
-            var existingTemplates = await _templateRepository.GetAllAsync();
-            if (existingTemplates.Any()) return;
-
-            var templates = new List<Template>
+﻿            var templates = new List<Template>
             {
                 new Template
                 {
@@ -825,16 +802,877 @@ namespace Infrastructure.Persistence.Seeders
                 },
                 new Template
                 {
-                    Name = "Grid Collage",
+                    Name = "Clean Grid",
                     Category = "Collage",
                     CategoryCode = "collage",
                     Format = "square",
-                    Description = "Six-slot square grid collage.",
+                    Description = "Simple square image grid.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 3,
+                    IsDefault = false,
+                    Tags = new List<string> { "collage", "grid", "square" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""Square Grid"",
+        ""width"": 1080,
+        ""height"": 1080,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 60,
+                    ""y"": 60,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-2"",
+                    ""type"": ""image"",
+                    ""x"": 570,
+                    ""y"": 60,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-3"",
+                    ""type"": ""image"",
+                    ""x"": 60,
+                    ""y"": 570,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-4"",
+                    ""type"": ""image"",
+                    ""x"": 570,
+                    ""y"": 570,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Memory Scrapbook",
+                    Category = "Scrapbook",
+                    CategoryCode = "scrapbook",
+                    Format = "portrait",
+                    Description = "Memory-board style scrapbook.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 1,
+                    IsDefault = true,
+                    Tags = new List<string> { "scrapbook", "memory", "notes" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""MEMORY BOARD"",
+        ""width"": 1080,
+        ""height"": 1350,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 90,
+                    ""y"": 60,
+                    ""width"": 900,
+                    ""height"": 80,
+                    ""rotation"": -2,
+                    ""text"": ""MEMORY BOARD"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 40,
+                        ""fill"": ""#5b4636""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 90,
+                    ""y"": 170,
+                    ""width"": 400,
+                    ""height"": 430,
+                    ""rotation"": -4,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 12
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-2"",
+                    ""type"": ""image"",
+                    ""x"": 560,
+                    ""y"": 230,
+                    ""width"": 360,
+                    ""height"": 340,
+                    ""rotation"": 3,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 12
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1518655048521-f130df041f66?auto=format&fit=crop&w=900&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Diary Page",
+                    Category = "Scrapbook",
+                    CategoryCode = "scrapbook",
+                    Format = "portrait",
+                    Description = "Diary-like scrapbook template.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1518655048521-f130df041f66?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1518655048521-f130df041f66?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 2,
+                    IsDefault = false,
+                    Tags = new List<string> { "scrapbook", "diary", "journal" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""MY DIARY PAGE"",
+        ""width"": 1080,
+        ""height"": 1350,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 90,
+                    ""y"": 60,
+                    ""width"": 900,
+                    ""height"": 80,
+                    ""rotation"": -2,
+                    ""text"": ""MY DIARY PAGE"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 40,
+                        ""fill"": ""#5b4636""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 90,
+                    ""y"": 170,
+                    ""width"": 400,
+                    ""height"": 430,
+                    ""rotation"": -4,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 12
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-2"",
+                    ""type"": ""image"",
+                    ""x"": 560,
+                    ""y"": 230,
+                    ""width"": 360,
+                    ""height"": 340,
+                    ""rotation"": 3,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 12
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1518655048521-f130df041f66?auto=format&fit=crop&w=900&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Pastel Scrapbook",
+                    Category = "Scrapbook",
+                    CategoryCode = "scrapbook",
+                    Format = "square",
+                    Description = "Soft pastel scrapbook collage.",
                     PreviewImageUrl = "https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=1200&q=80",
                     ThumbnailUrl = "https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=700&q=80",
                     SortOrder = 3,
                     IsDefault = false,
-                    Tags = new List<string> { "collage", "grid", "square" },
+                    Tags = new List<string> { "scrapbook", "pastel", "square" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""Square Grid"",
+        ""width"": 1080,
+        ""height"": 1080,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 60,
+                    ""y"": 60,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-2"",
+                    ""type"": ""image"",
+                    ""x"": 570,
+                    ""y"": 60,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-3"",
+                    ""type"": ""image"",
+                    ""x"": 60,
+                    ""y"": 570,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-4"",
+                    ""type"": ""image"",
+                    ""x"": 570,
+                    ""y"": 570,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Vintage Film",
+                    Category = "Film",
+                    CategoryCode = "film",
+                    Format = "portrait",
+                    Description = "Vintage analog poster layout.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 2,
+                    IsDefault = false,
+                    Tags = new List<string> { "film", "vintage", "portrait" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""VINTAGE FILM"",
+        ""width"": 1080,
+        ""height"": 1350,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 100,
+                    ""y"": 90,
+                    ""width"": 880,
+                    ""height"": 100,
+                    ""rotation"": 0,
+                    ""text"": ""VINTAGE FILM"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 48,
+                        ""fill"": ""#111111""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 240,
+                    ""width"": 800,
+                    ""height"": 920,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 20
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1200&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Contact Sheet",
+                    Category = "Film",
+                    CategoryCode = "film",
+                    Format = "square",
+                    Description = "Square contact-sheet style layout.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 3,
+                    IsDefault = false,
+                    Tags = new List<string> { "film", "grid", "contact-sheet" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""Square Grid"",
+        ""width"": 1080,
+        ""height"": 1080,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 60,
+                    ""y"": 60,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-2"",
+                    ""type"": ""image"",
+                    ""x"": 570,
+                    ""y"": 60,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-3"",
+                    ""type"": ""image"",
+                    ""x"": 60,
+                    ""y"": 570,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-4"",
+                    ""type"": ""image"",
+                    ""x"": 570,
+                    ""y"": 570,
+                    ""width"": 450,
+                    ""height"": 450,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 16
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Birthday Card",
+                    Category = "Celebrations",
+                    CategoryCode = "celebrations",
+                    Format = "square",
+                    Description = "Birthday greeting template.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 1,
+                    IsDefault = true,
+                    Tags = new List<string> { "celebration", "birthday", "party" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""HAPPY BIRTHDAY"",
+        ""width"": 1080,
+        ""height"": 1080,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 100,
+                    ""y"": 90,
+                    ""width"": 880,
+                    ""height"": 100,
+                    ""rotation"": 0,
+                    ""text"": ""HAPPY BIRTHDAY"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 52,
+                        ""fill"": ""#111111""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 250,
+                    ""width"": 800,
+                    ""height"": 620,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 20
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=1200&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Party Story",
+                    Category = "Celebrations",
+                    CategoryCode = "celebrations",
+                    Format = "story",
+                    Description = "Party story layout.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 2,
+                    IsDefault = false,
+                    Tags = new List<string> { "celebration", "party", "story" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""PARTY TIME"",
+        ""width"": 1080,
+        ""height"": 1920,
+        ""pageCount"": 3
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 100,
+                    ""y"": 80,
+                    ""width"": 880,
+                    ""height"": 100,
+                    ""rotation"": 0,
+                    ""text"": ""PARTY TIME"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 48,
+                        ""fill"": ""#111111""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 220,
+                    ""width"": 800,
+                    ""height"": 420,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 24
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-2"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 700,
+                    ""width"": 800,
+                    ""height"": 420,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 24
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-3"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 1180,
+                    ""width"": 800,
+                    ""height"": 420,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 24
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=900&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Happy Moments",
+                    Category = "Celebrations",
+                    CategoryCode = "celebrations",
+                    Format = "portrait",
+                    Description = "Celebration portrait layout.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 3,
+                    IsDefault = false,
+                    Tags = new List<string> { "celebration", "happy", "portrait" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""HAPPY MOMENTS"",
+        ""width"": 1080,
+        ""height"": 1350,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 100,
+                    ""y"": 90,
+                    ""width"": 880,
+                    ""height"": 100,
+                    ""rotation"": 0,
+                    ""text"": ""HAPPY MOMENTS"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 48,
+                        ""fill"": ""#111111""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 240,
+                    ""width"": 800,
+                    ""height"": 920,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 20
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1200&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Creator Intro",
+                    Category = "Creator Templates",
+                    CategoryCode = "creator-templates",
+                    Format = "portrait",
+                    Description = "Personal brand intro template.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 1,
+                    IsDefault = true,
+                    Tags = new List<string> { "creator", "intro", "brand" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""MEET THE CREATOR"",
+        ""width"": 1080,
+        ""height"": 1350,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 100,
+                    ""y"": 90,
+                    ""width"": 880,
+                    ""height"": 100,
+                    ""rotation"": 0,
+                    ""text"": ""MEET THE CREATOR"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 48,
+                        ""fill"": ""#111111""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 240,
+                    ""width"": 800,
+                    ""height"": 920,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 20
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Content Promo",
+                    Category = "Creator Templates",
+                    CategoryCode = "creator-templates",
+                    Format = "square",
+                    Description = "Promo card for social creators.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 2,
+                    IsDefault = false,
+                    Tags = new List<string> { "creator", "promo", "social" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""NEW CONTENT DROP"",
+        ""width"": 1080,
+        ""height"": 1080,
+        ""pageCount"": 1
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 100,
+                    ""y"": 90,
+                    ""width"": 880,
+                    ""height"": 100,
+                    ""rotation"": 0,
+                    ""text"": ""NEW CONTENT DROP"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 52,
+                        ""fill"": ""#111111""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 250,
+                    ""width"": 800,
+                    ""height"": 620,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 20
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Creator Story",
+                    Category = "Creator Templates",
+                    CategoryCode = "creator-templates",
+                    Format = "story",
+                    Description = "Story layout for creators.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 3,
+                    IsDefault = false,
+                    Tags = new List<string> { "creator", "story", "personal-brand" },
+                    TemplateData = BsonDocument.Parse(@"{
+    ""document"": {
+        ""type"": ""post"",
+        ""title"": ""CREATOR STORY"",
+        ""width"": 1080,
+        ""height"": 1920,
+        ""pageCount"": 3
+    },
+    ""pages"": [
+        {
+            ""id"": ""page-1"",
+            ""layers"": [
+                {
+                    ""id"": ""title"",
+                    ""type"": ""text"",
+                    ""x"": 100,
+                    ""y"": 80,
+                    ""width"": 880,
+                    ""height"": 100,
+                    ""rotation"": 0,
+                    ""text"": ""CREATOR STORY"",
+                    ""style"": {
+                        ""fontFamily"": ""Inter"",
+                        ""fontSize"": 48,
+                        ""fill"": ""#111111""
+                    }
+                },
+                {
+                    ""id"": ""img-1"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 220,
+                    ""width"": 800,
+                    ""height"": 420,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 24
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-2"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 700,
+                    ""width"": 800,
+                    ""height"": 420,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 24
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80""
+                },
+                {
+                    ""id"": ""img-3"",
+                    ""type"": ""image"",
+                    ""x"": 140,
+                    ""y"": 1180,
+                    ""width"": 800,
+                    ""height"": 420,
+                    ""rotation"": 0,
+                    ""style"": {
+                        ""opacity"": 1,
+                        ""cornerRadius"": 24
+                    },
+                    ""url"": ""https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=80""
+                }
+            ]
+        }
+    ]
+}")
+                },
+                new Template
+                {
+                    Name = "Dream Board",
+                    Category = "Vision Boards",
+                    CategoryCode = "vision-boards",
+                    Format = "portrait",
+                    Description = "Vision board with inspirational layout.",
+                    PreviewImageUrl = "https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=1200&q=80",
+                    ThumbnailUrl = "https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=700&q=80",
+                    SortOrder = 1,
+                    IsDefault = true,
+                    Tags = new List<string> { "vision", "moodboard", "goals" },
                     TemplateData = BsonDocument.Parse(@"{
     ""document"": {
         ""type"": ""post"",
@@ -1052,12 +1890,3 @@ namespace Infrastructure.Persistence.Seeders
 }")
                 },
             };
-
-
-            foreach (var template in templates)
-            {
-                await _templateRepository.CreateAsync(template);
-            }
-        }
-    }
-}
