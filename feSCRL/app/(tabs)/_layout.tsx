@@ -4,12 +4,17 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useProjectStore } from "@/src/stores/project.store";
 
-function CenterTabButton({ children }: any) {
+function CenterTabButton(props: any) {
   const { openCreateModal } = useProjectStore();
 
   return (
     <Pressable onPress={openCreateModal} style={styles.centerButtonWrapper}>
-      <View style={styles.centerButton}>{children}</View>
+      <View style={styles.centerButton}>
+        <View style={styles.plusContainer}>
+          <View style={styles.plusHorizontal} />
+          <View style={styles.plusVertical} />
+        </View>
+      </View>
     </Pressable>
   );
 }
@@ -29,7 +34,6 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="home"
-
         options={{
           title: "Trang chủ",
           tabBarIcon: ({ color, focused }) => (
@@ -52,6 +56,16 @@ export default function TabLayout() {
               size={24}
               color={color}
             />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="create"
+        options={{
+          tabBarButton: (props) => <CenterTabButton {...props} />,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="add" size={30} color="#000" />
           ),
         }}
       />
@@ -107,26 +121,25 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  plusCustom: {
-    width: 24,
-    height: 24,
+  plusContainer: {
+    width: 28,
+    height: 28,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 13,
   },
 
   plusHorizontal: {
     position: "absolute",
-    width: 28,
-    height: 3.5,
+    width: 24,
+    height: 3,
     borderRadius: 2,
     backgroundColor: "#000",
   },
 
   plusVertical: {
     position: "absolute",
-    width: 3.5,
-    height: 28,
+    width: 3,
+    height: 24,
     borderRadius: 2,
     backgroundColor: "#000",
   },
