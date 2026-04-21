@@ -1,12 +1,9 @@
 import { usePreventRemove } from "@react-navigation/native";
-import { useRouter } from "expo-router";
 import { RefObject, useRef } from "react";
 import ViewShot from "react-native-view-shot";
 
 interface UseEditorLeaveGuardProps {
   navigation: any;
-  isSavingBeforeLeave: boolean;
-  setIsSavingBeforeLeave: (value: boolean) => void;
   isUploadingAsset: boolean;
   saveCurrentProject: (thumbnailUri?: string) => Promise<void>;
   viewShotRef: RefObject<ViewShot | null>;
@@ -14,31 +11,37 @@ interface UseEditorLeaveGuardProps {
 
 export function useEditorLeaveGuard({
   navigation,
-  isSavingBeforeLeave,
-  setIsSavingBeforeLeave,
   isUploadingAsset,
   saveCurrentProject,
   viewShotRef,
 }: UseEditorLeaveGuardProps) {
-  const router = useRouter();
-  // Ref-based guard to prevent double invocation (React state is async)
-  const isSavingRef = useRef(false);
+  const isProcessingRef = useRef(false);
+  const allowNextRemoveRef = useRef(false);
 
-  usePreventRemove(!isSavingBeforeLeave, ({ data }) => {
-    if (isSavingBeforeLeave || isSavingRef.current) return;
-
-    if (isUploadingAsset) {
-      console.warn("[Editor] Still uploading. Waiting...");
+  usePreventRemove(true, ({ data }) => {
+    // Nếu đã cho phép remove rồi thì bỏ qua guard
+    if (allowNextRemoveRef.current) {
+      allowNextRemoveRef.current = false;
       return;
     }
 
-    isSavingRef.current = true;
-    setIsSavingBeforeLeave(true);
+    // Tránh chạy nhiều lần
+    if (isProcessingRef.current) return;
+
+    // Đang upload thì không cho rời
+    if (isUploadingAsset) {
+      console.warn("[Editor] Still uploading. Block leaving.");
+      return;
+    }
+
+    isProcessingRef.current = true;
 
     void (async () => {
       try {
         console.log("[Editor] Auto-saving before leave...");
+
         let thumbnailUri: string | undefined;
+
         try {
           if (viewShotRef.current?.capture) {
             thumbnailUri = await viewShotRef.current.capture();
@@ -46,26 +49,25 @@ export function useEditorLeaveGuard({
         } catch (captureErr) {
           console.warn("[Editor] Thumbnail capture failed", captureErr);
         }
+
         await saveCurrentProject(thumbnailUri);
-      } catch (err) {
-        console.warn("[Editor] Save on leave failed:", err);
-      } finally {
-        isSavingRef.current = false;
-        setIsSavingBeforeLeave(false);
-        // Ensure navigation happens AFTER the saving state is cleared and UI is ready
+
+        // Cho phép lần remove tiếp theo đi qua
+        allowNextRemoveRef.current = true;
+
         requestAnimationFrame(() => {
-          if (data.action.type === "GO_BACK" && !navigation.canGoBack()) {
-            router.replace("/(tabs)/project");
-          } else {
-            try {
-              navigation.dispatch(data.action);
-            } catch (e) {
-              router.replace("/(tabs)/project");
-            }
+          try {
+            navigation.dispatch(data.action);
+          } catch (e) {
+            console.warn("[Editor] dispatch failed:", e);
+          } finally {
+            isProcessingRef.current = false;
           }
         });
+      } catch (err) {
+        console.warn("[Editor] Save on leave failed:", err);
+        isProcessingRef.current = false;
       }
     })();
   });
 }
-

@@ -26,23 +26,21 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={DarkTheme}>
       <Stack screenOptions={{ headerShown: false }}>
-        {!isAuthenticated ? (
-          <>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="usage-intent" />
-            <Stack.Screen name="login" />
-            <Stack.Screen name="otp" />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="template-detail/[id]" options={{ presentation: "modal" }} />
-          </>
-        )}
-
-
+        {[
+          !isAuthenticated && <Stack.Screen key="index" name="index" />,
+          !isAuthenticated && <Stack.Screen key="usage-intent" name="usage-intent" />,
+          !isAuthenticated && <Stack.Screen key="login" name="login" />,
+          !isAuthenticated && <Stack.Screen key="otp" name="otp" />,
+          isAuthenticated && <Stack.Screen key="(tabs)" name="(tabs)" />,
+          isAuthenticated && (
+            <Stack.Screen
+              key="template-detail"
+              name="template-detail/[id]"
+              options={{ presentation: "modal" }}
+            />
+          ),
+        ].filter(Boolean) as React.ReactElement[]}
       </Stack>
-
 
       <ProjectCreateModal />
       <StatusBar style="light" />

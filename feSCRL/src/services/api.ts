@@ -6,6 +6,7 @@ import axios, {
 import { ApiError } from "../utils/api-error";
 import { ERROR_CODE } from "../configs/error.config";
 import { storage } from "../utils/storage";
+import { authBus } from "../utils/auth-bus";
 
 const instances = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_BASE_URL,
@@ -34,13 +35,13 @@ const processQueue = (error: unknown, token: string | null = null) => {
 
 instances.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const url = config.url || "";
+    const url = (config.url || "").toLowerCase();
 
     const isAuthRoute =
-      url.includes("/Auth/login") ||
-      url.includes("/Auth/request-otp") ||
-      url.includes("/Auth/refresh-token") ||
-      url.includes("/Auth/logout");
+      url.includes("/auth/login") ||
+      url.includes("/auth/request-otp") ||
+      url.includes("/auth/refresh-token") ||
+      url.includes("/auth/logout");
 
     if (isAuthRoute) {
       return config;
@@ -70,11 +71,11 @@ instances.interceptors.response.use(
     };
 
     const { status, data } = error.response;
-    const url = originalRequest?.url || "";
+    const url = (originalRequest?.url || "").toLowerCase();
 
-    const isRefreshRoute = url.includes("/Auth/refresh-token");
-    const isLoginRoute = url.includes("/Auth/login");
-    const isRequestOtpRoute = url.includes("/Auth/request-otp");
+    const isRefreshRoute = url.includes("/auth/refresh-token");
+    const isLoginRoute = url.includes("/auth/login");
+    const isRequestOtpRoute = url.includes("/auth/request-otp");
 
     if (
       status === 401 &&
@@ -103,12 +104,11 @@ instances.interceptors.response.use(
         const refreshToken = await storage.getRefreshToken();
 
         if (!refreshToken) {
-          await storage.clearAll();
+          authBus.emitUnauthorized();
           return Promise.reject(
             new ApiError("Unauthorized", ERROR_CODE.UNAUTHORIZED, 401),
           );
         }
-
         const refreshResponse = await instances.post("/Auth/refresh-token", {
           refreshToken,
         });
@@ -128,7 +128,7 @@ instances.interceptors.response.use(
         return instances(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        await storage.clearAll();
+        authBus.emitUnauthorized();
 
         return Promise.reject(
           new ApiError("Unauthorized", ERROR_CODE.UNAUTHORIZED, 401),

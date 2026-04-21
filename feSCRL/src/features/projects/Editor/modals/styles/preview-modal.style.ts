@@ -8,12 +8,23 @@ export const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 40,
   },
+
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
+    paddingTop: 20,
     marginBottom: 20,
+  },
+
+  closeBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 6,
   },
   headerTitle: {
     fontSize: 18,
@@ -21,14 +32,7 @@ export const styles = StyleSheet.create({
     color: "#fff",
     letterSpacing: 0.5,
   },
-  closeBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "rgba(255,255,255,0.15)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   mockupContainer: {
     flex: 1,
     paddingHorizontal: 16,
