@@ -1,10 +1,9 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import { Pressable, StyleSheet, View } from "react-native";
 import { useProjectStore } from "@/src/stores/project.store";
 
-function CenterTabButton(props: any) {
+function CenterTabButton() {
   const { openCreateModal } = useProjectStore();
 
   return (
@@ -64,9 +63,7 @@ export default function TabLayout() {
         name="create"
         options={{
           tabBarButton: (props) => <CenterTabButton {...props} />,
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="add" size={30} color="#000" />
-          ),
+          tabBarIcon: () => <Ionicons name="add" size={30} color="#000" />,
         }}
       />
 
