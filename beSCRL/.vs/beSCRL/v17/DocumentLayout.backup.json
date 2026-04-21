@@ -60,7 +60,7 @@
               "RelativeDocumentMoniker": "Infrastructure\\Services\\TemplateService.cs",
               "ToolTip": "D:\\Class\\scrl_app\\beSCRL\\Infrastructure\\Services\\TemplateService.cs",
               "RelativeToolTip": "Infrastructure\\Services\\TemplateService.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAgwDcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADIAAAAAAAAAAAAgwDUAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-19T03:38:15.322Z",
               "EditorCaption": ""
@@ -75,8 +75,7 @@
               "RelativeToolTip": "WebAPI\\Controllers\\TemplateCategoryController.cs",
               "ViewState": "AgIAABcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:38:10.908Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-19T03:38:10.908Z"
             },
             {
               "$type": "Document",
@@ -88,8 +87,7 @@
               "RelativeToolTip": "Application\\Helpers\\EditorStateValidator.cs",
               "ViewState": "AgIAAJYAAAAAAAAAAAAkwAEBAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:36:09.014Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-19T03:36:09.014Z"
             },
             {
               "$type": "Document",
@@ -101,8 +99,7 @@
               "RelativeToolTip": "WebAPI\\Controllers\\TemplateController.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAA1wAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:35:42.966Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-19T03:35:42.966Z"
             },
             {
               "$type": "Document",
@@ -114,8 +111,7 @@
               "RelativeToolTip": "WebAPI\\Controllers\\UserController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:35:35.225Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-19T03:35:35.225Z"
             },
             {
               "$type": "Document",
@@ -127,8 +123,7 @@
               "RelativeToolTip": "WebAPI\\Extensions\\RateLimitingExtensions.cs",
               "ViewState": "AgIAAFIAAAAAAAAAAAAQwBoAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:35:15.159Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-19T03:35:15.159Z"
             },
             {
               "$type": "Document",
@@ -140,8 +135,7 @@
               "RelativeToolTip": "WebAPI\\RateLimiting\\AuthRateLimitPolicies.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:35:10.216Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-19T03:35:10.216Z"
             },
             {
               "$type": "Document",
@@ -153,18 +147,12 @@
               "RelativeToolTip": "WebAPI\\RateLimiting\\RateLimitPartitionKeyHelper.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAQwBAAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-19T03:35:04.573Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-19T03:35:04.573Z"
             }
           ]
         },
         {
           "DockedWidth": 993,
-          "SelectedChildIndex": -1,
-          "Children": []
-        },
-        {
-          "DockedWidth": 296,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -182,7 +170,7 @@
           ]
         },
         {
-          "DockedWidth": 1604,
+          "DockedWidth": 296,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -192,7 +180,7 @@
           ]
         },
         {
-          "DockedWidth": 324,
+          "DockedWidth": 1604,
           "SelectedChildIndex": -1,
           "Children": [
             {

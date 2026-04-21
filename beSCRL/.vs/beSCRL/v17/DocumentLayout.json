@@ -60,7 +60,7 @@
               "RelativeDocumentMoniker": "Infrastructure\\Services\\TemplateService.cs",
               "ToolTip": "D:\\Class\\scrl_app\\beSCRL\\Infrastructure\\Services\\TemplateService.cs",
               "RelativeToolTip": "Infrastructure\\Services\\TemplateService.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAgwDUAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAACkAAAAAAAAAAAAgwDgAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-19T03:38:15.322Z",
               "EditorCaption": ""
@@ -152,7 +152,7 @@
           ]
         },
         {
-          "DockedWidth": 296,
+          "DockedWidth": 993,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -170,7 +170,7 @@
           ]
         },
         {
-          "DockedWidth": 1604,
+          "DockedWidth": 296,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -180,7 +180,7 @@
           ]
         },
         {
-          "DockedWidth": 324,
+          "DockedWidth": 1604,
           "SelectedChildIndex": -1,
           "Children": [
             {

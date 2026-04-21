@@ -10,11 +10,11 @@ import {
 import { ProjectSliceCreator } from "../../types/project.store.types";
 import { EAssetType } from "@/src/enums/layer.enum";
 import {
-  getEditorDocument,
-  mapLayersFromApi,
-  mapLayersToApi,
-  parseEditorState,
-  pickBestPageRawLayers,
+  getEditorDocument, // lấy document info như width/height/title từ editorState
+  mapLayersFromApi, // đổi layer backend -> layer frontend dùng trong app
+  mapLayersToApi, // đổi layer frontend -> layer format backend/editorState
+  parseEditorState, // parse dữ liệu editorState
+  pickBestPageRawLayers, // lấy danh sách raw layers từ page
 } from "../../helpers/editor-state";
 
 export const createProjectApiSlice: ProjectSliceCreator<

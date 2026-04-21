@@ -69,11 +69,25 @@ export function ProjectCard({ project, onPress }: IProjectCardProps) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{ position: 'absolute', top: 8, right: 44, width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.45)' }}
+          style={{
+            position: "absolute",
+            top: 8,
+            right: 44,
+            width: 28,
+            height: 28,
+            borderRadius: 14,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.45)",
+          }}
           activeOpacity={0.8}
           onPress={() => toggleStarProject(project.id)}
         >
-          <Ionicons name={project.isStarred ? "heart" : "heart-outline"} size={16} color={project.isStarred ? "#FF3B30" : "#fff"} />
+          <Ionicons
+            name={project.isStarred ? "heart" : "heart-outline"}
+            size={16}
+            color={project.isStarred ? "#FF3B30" : "#fff"}
+          />
         </TouchableOpacity>
       </View>
 
