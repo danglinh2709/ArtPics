@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Class\\scrl_app\\beSCRL\\Application\\Application.csproj": {}
+    "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Application\\Application.csproj": {}
   },
   "projects": {
-    "D:\\Class\\scrl_app\\beSCRL\\Application\\Application.csproj": {
+    "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Class\\scrl_app\\beSCRL\\Application\\Application.csproj",
+        "projectUniqueName": "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "D:\\Class\\scrl_app\\beSCRL\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\5540\\.nuget\\packages\\",
-        "outputPath": "D:\\Class\\scrl_app\\beSCRL\\Application\\obj\\",
+        "projectPath": "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Application\\Application.csproj",
+        "packagesPath": "C:\\Users\\NhatMinh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\5540\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\NhatMinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,8 +32,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj": {
-                "projectPath": "D:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj"
+              "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Domain\\Domain.csproj"
               }
             }
           }
@@ -48,7 +48,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -79,24 +79,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj": {
+    "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "D:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\5540\\.nuget\\packages\\",
-        "outputPath": "D:\\Class\\scrl_app\\beSCRL\\Domain\\obj\\",
+        "projectPath": "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\NhatMinh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\NhatMinh\\code\\ArtPics\\beSCRL\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\5540\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\NhatMinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -123,7 +123,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -150,7 +150,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

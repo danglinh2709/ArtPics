@@ -34,7 +34,8 @@ const ADJUSTMENTS: {
 ];
 
 export function AdjustPanel() {
-  const { selectedLayerId, layers, updateLayerAdjustments } = useProjectStore();
+  const { selectedLayerId, layers, updateLayerAdjustments, saveSnapshot } =
+    useProjectStore();
   const layer = layers.find((l) => l.id === selectedLayerId);
 
   if (!layer) return null;
@@ -50,18 +51,19 @@ export function AdjustPanel() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {ADJUSTMENTS.map((adj) => (
-        <Section 
-            key={adj.id} 
-            title={adj.label} 
-            value={(layer.adjustments?.[adj.id] ?? adj.defaultValue).toFixed(0)}
+        <Section
+          key={adj.id}
+          title={adj.label}
+          value={(layer.adjustments?.[adj.id] ?? adj.defaultValue).toFixed(0)}
         >
           <Slider
             style={styles.slider}
             minimumValue={adj.min}
             maximumValue={adj.max}
             value={layer.adjustments?.[adj.id] ?? adj.defaultValue}
+            onSlidingStart={saveSnapshot}
             onValueChange={(v: number) =>
-              updateLayerAdjustments(layer.id, { [adj.id]: v })
+              updateLayerAdjustments(layer.id, { [adj.id]: v }, false)
             }
             minimumTrackTintColor="#EECB68"
             maximumTrackTintColor="rgba(255,255,255,0.1)"
@@ -71,8 +73,8 @@ export function AdjustPanel() {
       ))}
 
       <TouchableOpacity style={styles.resetBtn} onPress={handleReset}>
-          <Ionicons name="refresh" size={18} color="#fff" />
-          <Typography style={styles.resetText}>Đặt lại tất cả</Typography>
+        <Ionicons name="refresh" size={18} color="#fff" />
+        <Typography style={styles.resetText}>Đặt lại tất cả</Typography>
       </TouchableOpacity>
       <View style={{ height: 40 }} />
     </ScrollView>
@@ -103,4 +105,3 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
-

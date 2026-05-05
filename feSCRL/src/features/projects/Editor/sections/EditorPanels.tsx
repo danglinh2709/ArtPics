@@ -5,6 +5,10 @@ import { StylePanel } from "../../toolbar/StylePanel";
 import { CropPanel } from "../../toolbar/CropPanel";
 import { AdjustPanel } from "../../toolbar/AdjustPanel";
 import { BackgroundPanel } from "../../toolbar/BackgroundPanel";
+import { FormatPanel } from "../../toolbar/FormatPanel";
+import { AlignPanel } from "../../toolbar/AlignPanel";
+import { PositionPanel } from "../../toolbar/PositionPanel";
+import { OpacityPanel } from "../../toolbar/OpacityPanel";
 import { PanelContainer } from "../../toolbar/PanelContainer";
 
 interface IEditorPanelsProps {
@@ -25,6 +29,14 @@ export function EditorPanels({ activeTab, onClose }: IEditorPanelsProps) {
         return <AdjustPanel />;
       case "background":
         return <BackgroundPanel />;
+      case "format":
+        return <FormatPanel />;
+      case "align":
+        return <AlignPanel />;
+      case "position":
+        return <PositionPanel />;
+      case "opacity":
+        return <OpacityPanel />;
       default:
         return null;
     }

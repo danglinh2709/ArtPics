@@ -32,6 +32,15 @@ export interface ProjectState {
   layers: ILayer[];
   pageBackground: TPageBackground;
 
+  // History State & Actions
+  pastStack: { layers: ILayer[]; pageBackground: TPageBackground }[];
+  futureStack: { layers: ILayer[]; pageBackground: TPageBackground }[];
+
+  pushHistory: () => void;
+  undo: () => void;
+  redo: () => void;
+  saveSnapshot: () => void;
+
   // Actions
   openCreateModal: () => void;
   closeCreateModal: () => void;
@@ -59,18 +68,35 @@ export interface ProjectState {
   duplicateLayer: (id: string) => void;
   selectLayer: (id: string | null) => void;
   lockLayer: (id: string, isLocked: boolean) => void;
-  updateLayerTransform: (id: string, updates: Partial<ILayerTransform>) => void;
+  updateLayerTransform: (
+    id: string,
+    updates: Partial<ILayerTransform>,
+    saveHistory?: boolean,
+  ) => void;
   moveLayer: (id: string, dx: number, dy: number) => void;
-  rotateLayer: (id: string, rotation: number) => void;
+  rotateLayer: (id: string, rotation: number, saveHistory?: boolean) => void;
   replaceLayerAsset: (id: string, uri: string, assetId?: string | null) => void;
-  updateLayerCrop: (id: string, updates: Partial<ILayerCrop>) => void;
+  updateLayerCrop: (
+    id: string,
+    updates: Partial<ILayerCrop>,
+    saveHistory?: boolean,
+  ) => void;
   resetLayerCrop: (id: string) => void;
   setLayerFrameRatio: (id: string, ratio: number) => void;
-  updateLayerStyle: (id: string, updates: Partial<ILayerStyle>) => void;
-  updateLayerOpacity: (id: string, opacity: number) => void;
+  updateLayerStyle: (
+    id: string,
+    updates: Partial<ILayerStyle>,
+    saveHistory?: boolean,
+  ) => void;
+  updateLayerOpacity: (
+    id: string,
+    opacity: number,
+    saveHistory?: boolean,
+  ) => void;
   updateLayerAdjustments: (
     id: string,
     updates: Partial<ILayer["adjustments"]>,
+    saveHistory?: boolean,
   ) => void;
   bringToFront: (id: string) => void;
   sendToBack: (id: string) => void;

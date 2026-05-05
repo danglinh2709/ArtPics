@@ -43,11 +43,10 @@ export const styles = StyleSheet.create({
   },
   otpInput: {
     flexDirection: "row",
-    width: 50,
+    width: "100%",
     gap: 10,
     alignItems: "center",
     justifyContent: "center",
-    textAlign: "center",
   },
   continueButton: {
     borderRadius: 12,

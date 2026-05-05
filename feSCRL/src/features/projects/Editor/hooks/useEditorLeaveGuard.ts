@@ -1,5 +1,5 @@
 import { usePreventRemove } from "@react-navigation/native";
-import { RefObject, useRef } from "react";
+import { RefObject, useRef, useState } from "react";
 import ViewShot from "react-native-view-shot";
 
 interface UseEditorLeaveGuardProps {
@@ -17,6 +17,7 @@ export function useEditorLeaveGuard({
 }: UseEditorLeaveGuardProps) {
   const isProcessingRef = useRef(false);
   const allowNextRemoveRef = useRef(false);
+  const [isSavingBeforeLeave, setIsSavingBeforeLeave] = useState(false);
 
   usePreventRemove(true, ({ data }) => {
     // Nếu đã cho phép remove rồi thì bỏ qua guard
@@ -35,6 +36,7 @@ export function useEditorLeaveGuard({
     }
 
     isProcessingRef.current = true;
+    setIsSavingBeforeLeave(true);
 
     void (async () => {
       try {
@@ -62,12 +64,16 @@ export function useEditorLeaveGuard({
             console.warn("[Editor] dispatch failed:", e);
           } finally {
             isProcessingRef.current = false;
+            setIsSavingBeforeLeave(false);
           }
         });
       } catch (err) {
         console.warn("[Editor] Save on leave failed:", err);
         isProcessingRef.current = false;
+        setIsSavingBeforeLeave(false);
       }
     })();
   });
+
+  return { isSavingBeforeLeave };
 }

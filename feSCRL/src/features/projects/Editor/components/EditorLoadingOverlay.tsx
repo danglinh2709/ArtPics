@@ -1,34 +1,45 @@
 import React from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Loading } from "../../../../components/Loading";
 
-// interface EditorLoadingOverlayProps {
-//   isUploadingAsset: boolean;
-//   isSavingBeforeLeave: boolean;
-// }
+interface EditorLoadingOverlayProps {
+  isUploadingAsset: boolean;
+  isSavingBeforeLeave: boolean;
+}
 
-// export function EditorLoadingOverlay({
-//   isUploadingAsset,
-//   isSavingBeforeLeave,
-// }: EditorLoadingOverlayProps) {
-//   return (
-//     <>
-//       {isUploadingAsset && (
-//         <View style={styles.uploadOverlay}>
-//           <ActivityIndicator size="large" color="#EECB68" />
-//         </View>
-//       )}
+export function EditorLoadingOverlay({
+  isUploadingAsset,
+  isSavingBeforeLeave,
+}: EditorLoadingOverlayProps) {
+  if (!isUploadingAsset && !isSavingBeforeLeave) return null;
 
-//       {isSavingBeforeLeave}
-//     </>
-//   );
-// }
+  return (
+    <View style={styles.overlay}>
+      <View style={styles.loadingBox}>
+        <Loading inline size={120} />
+      </View>
+    </View>
+  );
+}
 
-// const styles = StyleSheet.create({
-//   uploadOverlay: {
-//     ...StyleSheet.absoluteFillObject,
-//     backgroundColor: "rgba(0,0,0,0.7)",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     zIndex: 9999,
-//   },
-// });
+const styles = StyleSheet.create({
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 9999,
+  },
+  loadingBox: {
+    //backgroundColor: "#fff",
+    padding: 24,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+});

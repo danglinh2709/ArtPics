@@ -8,8 +8,13 @@ import { styles } from "./styles/style-pannel.style";
 import { Section } from "@/src/components/Section";
 
 export function StylePanel() {
-  const { selectedLayerId, layers, updateLayerStyle, updateLayerOpacity } =
-    useProjectStore();
+  const {
+    selectedLayerId,
+    layers,
+    updateLayerStyle,
+    updateLayerOpacity,
+    saveSnapshot,
+  } = useProjectStore();
   const layer = layers.find((l) => l.id === selectedLayerId);
   const [showIndividual, setShowIndividual] = useState(
     !!layer?.style?.individualCorners,
@@ -35,9 +40,14 @@ export function StylePanel() {
   };
 
   const updateIndividualCorner = (key: string, value: number) => {
-    const corners = { 
-      ...(layer.style?.individualCorners || { topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 0 }), 
-      [key]: value 
+    const corners = {
+      ...(layer.style?.individualCorners || {
+        topLeft: 0,
+        topRight: 0,
+        bottomLeft: 0,
+        bottomRight: 0,
+      }),
+      [key]: value,
     };
     updateLayerStyle(layer.id, { individualCorners: corners as any });
   };
@@ -53,7 +63,8 @@ export function StylePanel() {
           minimumValue={0}
           maximumValue={1}
           value={layer.style?.opacity ?? 1}
-          onValueChange={(v: number) => updateLayerOpacity(layer.id, v)}
+          onSlidingStart={saveSnapshot}
+          onValueChange={(v: number) => updateLayerOpacity(layer.id, v, false)}
           minimumTrackTintColor="#EECB68"
           maximumTrackTintColor="rgba(255,255,255,0.1)"
           thumbTintColor="#fff"
@@ -69,8 +80,9 @@ export function StylePanel() {
           minimumValue={0}
           maximumValue={100}
           value={layer.style?.borderRadius ?? 0}
+          onSlidingStart={saveSnapshot}
           onValueChange={(v: number) =>
-            updateLayerStyle(layer.id, { borderRadius: v })
+            updateLayerStyle(layer.id, { borderRadius: v }, false)
           }
           minimumTrackTintColor="#EECB68"
           maximumTrackTintColor="rgba(255,255,255,0.1)"
@@ -94,21 +106,25 @@ export function StylePanel() {
           <CornerSlider
             label="Trên trái"
             value={layer.style.individualCorners.topLeft}
+            onSlidingStart={saveSnapshot}
             onChange={(v) => updateIndividualCorner("topLeft", v)}
           />
           <CornerSlider
             label="Trên phải"
             value={layer.style.individualCorners.topRight}
+            onSlidingStart={saveSnapshot}
             onChange={(v) => updateIndividualCorner("topRight", v)}
           />
           <CornerSlider
             label="Dưới trái"
             value={layer.style.individualCorners.bottomLeft}
+            onSlidingStart={saveSnapshot}
             onChange={(v) => updateIndividualCorner("bottomLeft", v)}
           />
           <CornerSlider
             label="Dưới phải"
             value={layer.style.individualCorners.bottomRight}
+            onSlidingStart={saveSnapshot}
             onChange={(v) => updateIndividualCorner("bottomRight", v)}
           />
         </View>
@@ -118,33 +134,63 @@ export function StylePanel() {
 
       <Section title="Viền" value={`${layer.style?.border?.width ?? 0}px`}>
         <View style={styles.borderControls}>
-          <Typography variant="caption" style={styles.subLabel}>Độ dày</Typography>
+          <Typography variant="caption" style={styles.subLabel}>
+            Độ dày
+          </Typography>
           <Slider
             style={styles.slider}
             minimumValue={0}
             maximumValue={20}
             value={layer.style?.border?.width ?? 0}
-            onValueChange={(v) => updateLayerStyle(layer.id, { 
-              border: { ...(layer.style?.border || { color: "#fff", opacity: 1 }), width: v } 
-            })}
+            onSlidingStart={saveSnapshot}
+            onValueChange={(v) =>
+              updateLayerStyle(
+                layer.id,
+                {
+                  border: {
+                    ...(layer.style?.border || { color: "#fff", opacity: 1 }),
+                    width: v,
+                  },
+                },
+                false,
+              )
+            }
             minimumTrackTintColor="#EECB68"
             maximumTrackTintColor="rgba(255,255,255,0.1)"
             thumbTintColor="#fff"
           />
-          
+
           <View style={styles.borderColorRow}>
-             <Typography variant="caption" style={styles.subLabel}>Màu sắc</Typography>
-             <View style={styles.colorPredefined}>
-                {["#ffffff", "#000000", "#ff3b30", "#4cd964", "#007aff", "#EECB68"].map(c => (
-                  <TouchableOpacity 
-                    key={c}
-                    style={[styles.colorCircle, { backgroundColor: c }, layer.style?.border?.color === c && styles.activeColor]} 
-                    onPress={() => updateLayerStyle(layer.id, { 
-                      border: { ...(layer.style?.border || { width: 1, opacity: 1 }), color: c } 
-                    })}
-                  />
-                ))}
-             </View>
+            <Typography variant="caption" style={styles.subLabel}>
+              Màu sắc
+            </Typography>
+            <View style={styles.colorPredefined}>
+              {[
+                "#ffffff",
+                "#000000",
+                "#ff3b30",
+                "#4cd964",
+                "#007aff",
+                "#EECB68",
+              ].map((c) => (
+                <TouchableOpacity
+                  key={c}
+                  style={[
+                    styles.colorCircle,
+                    { backgroundColor: c },
+                    layer.style?.border?.color === c && styles.activeColor,
+                  ]}
+                  onPress={() =>
+                    updateLayerStyle(layer.id, {
+                      border: {
+                        ...(layer.style?.border || { width: 1, opacity: 1 }),
+                        color: c,
+                      },
+                    })
+                  }
+                />
+              ))}
+            </View>
           </View>
         </View>
       </Section>
@@ -156,10 +202,12 @@ function CornerSlider({
   label,
   value,
   onChange,
+  onSlidingStart,
 }: {
   label: string;
   value: number;
   onChange: (v: number) => void;
+  onSlidingStart?: () => void;
 }) {
   return (
     <View style={styles.cornerRow}>
@@ -171,6 +219,7 @@ function CornerSlider({
         minimumValue={0}
         maximumValue={100}
         value={value}
+        onSlidingStart={onSlidingStart}
         onValueChange={onChange}
         minimumTrackTintColor="#EECB68"
         maximumTrackTintColor="rgba(255,255,255,0.05)"
@@ -179,4 +228,3 @@ function CornerSlider({
     </View>
   );
 }
-

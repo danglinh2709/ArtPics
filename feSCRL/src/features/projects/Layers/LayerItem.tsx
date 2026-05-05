@@ -69,6 +69,14 @@ export function LayerItem({
       internalRotation.value = (layer.transform.rotation * Math.PI) / 180;
       internalWidth.value = layer.transform.width;
       internalHeight.value = layer.transform.height;
+
+      if (isSelected) {
+        syncValues.tx.value = layer.transform.x;
+        syncValues.ty.value = layer.transform.y;
+        syncValues.rotation.value = (layer.transform.rotation * Math.PI) / 180;
+        syncValues.width.value = layer.transform.width;
+        syncValues.height.value = layer.transform.height;
+      }
     }
   }, [
     layer.transform,
@@ -78,6 +86,8 @@ export function LayerItem({
     internalWidth,
     internalHeight,
     renderMode,
+    isSelected,
+    syncValues,
   ]);
 
   const commitTransform = () => {

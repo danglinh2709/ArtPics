@@ -15,6 +15,7 @@ interface IAddLayerModalProps {
   onClose: () => void;
   onSelectImage: (uri: string, width: number, height: number) => void;
   onAddText: (textLayer: TTextLayer) => void;
+  onOpenStickerModal: () => void;
 }
 
 export function AddLayerModal({
@@ -22,6 +23,7 @@ export function AddLayerModal({
   onClose,
   onSelectImage,
   onAddText,
+  onOpenStickerModal,
 }: IAddLayerModalProps) {
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -75,17 +77,25 @@ export function AddLayerModal({
                     return;
                   }
 
-                  // if (item.actionType === LAYER_MENU_ITEMS_ACTION_TYPE.TEXT) {
-                  //   onAddText({
-                  //     text: "Văn bản mới",
-                  //     x: 100,
-                  //     y: 100,
-                  //     width: 200,
-                  //     height: 50,
-                  //   });
-                  //   onClose();
-                  //   return;
-                  // }
+                  if (item.actionType === LAYER_MENU_ITEMS_ACTION_TYPE.TEXT) {
+                    onAddText({
+                      text: "Văn bản mới",
+                      x: 100,
+                      y: 100,
+                      width: 200,
+                      height: 50,
+                    });
+                    onClose();
+                    return;
+                  }
+
+                  if (
+                    item.actionType === LAYER_MENU_ITEMS_ACTION_TYPE.STICKER
+                  ) {
+                    onClose();
+                    onOpenStickerModal();
+                    return;
+                  }
                 }}
               >
                 <View style={styles.iconContainer}>

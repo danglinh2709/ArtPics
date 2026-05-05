@@ -23,3 +23,16 @@ D:\Class\scrl_app\beSCRL\Domain\obj\Debug\net8.0\Domain.dll
 D:\Class\scrl_app\beSCRL\Domain\obj\Debug\net8.0\refint\Domain.dll
 D:\Class\scrl_app\beSCRL\Domain\obj\Debug\net8.0\Domain.pdb
 D:\Class\scrl_app\beSCRL\Domain\obj\Debug\net8.0\ref\Domain.dll
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\bin\Debug\net8.0\Domain.deps.json
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\bin\Debug\net8.0\Domain.dll
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\bin\Debug\net8.0\Domain.pdb
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\Domain.csproj.AssemblyReference.cache
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\Domain.AssemblyInfoInputs.cache
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\Domain.AssemblyInfo.cs
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\Domain.csproj.CoreCompileInputs.cache
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\Domain.sourcelink.json
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\Domain.dll
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\refint\Domain.dll
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\Domain.pdb
+C:\Users\NhatMinh\code\ArtPics\beSCRL\Domain\obj\Debug\net8.0\ref\Domain.dll
