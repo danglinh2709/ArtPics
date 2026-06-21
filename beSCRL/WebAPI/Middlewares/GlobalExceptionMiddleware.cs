@@ -32,12 +32,17 @@ namespace WebAPI.Middlewares
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            var isTimeout = exception is TimeoutException;
+            context.Response.StatusCode = isTimeout
+                ? (int)HttpStatusCode.GatewayTimeout
+                : (int)HttpStatusCode.InternalServerError;
 
             var response = new
             {
                 StatusCode = context.Response.StatusCode,
-                Message = "Internal Server Error",
+                Message = isTimeout
+                    ? "Email service timed out. Please try again."
+                    : "Internal Server Error",
                 Detailed = context.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment() ? exception.Message : null
             };
 

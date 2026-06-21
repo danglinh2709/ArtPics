@@ -65,6 +65,15 @@ instances.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError<{ message?: string }>) => {
     if (!error.response) {
+      if (error.code === "ECONNABORTED" || error.code === "ETIMEDOUT") {
+        return Promise.reject(
+          new ApiError(
+            "Server took too long to respond. Please try again.",
+            ERROR_CODE.TIMEOUT,
+          ),
+        );
+      }
+
       return Promise.reject(new ApiError("No connection to server"));
     }
 
@@ -173,7 +182,7 @@ instances.interceptors.response.use(
     if (status >= 500) {
       return Promise.reject(
         new ApiError(
-          "Server error, please try again later",
+          data?.message || "Server error, please try again later",
           "SERVER_ERROR",
           status,
         ),

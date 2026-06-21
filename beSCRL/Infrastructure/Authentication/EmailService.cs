@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Authentication;
 using Infrastructure.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -10,10 +11,14 @@ namespace Infrastructure.Authentication
     public class EmailService : IEmailService
     {
         private readonly EmailSettings _emailSettings;
+        private readonly ILogger<EmailService> _logger;
 
-        public EmailService(IOptions<EmailSettings> emailOptions)
+        public EmailService(
+            IOptions<EmailSettings> emailOptions,
+            ILogger<EmailService> logger)
         {
             _emailSettings = emailOptions.Value;
+            _logger = logger;
         }
 
         //SendEmailAsync : gui cho ai, tieu de la gi, noi dung la gi
@@ -51,21 +56,55 @@ namespace Infrastructure.Authentication
 
             // create SmtpClient : may chu dung de gui email
             using var smtp = new SmtpClient();
+            var timeoutSeconds = _emailSettings.TimeoutSeconds > 0
+                ? _emailSettings.TimeoutSeconds
+                : 15;
+            using var timeoutCts = new CancellationTokenSource(
+                TimeSpan.FromSeconds(timeoutSeconds));
 
-            // connect smtp
-            await smtp.ConnectAsync(
-               _emailSettings.SmtpHost,
-               _emailSettings.SmtpPort,
-               SecureSocketOptions.StartTls);
+            smtp.Timeout = checked(timeoutSeconds * 1000);
 
-            // authentication
-            await smtp.AuthenticateAsync(_emailSettings.Username, _emailSettings.Password);
+            try
+            {
+                _logger.LogInformation(
+                    "Connecting to SMTP server {SmtpHost}:{SmtpPort}",
+                    _emailSettings.SmtpHost,
+                    _emailSettings.SmtpPort);
 
-            // send email
-            await smtp.SendAsync(message);
+                // connect smtp
+                await smtp.ConnectAsync(
+                    _emailSettings.SmtpHost,
+                    _emailSettings.SmtpPort,
+                    SecureSocketOptions.StartTls,
+                    timeoutCts.Token);
 
-            // disconnect 
-            await smtp.DisconnectAsync(true);
+                _logger.LogInformation("Authenticating with SMTP server");
+                await smtp.AuthenticateAsync(
+                    _emailSettings.Username,
+                    _emailSettings.Password,
+                    timeoutCts.Token);
+
+                _logger.LogInformation("Sending OTP email through SMTP server");
+                await smtp.SendAsync(message, timeoutCts.Token);
+
+                await smtp.DisconnectAsync(true, timeoutCts.Token);
+                _logger.LogInformation("OTP email sent successfully");
+            }
+            catch (OperationCanceledException ex) when (timeoutCts.IsCancellationRequested)
+            {
+                _logger.LogWarning(
+                    ex,
+                    "SMTP operation timed out after {TimeoutSeconds} seconds",
+                    timeoutSeconds);
+                throw new TimeoutException(
+                    "Email service timed out. Please try again.",
+                    ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send OTP email through SMTP server");
+                throw;
+            }
         }
 
         // SendOtpAsync: ham cbi noi dung otp va dung lai SendEmailAsync de gyu
