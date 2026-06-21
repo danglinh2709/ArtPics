@@ -39,6 +39,9 @@ export const BaseInput = forwardRef<TextInput, TInputProps>(
   },
 );
 
+BaseInput.displayName = "BaseInput";
+
+
 const styles = StyleSheet.create({
   wrapper: {
     width: "100%",

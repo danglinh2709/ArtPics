@@ -116,6 +116,9 @@ export const EditorCanvas = forwardRef<ViewShot, IEditorCanvasProps>(
   },
 );
 
+EditorCanvas.displayName = "EditorCanvas";
+
+
 const styles = StyleSheet.create({
   editorArea: {
     flex: 1,
