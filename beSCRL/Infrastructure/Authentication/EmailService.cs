@@ -1,15 +1,18 @@
-﻿using Application.Abstractions.Authentication;
+using System.Net.Http.Json;
+using Application.Abstractions.Authentication;
 using Infrastructure.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
 
 namespace Infrastructure.Authentication
 {
     public class EmailService : IEmailService
     {
+        private static readonly HttpClient HttpClient = new()
+        {
+            Timeout = Timeout.InfiniteTimeSpan
+        };
+
         private readonly EmailSettings _emailSettings;
         private readonly ILogger<EmailService> _logger;
 
@@ -21,93 +24,98 @@ namespace Infrastructure.Authentication
             _logger = logger;
         }
 
-        //SendEmailAsync : gui cho ai, tieu de la gi, noi dung la gi
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            // 1. validate input
-            if (string.IsNullOrEmpty(toEmail))
+            ArgumentException.ThrowIfNullOrWhiteSpace(toEmail);
+            ArgumentException.ThrowIfNullOrWhiteSpace(subject);
+            ArgumentException.ThrowIfNullOrWhiteSpace(body);
+
+            if (string.IsNullOrWhiteSpace(_emailSettings.ApiKey) ||
+                _emailSettings.ApiKey.StartsWith("REPLACE_ME", StringComparison.OrdinalIgnoreCase))
             {
-                throw new ArgumentNullException("Recipient email cannot be empty", nameof(toEmail));
+                throw new EmailDeliveryException(
+                    "Email API key is not configured. Set EmailSettings__ApiKey.");
             }
 
-            if (string.IsNullOrEmpty(subject))
+            if (string.IsNullOrWhiteSpace(_emailSettings.SenderEmail))
             {
-                throw new ArgumentNullException("Subject cannot be empty", nameof(subject));
+                throw new EmailDeliveryException(
+                    "Email sender is not configured. Set EmailSettings__SenderEmail.");
             }
 
-            if (string.IsNullOrEmpty(body))
+            var apiBaseUrl = _emailSettings.ApiBaseUrl.TrimEnd('/');
+            if (!Uri.TryCreate($"{apiBaseUrl}/smtp/email", UriKind.Absolute, out var endpoint))
             {
-                throw new ArgumentNullException("Body cannot be empty", nameof(body));
+                throw new EmailDeliveryException("Email API URL is invalid.");
             }
 
-            // 2. create mimeMessage: 1 object email hoan chinh
-            var message = new MimeMessage();
-
-            // 3. add + set From, To, Subject, Body
-            message.From.Add(new MailboxAddress(
-                _emailSettings.SenderName,
-                _emailSettings.SenderEmail));
-            message.To.Add(MailboxAddress.Parse(toEmail));
-            message.Subject = subject;
-            message.Body = new TextPart("html")
-            {
-                Text = body
-            };
-
-            // create SmtpClient : may chu dung de gui email
-            using var smtp = new SmtpClient();
             var timeoutSeconds = _emailSettings.TimeoutSeconds > 0
                 ? _emailSettings.TimeoutSeconds
                 : 15;
             using var timeoutCts = new CancellationTokenSource(
                 TimeSpan.FromSeconds(timeoutSeconds));
 
-            smtp.Timeout = checked(timeoutSeconds * 1000);
+            var payload = new
+            {
+                sender = new
+                {
+                    name = _emailSettings.SenderName,
+                    email = _emailSettings.SenderEmail
+                },
+                to = new[]
+                {
+                    new { email = toEmail }
+                },
+                subject,
+                htmlContent = body
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+            request.Headers.Add("api-key", _emailSettings.ApiKey);
+            request.Content = JsonContent.Create(payload);
 
             try
             {
-                _logger.LogInformation(
-                    "Connecting to SMTP server {SmtpHost}:{SmtpPort}",
-                    _emailSettings.SmtpHost,
-                    _emailSettings.SmtpPort);
-
-                // connect smtp
-                await smtp.ConnectAsync(
-                    _emailSettings.SmtpHost,
-                    _emailSettings.SmtpPort,
-                    SecureSocketOptions.StartTls,
+                _logger.LogInformation("Sending OTP email through Brevo HTTPS API");
+                using var response = await HttpClient.SendAsync(
+                    request,
+                    HttpCompletionOption.ResponseHeadersRead,
                     timeoutCts.Token);
 
-                _logger.LogInformation("Authenticating with SMTP server");
-                await smtp.AuthenticateAsync(
-                    _emailSettings.Username,
-                    _emailSettings.Password,
-                    timeoutCts.Token);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError(
+                        "Brevo email API rejected the request with HTTP status {StatusCode}",
+                        (int)response.StatusCode);
+                    throw new EmailDeliveryException(
+                        $"Email provider rejected the request with HTTP status {(int)response.StatusCode}.");
+                }
 
-                _logger.LogInformation("Sending OTP email through SMTP server");
-                await smtp.SendAsync(message, timeoutCts.Token);
-
-                await smtp.DisconnectAsync(true, timeoutCts.Token);
-                _logger.LogInformation("OTP email sent successfully");
+                _logger.LogInformation("OTP email accepted by Brevo HTTPS API");
             }
             catch (OperationCanceledException ex) when (timeoutCts.IsCancellationRequested)
             {
                 _logger.LogWarning(
                     ex,
-                    "SMTP operation timed out after {TimeoutSeconds} seconds",
+                    "Email API request timed out after {TimeoutSeconds} seconds",
                     timeoutSeconds);
                 throw new TimeoutException(
                     "Email service timed out. Please try again.",
                     ex);
             }
-            catch (Exception ex)
+            catch (EmailDeliveryException)
             {
-                _logger.LogError(ex, "Failed to send OTP email through SMTP server");
                 throw;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Failed to call Brevo email API");
+                throw new EmailDeliveryException(
+                    "Unable to reach the email provider.",
+                    ex);
             }
         }
 
-        // SendOtpAsync: ham cbi noi dung otp va dung lai SendEmailAsync de gyu
         public async Task SendOtpAsync(string toEmail, string otp)
         {
             var subject = "Your OTP Code";

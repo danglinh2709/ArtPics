@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -32,17 +33,25 @@ namespace WebAPI.Middlewares
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            var isTimeout = exception is TimeoutException;
-            context.Response.StatusCode = isTimeout
-                ? (int)HttpStatusCode.GatewayTimeout
-                : (int)HttpStatusCode.InternalServerError;
+            var (statusCode, message) = exception switch
+            {
+                TimeoutException => (
+                    HttpStatusCode.GatewayTimeout,
+                    "Email service timed out. Please try again."),
+                EmailDeliveryException => (
+                    HttpStatusCode.BadGateway,
+                    "Email service is unavailable. Please try again."),
+                _ => (
+                    HttpStatusCode.InternalServerError,
+                    "Internal Server Error")
+            };
+
+            context.Response.StatusCode = (int)statusCode;
 
             var response = new
             {
                 StatusCode = context.Response.StatusCode,
-                Message = isTimeout
-                    ? "Email service timed out. Please try again."
-                    : "Internal Server Error",
+                Message = message,
                 Detailed = context.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment() ? exception.Message : null
             };
 

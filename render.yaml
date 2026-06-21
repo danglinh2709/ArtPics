@@ -15,7 +15,7 @@ services:
         sync: false
       - key: JWT__SecretKey
         sync: false
-      - key: EmailSettings__Password
+      - key: EmailSettings__ApiKey
         sync: false
       - key: EmailSettings__TimeoutSeconds
         value: 15
