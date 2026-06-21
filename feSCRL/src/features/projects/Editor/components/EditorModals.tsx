@@ -1,4 +1,3 @@
-import React from "react";
 
 import { ExportModal } from "../modals/ExportModal";
 import { PreviewModal } from "../modals/PreviewModal";
@@ -34,7 +33,6 @@ interface EditorModalsProps {
   onOpenPreview: () => void;
   onSelectSticker: (imageUrl: string) => void;
 }
-
 export function EditorModals({
   isLayerModalVisible,
   isExportModalVisible,

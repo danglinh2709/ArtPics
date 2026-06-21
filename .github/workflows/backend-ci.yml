@@ -1,0 +1,49 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+    paths:
+      - 'beSCRL/**'
+      - '.github/workflows/backend-ci.yml'
+  pull_request:
+    branches: [ "main", "dev" ]
+    paths:
+      - 'beSCRL/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      working-directory: ./beSCRL
+      run: dotnet restore
+      
+    - name: Build
+      working-directory: ./beSCRL
+      run: dotnet build --no-restore --configuration Release
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          cd /opt/scrl
+          git pull origin main
+          docker compose -f docker-compose.prod.yml up -d --build

@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using WebAPI.Extensions;  
+using WebAPI.Extensions;
+using WebAPI.Middlewares;
 
 namespace WebAPI
 {
@@ -82,17 +83,29 @@ namespace WebAPI
                     };
                 });
 
+            var corsSettings = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
+                    if (corsSettings.Length > 0 && !corsSettings.Contains("*"))
+                    {
+                        policy.WithOrigins(corsSettings)
+                              .AllowAnyMethod()
+                              .AllowAnyHeader()
+                              .AllowCredentials(); // needed for auth cookies/tokens in some cases
+                    }
+                    else
+                    {
+                        policy.AllowAnyOrigin()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+                    }
                 });
             });
 
             builder.Services.AddAuthRateLimiting();
+            builder.Services.AddHealthChecks();
 
             var app = builder.Build();
 
@@ -109,6 +122,8 @@ namespace WebAPI
             app.UseRateLimiter();
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            app.UseMiddleware<GlobalExceptionMiddleware>();
            
             // Seed templates
             using (var scope = app.Services.CreateScope())
@@ -118,6 +133,7 @@ namespace WebAPI
             }
 
             app.MapControllers();
+            app.MapHealthChecks("/health");
 
             app.Run();
         }

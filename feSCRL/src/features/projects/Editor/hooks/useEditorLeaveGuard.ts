@@ -17,7 +17,7 @@ export function useEditorLeaveGuard({
 }: UseEditorLeaveGuardProps) {
   const isProcessingRef = useRef(false);
   const allowNextRemoveRef = useRef(false);
-  const [isSavingBeforeLeave, setIsSavingBeforeLeave] = useState(false);
+  const [isSavingBeforeLeave, setIsSavingBeforeLeave] = useState<boolean>(false);
 
   usePreventRemove(true, ({ data }) => {
     // Nếu đã cho phép remove rồi thì bỏ qua guard
