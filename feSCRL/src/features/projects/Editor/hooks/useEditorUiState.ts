@@ -4,12 +4,12 @@ import { TToolbarTab } from "@/src/types/editor.types";
 export function useEditorUiState() {
   const [activeTab, setActiveTab] = useState<TToolbarTab | null>(null);
 
-  const [isLayerModalVisible, setIsLayerModalVisible] = useState(false);
-  const [isSavingBeforeLeave, setIsSavingBeforeLeave] = useState(false);
+  const [isLayerModalVisible, setIsLayerModalVisible] = useState<boolean>(false);
 
-  const [isExportModalVisible, setIsExportModalVisible] = useState(false);
-  const [isPreviewModalVisible, setIsPreviewModalVisible] = useState(false);
-  const [isTextEditModalVisible, setIsTextEditModalVisible] = useState(false);
+  const [isExportModalVisible, setIsExportModalVisible] = useState<boolean>(false);
+  const [isPreviewModalVisible, setIsPreviewModalVisible] = useState<boolean>(false);
+  const [isTextEditModalVisible, setIsTextEditModalVisible] = useState<boolean>(false);
+  const [isStickerModalVisible, setIsStickerModalVisible] = useState<boolean>(false);
 
   return {
     activeTab,
@@ -17,9 +17,6 @@ export function useEditorUiState() {
 
     isLayerModalVisible,
     setIsLayerModalVisible,
-
-    isSavingBeforeLeave,
-    setIsSavingBeforeLeave,
 
     isExportModalVisible,
     setIsExportModalVisible,
@@ -29,5 +26,8 @@ export function useEditorUiState() {
 
     isTextEditModalVisible,
     setIsTextEditModalVisible,
+
+    isStickerModalVisible,
+    setIsStickerModalVisible,
   };
 }

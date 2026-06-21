@@ -1,0 +1,12 @@
+.dockerignore
+.env
+.env.*
+.vs/
+.vscode/
+bin/
+obj/
+*/bin/
+*/obj/
+*.user
+*.suo
+*.log

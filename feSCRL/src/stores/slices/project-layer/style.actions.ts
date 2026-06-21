@@ -5,27 +5,36 @@ export const createLayerStyleActions: ProjectSliceCreator<
     import("../../types/project.store.types").ProjectState,
     "updateLayerStyle" | "updateLayerOpacity" | "updateLayerAdjustments"
   >
-> = (set) => ({
-  updateLayerStyle: (id, updates) =>
-    set((state) => ({
-      layers: state.layers.map((l) =>
-        l.id === id ? { ...l, style: { ...l.style, ...updates } } : l,
-      ),
-    })),
+> = (set, get) => ({
+  updateLayerStyle: (id, updates, saveHistory = true) =>
+    set((state) => {
+      if (saveHistory) get().pushHistory();
+      return {
+        layers: state.layers.map((l) =>
+          l.id === id ? { ...l, style: { ...l.style, ...updates } } : l,
+        ),
+      };
+    }),
 
-  updateLayerOpacity: (id, opacity) =>
-    set((state) => ({
-      layers: state.layers.map((l) =>
-        l.id === id ? { ...l, style: { ...l.style, opacity } } : l,
-      ),
-    })),
+  updateLayerOpacity: (id, opacity, saveHistory = true) =>
+    set((state) => {
+      if (saveHistory) get().pushHistory();
+      return {
+        layers: state.layers.map((l) =>
+          l.id === id ? { ...l, style: { ...l.style, opacity } } : l,
+        ),
+      };
+    }),
 
-  updateLayerAdjustments: (id, updates) =>
-    set((state) => ({
-      layers: state.layers.map((l) =>
-        l.id === id
-          ? { ...l, adjustments: { ...l.adjustments, ...updates } }
-          : l,
-      ),
-    })),
+  updateLayerAdjustments: (id, updates, saveHistory = true) =>
+    set((state) => {
+      if (saveHistory) get().pushHistory();
+      return {
+        layers: state.layers.map((l) =>
+          l.id === id
+            ? { ...l, adjustments: { ...l.adjustments, ...updates } }
+            : l,
+        ),
+      };
+    }),
 });

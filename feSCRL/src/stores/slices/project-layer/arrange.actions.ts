@@ -5,9 +5,10 @@ export const createLayerArrangeActions: ProjectSliceCreator<
     import("../../types/project.store.types").ProjectState,
     "bringToFront" | "sendToBack"
   >
-> = (set) => ({
+> = (set, get) => ({
   bringToFront: (id) =>
     set((state) => {
+      get().pushHistory();
       const layers = [...state.layers];
       const i = layers.findIndex((l) => l.id === id);
       if (i === -1) return state;
@@ -26,13 +27,16 @@ export const createLayerArrangeActions: ProjectSliceCreator<
       };
 
       // Sort layers by zIndex to maintain array order consistency
-      layers.sort((a, b) => (a.transform.zIndex || 0) - (b.transform.zIndex || 0));
+      layers.sort(
+        (a, b) => (a.transform.zIndex || 0) - (b.transform.zIndex || 0),
+      );
 
       return { layers };
     }),
 
   sendToBack: (id) =>
     set((state) => {
+      get().pushHistory();
       const layers = [...state.layers];
       const i = layers.findIndex((l) => l.id === id);
       if (i === -1) return state;
@@ -51,7 +55,9 @@ export const createLayerArrangeActions: ProjectSliceCreator<
       };
 
       // Sort layers by zIndex to maintain array order consistency
-      layers.sort((a, b) => (a.transform.zIndex || 0) - (b.transform.zIndex || 0));
+      layers.sort(
+        (a, b) => (a.transform.zIndex || 0) - (b.transform.zIndex || 0),
+      );
 
       return { layers };
     }),

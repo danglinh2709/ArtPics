@@ -13,9 +13,10 @@ export const createLayerCrudActions: ProjectSliceCreator<
     | "addTextLayer"
     | "updateLayerText"
   >
-> = (set) => ({
+> = (set, get) => ({
   addLayer: (layer) =>
     set((state) => {
+      get().pushHistory();
       const maxZIndex = state.layers.reduce(
         (max, l) => Math.max(max, l.transform.zIndex || 0),
         0,
@@ -41,14 +42,18 @@ export const createLayerCrudActions: ProjectSliceCreator<
     })),
 
   deleteLayer: (id) =>
-    set((state) => ({
-      layers: state.layers.filter((l) => l.id !== id),
-      selectedLayerId:
-        state.selectedLayerId === id ? null : state.selectedLayerId,
-    })),
+    set((state) => {
+      get().pushHistory();
+      return {
+        layers: state.layers.filter((l) => l.id !== id),
+        selectedLayerId:
+          state.selectedLayerId === id ? null : state.selectedLayerId,
+      };
+    }),
 
   duplicateLayer: (id) =>
     set((state) => {
+      get().pushHistory();
       const original = state.layers.find((l) => l.id === id);
       if (!original) return state;
 
@@ -90,6 +95,7 @@ export const createLayerCrudActions: ProjectSliceCreator<
 
   addTextLayer: (textLayer: import("@/src/types/editor.types").TTextLayer) => {
     set((state) => {
+      get().pushHistory();
       const maxZIndex = state.layers.reduce(
         (max, l) => Math.max(max, l.transform.zIndex || 0),
         0,

@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useProjectStore } from "@/src/stores/project.store";
 
 interface IEditorTopBarProps {
   onBack: () => void;
@@ -8,6 +9,19 @@ interface IEditorTopBarProps {
 }
 
 export function EditorTopBar({ onBack, onExport }: IEditorTopBarProps) {
+  const { undo, redo, pastStack, futureStack } = useProjectStore();
+
+  const handleUndo = useCallback(() => {
+    undo();
+  }, [undo]);
+
+  const handleRedo = useCallback(() => {
+    redo();
+  }, [redo]);
+
+  const hasUndo = pastStack.length > 0;
+  const hasRedo = futureStack.length > 0;
+
   return (
     <View style={styles.topBar}>
       <TouchableOpacity onPress={onBack}>
@@ -15,12 +29,28 @@ export function EditorTopBar({ onBack, onExport }: IEditorTopBarProps) {
       </TouchableOpacity>
 
       <View style={styles.topBarRight}>
-        <TouchableOpacity style={styles.iconBtn}>
-          <Ionicons name="arrow-undo" size={24} color="#666" />
+        <TouchableOpacity
+          style={styles.iconBtn}
+          onPress={handleUndo}
+          disabled={!hasUndo}
+        >
+          <Ionicons
+            name="arrow-undo"
+            size={24}
+            color={hasUndo ? "#fff" : "#666"}
+          />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconBtn}>
-          <Ionicons name="arrow-redo" size={24} color="#666" />
+        <TouchableOpacity
+          style={styles.iconBtn}
+          onPress={handleRedo}
+          disabled={!hasRedo}
+        >
+          <Ionicons
+            name="arrow-redo"
+            size={24}
+            color={hasRedo ? "#fff" : "#666"}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.iconBtn}>
@@ -41,7 +71,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    height: 60,
+    height: 50,
   },
   topBarRight: {
     flexDirection: "row",

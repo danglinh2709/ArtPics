@@ -166,7 +166,7 @@ export function EditableLayerContent({
             },
           ]}
         >
-          {layer.text ?? ""}
+          {layer.uri || ""}
         </Text>
       </Animated.View>
     );

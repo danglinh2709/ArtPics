@@ -18,7 +18,8 @@ export const API_ENDPOINT = {
     BASE: "/Folders",
     BY_ID: (id: string) => `/Folders/${id}`,
     ADD_PROJECTS: (id: string) => `/Folders/${id}/projects`,
-    REMOVE_PROJECT: (id: string, projectId: string) => `/Folders/${id}/projects/${projectId}`,
+    REMOVE_PROJECT: (id: string, projectId: string) =>
+      `/Folders/${id}/projects/${projectId}`,
   },
   TEMPLATE: {
     BASE: "/Template",
@@ -26,6 +27,10 @@ export const API_ENDPOINT = {
     FORMATS: "/Template/formats",
   },
   TEMPLATE_CATEGORY: {
-    BASE: "/TemplateCategory"
-  }
+    BASE: "/TemplateCategory",
+  },
+  STICKER: {
+    BASE: "/Sticker",
+    CATEGORIES: "/Sticker/categories",
+  },
 };

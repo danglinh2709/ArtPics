@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { useWindowDimensions, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ViewShot from "react-native-view-shot";
@@ -22,13 +22,14 @@ import { useEditorExport } from "./hooks/useEditorExport";
 import { useEditorLayerActions } from "./hooks/useEditorLayerActions";
 
 import { EditorModals } from "./components/EditorModals";
-// import { EditorLoadingOverlay } from "./components/EditorLoadingOverlay";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+import { EditorLoadingOverlay } from "./components/EditorLoadingOverlay";
 
 export default function Editor() {
   const router = useRouter();
   const navigation = useNavigation();
+  const { width: windowWidth } = useWindowDimensions();
+  // Override SCREEN_WIDTH with dynamic width for responsiveness
+  const canvasWidth = windowWidth * EDITOR_UI_CONSTANTS.CANVAS_WIDTH_RATIO;
 
   const {
     selectedRatio,
@@ -47,14 +48,14 @@ export default function Editor() {
     setActiveTab,
     isLayerModalVisible,
     setIsLayerModalVisible,
-    isSavingBeforeLeave,
-    setIsSavingBeforeLeave,
     isExportModalVisible,
     setIsExportModalVisible,
     isPreviewModalVisible,
     setIsPreviewModalVisible,
     isTextEditModalVisible,
     setIsTextEditModalVisible,
+    isStickerModalVisible,
+    setIsStickerModalVisible,
   } = useEditorUiState();
 
   const viewShotRef = React.useRef<ViewShot>(null);
@@ -67,13 +68,10 @@ export default function Editor() {
   const { composedGesture, animatedStyle } = useEditorViewport();
 
   const ratio = selectedRatio?.ratio || 1;
-  const canvasWidth = SCREEN_WIDTH * EDITOR_UI_CONSTANTS.CANVAS_WIDTH_RATIO;
   const canvasHeight = canvasWidth / ratio;
 
-  useEditorLeaveGuard({
+  const { isSavingBeforeLeave } = useEditorLeaveGuard({
     navigation,
-    isSavingBeforeLeave,
-    setIsSavingBeforeLeave,
     isUploadingAsset,
     saveCurrentProject,
     viewShotRef,
@@ -127,6 +125,10 @@ export default function Editor() {
     setActiveTab((prev) => (prev === tab ? null : tab));
   };
 
+  const handleSelectSticker = (imageUrl: string) => {
+    handleSelectImage(imageUrl, 200, 200);
+  };
+
   return (
     <GestureHandlerRootView style={styles.root}>
       <SelectionSyncProvider>
@@ -168,10 +170,12 @@ export default function Editor() {
             isExportModalVisible={isExportModalVisible}
             isPreviewModalVisible={isPreviewModalVisible}
             isTextEditModalVisible={isTextEditModalVisible}
+            isStickerModalVisible={isStickerModalVisible}
             setIsLayerModalVisible={setIsLayerModalVisible}
             setIsExportModalVisible={setIsExportModalVisible}
             setIsPreviewModalVisible={setIsPreviewModalVisible}
             setIsTextEditModalVisible={setIsTextEditModalVisible}
+            setIsStickerModalVisible={setIsStickerModalVisible}
             layers={layers}
             pageBackground={pageBackground}
             canvasWidth={canvasWidth}
@@ -182,12 +186,13 @@ export default function Editor() {
             onSaveImage={handleSaveImage}
             onSaveText={handleSaveText}
             onOpenPreview={handleOpenPreview}
+            onSelectSticker={handleSelectSticker}
           />
 
-          {/* <EditorLoadingOverlay
+          <EditorLoadingOverlay
             isUploadingAsset={isUploadingAsset}
             isSavingBeforeLeave={isSavingBeforeLeave}
-          /> */}
+          />
         </SafeAreaView>
       </SelectionSyncProvider>
     </GestureHandlerRootView>

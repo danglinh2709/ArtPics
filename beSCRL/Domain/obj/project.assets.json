@@ -131,11 +131,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj",
+      "projectUniqueName": "D:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "d:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj",
+      "projectPath": "D:\\Class\\scrl_app\\beSCRL\\Domain\\Domain.csproj",
       "packagesPath": "C:\\Users\\5540\\.nuget\\packages\\",
-      "outputPath": "d:\\Class\\scrl_app\\beSCRL\\Domain\\obj\\",
+      "outputPath": "D:\\Class\\scrl_app\\beSCRL\\Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

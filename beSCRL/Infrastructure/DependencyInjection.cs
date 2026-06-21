@@ -42,9 +42,11 @@ namespace Infrastructure
             services.AddScoped<IFolderService, FolderService>();
             services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<ITemplateCategoryService, TemplateCategoryService>();
+            services.AddScoped<IStickerService, StickerService>();
 
             services.AddScoped<TemplateSeeder>();
             services.AddScoped<TemplateCategorySeeder>();
+            services.AddScoped<StickerSeeder>();
             services.AddScoped<DatabaseSeeder>();
 
             // Cloudinary
@@ -61,6 +63,7 @@ namespace Infrastructure
             services.AddScoped<IFolderRepository, FolderRepository>();
             services.AddScoped<ITemplateRepository, TemplateRepository>();
             services.AddScoped<ITemplateCategoryRepository, TemplateCategoryRepository>();
+            services.AddScoped<IStickerRepository, StickerRepository>();
 
             return services;
         }

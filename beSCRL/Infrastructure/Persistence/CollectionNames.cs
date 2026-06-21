@@ -17,5 +17,6 @@ namespace Infrastructure.Persistence
         public const string ProjectVersions = "project_versions";
         public const string Folders = "folders";
         public const string TemplateCategory = "template_categories";
+        public const string Stickers = "stickers";
     }
 }

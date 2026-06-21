@@ -23,6 +23,7 @@ export function CropPanel() {
     updateLayerCrop,
     resetLayerCrop,
     setLayerFrameRatio,
+    saveSnapshot,
   } = useProjectStore();
 
   const layer = layers.find((l) => l.id === selectedLayerId);
@@ -84,7 +85,10 @@ export function CropPanel() {
           maximumValue={5}
           step={0.1}
           value={layer.crop.scale}
-          onValueChange={(v: number) => updateLayerCrop(layer.id, { scale: v })}
+          onSlidingStart={saveSnapshot}
+          onValueChange={(v: number) =>
+            updateLayerCrop(layer.id, { scale: v }, false)
+          }
           minimumTrackTintColor="#EECB68"
           maximumTrackTintColor="rgba(255,255,255,0.1)"
           thumbTintColor="#fff"
@@ -100,8 +104,9 @@ export function CropPanel() {
           minimumValue={-180}
           maximumValue={180}
           value={layer.crop.rotation}
+          onSlidingStart={saveSnapshot}
           onValueChange={(v: number) =>
-            updateLayerCrop(layer.id, { rotation: v })
+            updateLayerCrop(layer.id, { rotation: v }, false)
           }
           minimumTrackTintColor="#EECB68"
           maximumTrackTintColor="rgba(255,255,255,0.1)"
