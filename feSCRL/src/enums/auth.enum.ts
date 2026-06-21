@@ -1,8 +1,8 @@
 export enum EAuth {
-  LOGIN = "auth/login",
-  LOGOUT = "auth/logout",
-  REQUEST_OTP = "auth/request-otp",
-  REFRESH_TOKEN = "auth/refresh-token",
+  LOGIN = "/Auth/login",
+  LOGOUT = "/Auth/logout",
+  REQUEST_OTP = "/Auth/request-otp",
+  REFRESH_TOKEN = "/Auth/refresh-token",
 }
 
 export enum EAuthToken {
