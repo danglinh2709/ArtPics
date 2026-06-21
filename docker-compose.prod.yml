@@ -16,7 +16,8 @@ services:
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - MongoDbSettings__ConnectionString=mongodb://mongodb:27017
+      # For production, connection string MUST be injected via .env on VPS
+      - MongoDbSettings__ConnectionString=${MongoDbSettings__ConnectionString}
       # Pass secrets via VPS .env
     depends_on:
       - mongodb

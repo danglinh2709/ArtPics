@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: scrl-backend
+    env: docker
+    dockerContext: ./beSCRL
+    dockerfilePath: ./beSCRL/Dockerfile
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: CorsSettings__AllowedOrigins__0
+        value: "*"
+      - key: MongoDbSettings__ConnectionString
+        sync: false
+      - key: JWT__SecretKey
+        sync: false
+      - key: EmailSettings__Password
+        sync: false
+      - key: CloudinarySettings__CloudName
+        sync: false
+      - key: CloudinarySettings__ApiKey
+        sync: false
+      - key: CloudinarySettings__ApiSecret
+        sync: false
